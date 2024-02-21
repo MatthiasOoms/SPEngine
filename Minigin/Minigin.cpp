@@ -109,13 +109,12 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		//	  lag -= msPerFrame;
 		//}
 
-		sceneManager.Update();
-		renderer.Render();
+		sceneManager.Update(deltaTime);
+		renderer.Render(deltaTime);
 
 		const auto sleepTime = 
 			currentTime + std::chrono::milliseconds(msPerFrame) - std::chrono::high_resolution_clock::now();
 
 		std::this_thread::sleep_for(sleepTime);
-		// End of Tick calculations
 	}
 }
