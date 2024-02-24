@@ -16,10 +16,10 @@ dae::FPSComponent::FPSComponent(GameObject* pOwner)
 	}
 }
 
-void dae::FPSComponent::Update(float elapsedSec)
+void dae::FPSComponent::Update(const float deltaTime)
 {
 	if (m_pTextComponent != nullptr)
 	{
-		m_pTextComponent->SetText(std::to_string(int(1.f / elapsedSec)));
+		m_pTextComponent->SetText(std::to_string(int(1.f / deltaTime)));
 	}
 }

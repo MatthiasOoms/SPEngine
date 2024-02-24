@@ -60,12 +60,7 @@ namespace dae
 	template<typename Comp>
 	inline Comp* GameObject::AddComponent()
 	{
-		// TODO: Implement check to see if Inherits from base class Component
-		// Use a static_assert for it
-		if (!std::is_base_of<Component, Comp>::value)
-		{
-			return nullptr;
-		}
+		static_assert(std::is_base_of<Component, Comp>(), "This is not a derived class of Component");
 		Comp* temp{ new Comp{ this } };
 		m_pComponents.push_back(temp);
 		return temp;
