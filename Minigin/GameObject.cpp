@@ -28,7 +28,7 @@ dae::GameObject::~GameObject()
 	}
 }
 
-void dae::GameObject::Update(float deltaTime)
+void dae::GameObject::Update(const float deltaTime)
 {
 	for (size_t idx{}; idx < m_pComponents.size(); ++idx)
 	{
@@ -36,7 +36,7 @@ void dae::GameObject::Update(float deltaTime)
 	}
 }
 
-void dae::GameObject::Render(float deltaTime) const
+void dae::GameObject::Render(const float deltaTime) const
 {
 	for (size_t idx{}; idx < m_pComponents.size(); ++idx)
 	{

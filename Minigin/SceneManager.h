@@ -12,8 +12,8 @@ namespace dae
 	public:
 		Scene& CreateScene(const std::string& name);
 
-		void Update(float deltaTime);
-		void Render(float deltaTime) const;
+		void Update(const float deltaTime);
+		void Render(const float deltaTime) const;
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

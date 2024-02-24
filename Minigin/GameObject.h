@@ -19,8 +19,8 @@ namespace dae
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
-		void Update(float deltaTime);
-		void Render(float deltaTime) const;
+		void Update(const float deltaTime);
+		void Render(const float deltaTime) const;
 		TransformComponent& GetTransform() const;
 
 		template <typename Comp> Comp* AddComponent();
@@ -62,6 +62,10 @@ namespace dae
 	{
 		// TODO: Implement check to see if Inherits from base class Component
 		// Use a static_assert for it
+		if (!std::is_base_of<Component, Comp>::value)
+		{
+			return nullptr;
+		}
 		Comp* temp{ new Comp{ this } };
 		m_pComponents.push_back(temp);
 		return temp;
