@@ -1,8 +1,8 @@
-#include "TransformComponent.h"
+#include "Transform.h"
 #include "GameObject.h"
 
-dae::TransformComponent::TransformComponent(GameObject* pOwner)
-	: Component(pOwner)
+dae::Transform::Transform(GameObject* pOwner)
+	: m_pOwner{ pOwner }
 	, m_LocalPosition{}
 	, m_WorldPosition{}
 {
@@ -12,11 +12,11 @@ dae::TransformComponent::TransformComponent(GameObject* pOwner)
 	}
 }
 
-dae::TransformComponent::~TransformComponent()
+dae::Transform::~Transform()
 {
 }
 
-void dae::TransformComponent::SetLocalPosition(const float x, const float y, const float z)
+void dae::Transform::SetLocalPosition(const float x, const float y, const float z)
 {
 	m_LocalPosition.x = x;
 	m_LocalPosition.y = y;
@@ -32,7 +32,7 @@ void dae::TransformComponent::SetLocalPosition(const float x, const float y, con
 	}
 }
 
-void dae::TransformComponent::SetWorldPosition(float x, float y, float z)
+void dae::Transform::SetWorldPosition(float x, float y, float z)
 {
 	m_WorldPosition.x = x;
 	m_WorldPosition.y = y;

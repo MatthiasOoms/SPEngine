@@ -1,5 +1,5 @@
 #pragma once
-#include "TransformComponent.h"
+#include "Transform.h"
 #include <memory>
 #include <vector>
 
@@ -21,7 +21,7 @@ namespace dae
 
 		void Update(const float deltaTime);
 		void Render(const float deltaTime) const;
-		TransformComponent& GetTransform() const;
+		Transform& GetTransform() const;
 
 		template <typename Comp> Comp* AddComponent();
 		template <typename Comp> Comp* GetComponent() const;
@@ -36,7 +36,7 @@ namespace dae
 		void SetLocalPosition(const float x, const float y, const float z);
 
 	private:
-		std::unique_ptr<TransformComponent> m_pTransform;
+		std::unique_ptr<Transform> m_pTransform;
 		// Everything is owned by the scene, inside of smart_ptrs
 		// why use smart ptrs inside of the objects
 

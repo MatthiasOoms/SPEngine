@@ -3,7 +3,7 @@
 #include "Texture2D.h"
 #include "GameObject.h"
 #include "Renderer.h"
-#include "TransformComponent.h"
+#include "Transform.h"
 
 namespace dae
 {

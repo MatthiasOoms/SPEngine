@@ -7,15 +7,16 @@
 
 dae::GameObject::GameObject()
 	: m_pParent{ nullptr }
+	, m_IsPositionDirty{ false }
 {
-	m_pTransform = std::make_unique<TransformComponent>(this);
+	m_pTransform = std::make_unique<Transform>(this);
 }
 
 dae::GameObject::GameObject(GameObject* pParent)
 	: m_IsPositionDirty{ true }
 {
 	m_pParent = nullptr;
-	m_pTransform = std::make_unique<TransformComponent>(this);
+	m_pTransform = std::make_unique<Transform>(this);
 	SetParent(pParent, false);
 }
 
@@ -44,7 +45,7 @@ void dae::GameObject::Render(const float deltaTime) const
 	}
 }
 
-dae::TransformComponent& dae::GameObject::GetTransform() const
+dae::Transform& dae::GameObject::GetTransform() const
 {
 	return *m_pTransform;
 }
