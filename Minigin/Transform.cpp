@@ -1,7 +1,7 @@
 #include "Transform.h"
 #include "GameObject.h"
 
-dae::Transform::Transform(std::weak_ptr<GameObject> pOwner)
+dae::Transform::Transform(GameObject* pOwner)
 	: m_pOwner{ pOwner }
 	, m_LocalPosition{}
 	, m_WorldPosition{}

@@ -2,17 +2,17 @@
 #include "GameObject.h"
 #include "TextComponent.h"
 
-dae::FPSComponent::FPSComponent(std::weak_ptr<GameObject> pOwner)
+dae::FPSComponent::FPSComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
 	, m_pTextComponent{ nullptr }
 {
-	if (m_pOwner.lock()->HasComponent<dae::TextComponent>())
+	if (m_pOwner->HasComponent<dae::TextComponent>())
 	{
-		m_pTextComponent = m_pOwner.lock()->GetComponent<dae::TextComponent>();
+		m_pTextComponent = m_pOwner->GetComponent<dae::TextComponent>();
 	}
 	else
 	{
-		m_pTextComponent = m_pOwner.lock()->AddComponent<dae::TextComponent>();
+		m_pTextComponent = m_pOwner->AddComponent<dae::TextComponent>();
 	}
 }
 
