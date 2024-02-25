@@ -10,7 +10,7 @@ namespace dae
     class FPSComponent final : public UpdateComponent
     {
     public:
-        FPSComponent(GameObject* pOwner);
+        FPSComponent(std::weak_ptr<GameObject> pOwner);
         virtual ~FPSComponent() {};
 
         FPSComponent(const FPSComponent& other) = delete;
@@ -21,6 +21,6 @@ namespace dae
         virtual void Update(float elapsedSec);
 
     private:
-        TextComponent* m_pTextComponent;
+        std::shared_ptr<TextComponent> m_pTextComponent;
     };
 }

@@ -7,7 +7,7 @@
 
 namespace dae
 {
-	TextureComponent::TextureComponent(GameObject* pOwner)
+	TextureComponent::TextureComponent(std::weak_ptr<GameObject> pOwner)
 		: RenderComponent(pOwner)
 	{
 	}
@@ -25,7 +25,7 @@ namespace dae
 	{
 		if (m_pTexture != nullptr)
 		{
-			const auto& pos = m_pOwner->GetTransform().GetWorldPosition();
+			const auto& pos = m_pOwner.lock()->GetTransform().GetWorldPosition();
 			Renderer::GetInstance().RenderTexture(*m_pTexture, pos.x, pos.y);
 		}
 	}

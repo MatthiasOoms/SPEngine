@@ -11,7 +11,6 @@ namespace dae
 	{
 	public:
 		GameObject();
-		GameObject(GameObject* pParent);
 		~GameObject();
 
 		GameObject(const GameObject& other) = delete;
@@ -22,63 +21,47 @@ namespace dae
 		void Update(const float deltaTime);
 		void Render(const float deltaTime) const;
 		Transform& GetTransform() const;
-
-		template <typename Comp> Comp* AddComponent();
-		template <typename Comp> Comp* GetComponent() const;
+		
+		template <typename Comp> std::shared_ptr<Comp> AddComponent();
+		template <typename Comp> std::shared_ptr<Comp> GetComponent() const;
 		template <typename Comp> bool HasComponent() const;
 		template <typename Comp> void RemoveComponent();
-		GameObject* GetParent() const;
-		void SetParent(GameObject* pParent, bool keepWorldPosition);
-		int GetChildCount() const;
-		GameObject* GetChildAt(int idx) const;
 
 		void SetLocalPosition(const glm::vec3& pos);
 		void SetLocalPosition(const float x, const float y, const float z);
 
 	private:
 		std::unique_ptr<Transform> m_pTransform;
-		// Everything is owned by the scene, inside of smart_ptrs
-		// why use smart ptrs inside of the objects
-
-		// After quiz: Should I use smart ptr for parent and child or not?
-		GameObject* m_pParent;
-		std::vector<GameObject*> m_pChildren;
-		std::vector<Component*> m_pComponents;
+		std::vector<std::shared_ptr<Component>> m_pComponents;
 		bool m_IsPositionDirty;
-
-		void AddChild(GameObject* pChild);
-		void RemoveChild(GameObject* pChild);
 
 		const glm::vec3& GetLocalPosition() const;
 		const glm::vec3& GetWorldPosition();
-
-		void UpdateWorldPosition();
-
-		void SetPositionDirty();
 	};
 
 	template<typename Comp>
-	inline Comp* GameObject::AddComponent()
+	inline std::shared_ptr<Comp> GameObject::AddComponent()
 	{
 		static_assert(std::is_base_of<Component, Comp>(), "This is not a derived class of Component");
-		Comp* temp{ new Comp{ this } };
-		m_pComponents.push_back(temp);
-		return temp;
+
+		auto temp = std::make_shared<Comp>(this);
+		m_pComponents.push_back(std::move(temp));
+		return std::move(temp);
 	}
 
 	template<typename Comp>
-	inline Comp* GameObject::GetComponent() const
+	inline std::shared_ptr<Comp> GameObject::GetComponent() const
 	{
 		Comp* temp;
 		for (size_t idx{}; idx < m_pComponents.size(); idx++)
 		{
-			temp = dynamic_cast<Comp*>(m_pComponents[idx]);
+			temp = dynamic_cast<Comp*>(m_pComponents[idx].get());
 			if (temp != nullptr)
 			{
-				return temp;
+				return std::make_shared<Comp>(m_pComponents[idx].get());
 			}
 		}
-		return nullptr;
+		return {};
 	}
 
 	template<typename Comp>
@@ -87,11 +70,10 @@ namespace dae
 		Comp* temp;
 		for (size_t idx{}; idx < m_pComponents.size(); idx++)
 		{
-			temp = dynamic_cast<Comp*>(m_pComponents[idx]);
+			temp = dynamic_cast<Comp*>(m_pComponents[idx].get());
 			if (temp != nullptr)
 			{
-				delete m_pComponents[idx];
-				m_pComponents[idx] = nullptr;
+				m_pComponents[idx].reset();
 
 				auto nth = m_pComponents.begin() + idx;
 				m_pComponents.erase(nth);
@@ -107,7 +89,7 @@ namespace dae
 		Comp* temp;
 		for (size_t idx{}; idx < m_pComponents.size(); idx++)
 		{
-			temp = dynamic_cast<Comp*>(m_pComponents[idx]);
+			temp = dynamic_cast<Comp*>(m_pComponents[idx].get());
 			if (temp != nullptr)
 			{
 				return true;

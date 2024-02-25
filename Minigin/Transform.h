@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <memory>
 
 namespace dae
 {
@@ -8,7 +9,7 @@ namespace dae
 	class Transform final
 	{
 	public:
-		Transform(GameObject* pOwner);
+		Transform(std::weak_ptr<GameObject> pOwner);
 		~Transform();
 
 		const glm::vec3& GetLocalPosition() const { return m_LocalPosition; }
@@ -19,6 +20,6 @@ namespace dae
 	private:
 		glm::vec3 m_LocalPosition;
 		glm::vec3 m_WorldPosition;
-		GameObject* m_pOwner;
+		std::weak_ptr<GameObject> m_pOwner;
 	};
 }
