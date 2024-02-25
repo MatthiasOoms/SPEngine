@@ -14,7 +14,7 @@ namespace dae
 	class TextComponent final : public UpdateComponent
 	{
 	public:
-		TextComponent(GameObject* pOwner);
+		TextComponent(std::weak_ptr<GameObject> pOwner);
 		virtual ~TextComponent() = default;
 
 		TextComponent(const TextComponent& other) = delete;

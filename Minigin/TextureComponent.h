@@ -10,7 +10,7 @@ namespace dae
 	class TextureComponent final : public RenderComponent
 	{
 	public:
-		TextureComponent(GameObject* pOwner);
+		TextureComponent(std::weak_ptr<GameObject> pOwner);
 		virtual ~TextureComponent();
 
 		TextureComponent(const TextureComponent& other) = delete;
