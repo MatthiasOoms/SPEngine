@@ -21,6 +21,6 @@ namespace dae
         virtual void Update(float elapsedSec);
 
     private:
-        std::shared_ptr<TextComponent> m_pTextComponent;
+        TextComponent* m_pTextComponent;
     };
 }
