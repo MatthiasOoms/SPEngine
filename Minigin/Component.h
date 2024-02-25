@@ -9,7 +9,7 @@ namespace dae
 	class Component
 	{
 	public:
-		Component(std::weak_ptr<GameObject> pOwner);
+		Component(GameObject* pOwner);
 
 		virtual ~Component() = default;
 		Component(const Component& other) = delete;
@@ -21,13 +21,13 @@ namespace dae
 		virtual void Render(float elapsedSec) const = 0;
 
 	protected:
-		std::weak_ptr<GameObject> m_pOwner;
+		GameObject* m_pOwner;
 	};
 
 	class UpdateComponent : public Component
 	{
 	public:
-		UpdateComponent(std::weak_ptr<GameObject> pOwner);
+		UpdateComponent(GameObject* pOwner);
 		virtual ~UpdateComponent() = default;
 
 		UpdateComponent(const UpdateComponent& other) = delete;
@@ -42,7 +42,7 @@ namespace dae
 	class RenderComponent : public Component
 	{
 	public:
-		RenderComponent(std::weak_ptr<GameObject> pOwner);
+		RenderComponent(GameObject* pOwner);
 		virtual ~RenderComponent() = default;
 
 		RenderComponent(const RenderComponent& other) = delete;
