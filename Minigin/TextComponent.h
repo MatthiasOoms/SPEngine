@@ -4,6 +4,7 @@
 #include <SDL_ttf.h>
 #include <memory>
 #include <string>
+
 namespace dae
 {
 	class GameObject;

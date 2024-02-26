@@ -31,14 +31,13 @@ namespace dae
             SDL_FreeSurface(surf);
             
             // Add TextureComponent if not already made
-            if (m_pOwner->HasComponent<dae::TextureComponent>()) { }
-            else
+            if (!m_pOwner->HasComponent<TextureComponent>()) 
             {
-                m_pOwner->AddComponent<dae::TextureComponent>();
+                m_pOwner->AddComponent<TextureComponent>();
             }
 
             // Set the texture
-            m_pOwner->GetComponent<dae::TextureComponent>()->SetTexture(std::make_shared<Texture2D>(texture));
+            m_pOwner->GetComponent<TextureComponent>()->SetTexture(std::make_shared<Texture2D>(texture));
 
             m_NeedsUpdate = false;
         }
@@ -53,6 +52,5 @@ namespace dae
     void TextComponent::SetFont(const std::shared_ptr<Font>& font)
     {
         m_pFont = font;
-        m_NeedsUpdate = true;
     }
 }
