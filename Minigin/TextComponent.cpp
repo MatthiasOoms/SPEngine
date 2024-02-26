@@ -29,7 +29,17 @@ namespace dae
                 throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
             }
             SDL_FreeSurface(surf);
+            
+            // Add TextureComponent if not already made
+            if (m_pOwner->HasComponent<dae::TextureComponent>()) { }
+            else
+            {
+                m_pOwner->AddComponent<dae::TextureComponent>();
+            }
+
+            // Set the texture
             m_pOwner->GetComponent<dae::TextureComponent>()->SetTexture(std::make_shared<Texture2D>(texture));
+
             m_NeedsUpdate = false;
         }
     }
@@ -43,5 +53,6 @@ namespace dae
     void TextComponent::SetFont(const std::shared_ptr<Font>& font)
     {
         m_pFont = font;
+        m_NeedsUpdate = true;
     }
 }

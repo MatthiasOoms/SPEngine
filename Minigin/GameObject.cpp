@@ -1,7 +1,6 @@
 #include <string>
 #include "GameObject.h"
 #include "ResourceManager.h"
-//#include "SceneManager.h"
 #include "Renderer.h"
 #include "Component.h"
 
