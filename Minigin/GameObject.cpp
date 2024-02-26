@@ -107,9 +107,6 @@ void dae::GameObject::RemoveChild(GameObject* pChild)
 		pChild->GetChildAt(i)->SetParent(this, true);
 	}
 
-	// Remove child from scene? Don't know how yet
-	//auto& sceneManager = SceneManager::GetInstance();
-
 	std::erase(m_pChildren, pChild);
 }
 
