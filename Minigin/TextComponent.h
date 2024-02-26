@@ -1,6 +1,5 @@
 #pragma once
 #include "Component.h"
-#include <stdexcept>
 #include <SDL_ttf.h>
 #include <memory>
 #include <string>
@@ -11,6 +10,7 @@ namespace dae
 	class Texture2D;
 	class Transform;
 	class Font;
+	class TextureComponent;
 
 	class TextComponent final : public UpdateComponent
 	{
@@ -32,6 +32,7 @@ namespace dae
 		bool m_NeedsUpdate;
 		std::string m_Text;
 		std::shared_ptr<Font> m_pFont;
+		TextureComponent* m_pTextureComponent;
 
 		// Add ptr to GameObject in Interface classes
 		// Now there's only access in Update and Render

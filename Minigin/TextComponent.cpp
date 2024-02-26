@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "TextComponent.h"
 #include "GameObject.h"
 #include "Texture2D.h"
@@ -11,6 +12,15 @@ namespace dae
         : UpdateComponent(pOwner)
         , m_NeedsUpdate{ false }
     {
+        // Add TextureComponent if not already made
+        if (!m_pOwner->HasComponent<TextureComponent>())
+        {
+            m_pTextureComponent = m_pOwner->AddComponent<TextureComponent>();
+        }
+        else
+        {
+            m_pTextureComponent = m_pOwner->GetComponent<TextureComponent>();
+        }
     }
 
     void TextComponent::Update(float)
@@ -29,15 +39,9 @@ namespace dae
                 throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
             }
             SDL_FreeSurface(surf);
-            
-            // Add TextureComponent if not already made
-            if (!m_pOwner->HasComponent<TextureComponent>()) 
-            {
-                m_pOwner->AddComponent<TextureComponent>();
-            }
 
             // Set the texture
-            m_pOwner->GetComponent<TextureComponent>()->SetTexture(std::make_shared<Texture2D>(texture));
+            m_pTextureComponent->SetTexture(std::make_shared<Texture2D>(texture));
 
             m_NeedsUpdate = false;
         }
