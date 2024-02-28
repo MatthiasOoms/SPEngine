@@ -21,7 +21,7 @@ void dae::Transform::SetLocalPosition(const float x, const float y, const float 
 	m_LocalPosition.x = x;
 	m_LocalPosition.y = y;
 	m_LocalPosition.z = z;
-	if (m_pOwner->GetParent())
+	if (m_pOwner->GetParent() != nullptr)
 	{
 		auto buffer{ m_pOwner->GetParent()->GetTransform().GetWorldPosition() };
 		SetWorldPosition(buffer.x + x, buffer.y + y, buffer.z + z);

@@ -7,12 +7,14 @@
 dae::GameObject::GameObject()
 	: m_pParent{ nullptr }
 	, m_IsPositionDirty{ false }
+	, m_IsDead{ false }
 {
 	m_pTransform = std::make_unique<Transform>(this);
 }
 
 dae::GameObject::GameObject(GameObject* pParent)
 	: m_IsPositionDirty{ true }
+	, m_IsDead{ false }
 {
 	m_pParent = nullptr;
 	m_pTransform = std::make_unique<Transform>(this);
@@ -56,6 +58,22 @@ dae::GameObject* dae::GameObject::GetParent() const
 
 void dae::GameObject::SetParent(GameObject* pParent, bool keepWorldPosition)
 {
+	// If the parent is the same as self or the current parent, do nothing
+	if (pParent == this && pParent == m_pParent)
+	{
+		return;
+	}
+
+	// If the parent is a child of self, do nothing
+	for (int i{}; i < m_pChildren.size(); i++)
+	{
+		if (pParent == m_pChildren[i])
+		{
+			return;
+		}
+	}
+
+	// If it has no parent, it's a root object
 	if (m_pParent == nullptr)
 	{
 		if (m_pTransform)
@@ -63,17 +81,21 @@ void dae::GameObject::SetParent(GameObject* pParent, bool keepWorldPosition)
 			SetLocalPosition(GetWorldPosition());
 		}
 	}
-	else if (keepWorldPosition)
-	{
-		SetLocalPosition(GetWorldPosition() - m_pParent->GetWorldPosition());
-	}
-	if (m_pParent)
+	// If has a parent, remove self from parent
+	else 
 	{
 		m_pParent->RemoveChild(this);
+		if (keepWorldPosition)
+		{
+			// Set local position to world position
+			SetLocalPosition(GetWorldPosition() - m_pParent->GetWorldPosition());
+		}
 	}
 
-	m_pParent = pParent;
+	// Set new parent
+ 	m_pParent = pParent;
 
+	// If the new parent is not null, add self to parent
 	if (m_pParent)
 	{
 		m_pParent->AddChild(this);
@@ -87,11 +109,24 @@ int dae::GameObject::GetChildCount() const
 
 dae::GameObject* dae::GameObject::GetChildAt(int idx) const
 {
-	if (idx < GetChildCount())
+	// If the index is valid, return the child
+	if (idx >= 0 && idx < GetChildCount())
 	{
 		return m_pChildren[idx];
 	}
+
+	// If the index is invalid, return nullptr
 	return nullptr;
+}
+
+void dae::GameObject::Kill()
+{
+	m_IsDead = true;
+}
+
+bool dae::GameObject::IsDead()
+{
+	return m_IsDead;
 }
 
 void dae::GameObject::AddChild(GameObject* pChild)

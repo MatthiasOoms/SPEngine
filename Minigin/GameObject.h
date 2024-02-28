@@ -32,6 +32,9 @@ namespace dae
 		int GetChildCount() const;
 		GameObject* GetChildAt(int idx) const;
 
+		void Kill();
+		bool IsDead();
+
 		void SetLocalPosition(const glm::vec3& pos);
 		void SetLocalPosition(const float x, const float y, const float z);
 
@@ -45,6 +48,7 @@ namespace dae
 		std::vector<GameObject*> m_pChildren;
 		std::vector<Component*> m_pComponents;
 		bool m_IsPositionDirty;
+		bool m_IsDead;
 
 		void AddChild(GameObject* pChild);
 		void RemoveChild(GameObject* pChild);

@@ -28,9 +28,23 @@ void Scene::RemoveAll()
 
 void Scene::Update(const float deltaTime)
 {
-	for(auto& object : m_objects)
+	for(int i{0}; i < m_objects.size(); i++)
 	{
-		object->Update(deltaTime);
+		m_objects[i]->Update(deltaTime);
+	}
+
+	// Remove dead objects
+	for (int i{ int(m_objects.size() - 1) }; i >= 0; i--)
+	{
+		if (m_objects[i]->IsDead())
+		{
+			for (int j{}; j < m_objects[i]->GetChildCount(); j++)
+			{
+				m_objects[i]->GetChildAt(j)->SetParent(nullptr, true);
+			}
+			m_objects[i].reset();
+			Remove(m_objects[i]);
+		}
 	}
 }
 
