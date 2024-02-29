@@ -34,7 +34,7 @@ void Scene::Update(const float deltaTime)
 	}
 
 	// Remove dead objects
-	for (int i{ int(m_objects.size() - 1) }; i >= 0; i--)
+	/*for (int i{ int(m_objects.size() - 1) }; i >= 0; i--)
 	{
 		if (m_objects[i]->IsDead())
 		{
@@ -45,7 +45,7 @@ void Scene::Update(const float deltaTime)
 			m_objects[i].reset();
 			Remove(m_objects[i]);
 		}
-	}
+	}*/
 }
 
 void Scene::Render(const float deltaTime) const

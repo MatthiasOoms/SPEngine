@@ -167,7 +167,6 @@ void dae::GameObject::UpdateWorldPosition()
 		}
 		else
 		{
-
 			auto buffer{ m_pParent->GetWorldPosition() + GetLocalPosition() };
 			m_pTransform->SetWorldPosition(buffer.x, buffer.y, buffer.z);
 		}
