@@ -65,7 +65,7 @@ void dae::GameObject::SetParent(GameObject* pParent, bool keepWorldPosition)
 	}
 
 	// If the parent is a child of self, do nothing
-	for (int i{}; i < m_pChildren.size(); i++)
+	for (size_t i{}; i < m_pChildren.size(); ++i)
 	{
 		if (pParent == m_pChildren[i])
 		{
@@ -136,12 +136,6 @@ void dae::GameObject::AddChild(GameObject* pChild)
 
 void dae::GameObject::RemoveChild(GameObject* pChild)
 {
-	// Not removed from scene
-	for (int i{}; i < pChild->GetChildCount(); ++i)
-	{
-		pChild->GetChildAt(i)->SetParent(this, true);
-	}
-
 	std::erase(m_pChildren, pChild);
 }
 

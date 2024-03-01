@@ -28,24 +28,38 @@ void Scene::RemoveAll()
 
 void Scene::Update(const float deltaTime)
 {
-	for(int i{0}; i < m_objects.size(); i++)
+	for(size_t i{}; i < m_objects.size(); ++i)
 	{
 		m_objects[i]->Update(deltaTime);
 	}
 
 	// Remove dead objects
-	/*for (int i{ int(m_objects.size() - 1) }; i >= 0; i--)
+	for (int i{ int(m_objects.size() - 1) }; i >= 0; i--)
 	{
 		if (m_objects[i]->IsDead())
 		{
-			for (int j{}; j < m_objects[i]->GetChildCount(); j++)
+			// If object has parent, set parent of children
+			if (m_objects[i]->GetParent() != nullptr)
 			{
-				m_objects[i]->GetChildAt(j)->SetParent(nullptr, true);
+				for (int j{}; j < m_objects[i]->GetChildCount(); j++)
+				{
+					m_objects[i]->GetChildAt(j)->SetParent(m_objects[i]->GetParent(), true);
+				}
 			}
+			else
+			{
+				// If object has no parent, set children to nullptr
+				for (int j{}; j < m_objects[i]->GetChildCount(); j++)
+				{
+					m_objects[i]->GetChildAt(j)->SetParent(nullptr, true);
+				}
+			}
+
+			// Remove object
 			m_objects[i].reset();
 			Remove(m_objects[i]);
 		}
-	}*/
+	}
 }
 
 void Scene::Render(const float deltaTime) const
