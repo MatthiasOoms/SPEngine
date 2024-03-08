@@ -405,3 +405,4 @@ build_web
 
 # Dear Imgui settings file
 imgui.ini
+3rdParty/imgui/examples/example_emscripten_wgpu/web/index.html
