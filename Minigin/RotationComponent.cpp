@@ -16,6 +16,12 @@ void dae::RotationComponent::Update(float elapsedSec)
 {
 	m_RotAngle += m_RotSpeed * elapsedSec * float(M_PI) / 180.f;
 
+	// Prevent undefined behavior due to overflow
+	if (m_RotAngle >= 2 * M_PI)
+	{
+		m_RotAngle -= 2 * M_PI;
+	}
+
 	glm::vec3 buffer{ cosf(m_RotAngle) * m_Distance, sinf(m_RotAngle) * m_Distance, 0 };
 	m_pOwner->SetLocalPosition(buffer.x, buffer.y, buffer.z);
 }

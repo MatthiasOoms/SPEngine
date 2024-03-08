@@ -65,6 +65,7 @@ void dae::GameObject::SetParent(GameObject* pParent, bool keepWorldPosition)
 	}
 
 	// If the parent is a child of self, do nothing
+	// TODO: Check if parent is not a grandchild of self!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	for (size_t i{}; i < m_pChildren.size(); ++i)
 	{
 		if (pParent == m_pChildren[i])

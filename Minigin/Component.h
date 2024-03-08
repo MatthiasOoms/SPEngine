@@ -22,6 +22,9 @@ namespace dae
 		void SetOwner(GameObject* pOwner) { m_pOwner = pOwner; }
 
 	protected:
+		GameObject* GetOwner() const { return m_pOwner; }
+
+	private:
 		GameObject* m_pOwner;
 	};
 
