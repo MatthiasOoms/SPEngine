@@ -3,9 +3,16 @@
 #include "SceneManager.h"
 #include "Texture2D.h"
 
+#pragma warning(push)
+
+#pragma warning (disable: 4018)     // '<': signed / unsigned mismatch
+#pragma warning (disable: 4244)     // 'argument': conversion from 'int' to 'float', possible loss of data
+
 #include <imgui.h>
 #include <backends/imgui_impl_sdl2.h>
 #include <backends/imgui_impl_opengl3.h>
+
+#pragma warning(pop)
 
 int GetOpenGLDriverIndex()
 {
@@ -44,7 +51,6 @@ void dae::Renderer::Render(const float deltaTime) const
 
 	SceneManager::GetInstance().Render(deltaTime);
 
-	// This block of code is causing a warning, but it's a false positive
 	ImGui_ImplOpenGL3_NewFrame(); 
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
