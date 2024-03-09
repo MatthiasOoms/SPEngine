@@ -38,10 +38,6 @@ dae::ImGuiComponent::~ImGuiComponent()
 	ImGui::DestroyContext();
 }
 
-void dae::ImGuiComponent::Update(float)
-{
-}
-
 void dae::ImGuiComponent::RenderUI(float)
 {
 	ImGui_ImplOpenGL3_NewFrame();

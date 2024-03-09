@@ -42,7 +42,7 @@ namespace dae
 		ImGuiComponent& operator=(const ImGuiComponent& other) = delete;
 		ImGuiComponent& operator=(ImGuiComponent&& other) = delete;
 
-		virtual void Update(float elapsedSec) override;
+		virtual void Update(float) override {};
 
 		void PlotIntegers();
 		void PlotObj();
