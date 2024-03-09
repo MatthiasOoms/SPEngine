@@ -23,6 +23,7 @@ namespace dae
 
 		SDL_Renderer* GetSDLRenderer() const;
 
+		SDL_Window* GetWindow() const { return m_window; }
 		const SDL_Color& GetBackgroundColor() const { return m_clearColor; }
 		void SetBackgroundColor(const SDL_Color& color) { m_clearColor = color; }
 	};

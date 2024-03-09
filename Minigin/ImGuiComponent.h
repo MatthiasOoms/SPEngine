@@ -29,7 +29,7 @@ namespace dae
 		int ID;
 	};
 
-	class ImGuiComponent : public RenderComponent
+	class ImGuiComponent : public UpdateComponent
 	{
 	public:
 		ImGuiComponent(GameObject* pOwner);
@@ -40,7 +40,7 @@ namespace dae
 		ImGuiComponent& operator=(const ImGuiComponent& other) = delete;
 		ImGuiComponent& operator=(ImGuiComponent&& other) = delete;
 
-		virtual void Render(float elapsedSec) const override;
+		virtual void Update(float elapsedSec) override;
 
 		void PlotIntegers();
 		void PlotObj();
@@ -51,7 +51,7 @@ namespace dae
 		void BenchmarkObjAlt(std::vector<GameObject3DAlt> objAltVec, int benchmarks);
 
 		const int m_ArrSize{ 10'000'000 };
-		int m_MaxStepSize{ 1024 };
+		const int m_MaxStepSize{ 1024 };
 		std::vector<float> m_Steps{};
 		std::vector<float> m_yDataIntegers{};
 		std::vector<float> m_yDataObj{};

@@ -1,4 +1,5 @@
 #include "ImGuiComponent.h"
+#include "Renderer.h"
 
 #include "imgui.h"
 #include "imconfig.h"
@@ -10,16 +11,44 @@
 #include <numeric>
 
 dae::ImGuiComponent::ImGuiComponent(GameObject* pOwner)
-	: RenderComponent(pOwner)
+	: UpdateComponent(pOwner)
 {
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui_ImplSDL2_InitForOpenGL(Renderer::GetInstance().GetWindow(), SDL_GL_GetCurrentContext());
+	ImGui_ImplOpenGL3_Init();
+
+	// Plot step sizes
+	for (int stepSize{ 1 }; stepSize <= m_MaxStepSize; stepSize *= 2)
+	{
+		m_Steps.push_back(float(stepSize));
+	}
+	for (size_t i{}; i < m_Steps.size(); ++i)
+	{
+		m_yDataIntegers.push_back(0);
+		m_yDataObj.push_back(0);
+		m_yDataObjAlt.push_back(0);
+	}
 }
 
 dae::ImGuiComponent::~ImGuiComponent()
 {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 }
 
-void dae::ImGuiComponent::Render(float) const
+void dae::ImGuiComponent::Update(float)
 {
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+
+	PlotIntegers();
+	PlotObj();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void dae::ImGuiComponent::PlotIntegers()
@@ -81,7 +110,7 @@ void dae::ImGuiComponent::PlotObj()
 	conf.frame_size = ImVec2(200, 100);
 	conf.line_thickness = 2.f;
 
-	//ImGui::Plot("ObjPlot", conf);
+	ImGui::Plot("ObjPlot", conf);
 
 	if (ImGui::Button("Trash the cache with alternate objects!"))
 	{
@@ -92,7 +121,7 @@ void dae::ImGuiComponent::PlotObj()
 	conf.values.ys = m_yDataObjAlt.data();
 	conf.values.color = ImColor(0, 0, 255);
 
-	//ImGui::Plot("ObjAltPlot", conf);
+	ImGui::Plot("ObjAltPlot", conf);
 
 	// Combined
 	ImGui::Text("Combined Graphs: ");
@@ -114,7 +143,7 @@ void dae::ImGuiComponent::PlotObj()
 	conf_Combined.tooltip.format = "x=%.2f, y=%.2f";
 	conf_Combined.frame_size = ImVec2(200, 100);
 
-	//ImGui::Plot("CombinedPlot", conf_Combined);
+	ImGui::Plot("CombinedPlot", conf_Combined);
 }
 
 void dae::ImGuiComponent::BenchmarkIntegers(std::vector<int> intVec, int benchmarks)
