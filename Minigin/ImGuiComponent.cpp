@@ -9,6 +9,7 @@
 
 #include <chrono>
 #include <numeric>
+//#include <thread>
 
 dae::ImGuiComponent::ImGuiComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
@@ -62,6 +63,8 @@ void dae::ImGuiComponent::PlotIntegers()
 		// Plot data
 		std::vector<int> intArr(m_ArrSize, int{});
 		BenchmarkIntegers(intArr, benchmarkCount);
+		/*std::thread t1(&BenchmarkIntegers, intArr, benchmarkCount);
+		t1.join();*/
 	}
 
 	// Make plot
@@ -94,6 +97,9 @@ void dae::ImGuiComponent::PlotObj()
 		// Plot data
 		std::vector<GameObject3D> objArr(m_ArrSize, GameObject3D{});
 		BenchmarkObj(objArr, benchmarkCount);
+		/*std::thread t2(BenchmarkObj, objArr, benchmarkCount);
+		t2.join();*/
+		
 	}
 	ImGui::PlotConfig conf;
 	conf.values.xs = m_Steps.data();
@@ -117,6 +123,8 @@ void dae::ImGuiComponent::PlotObj()
 		// Plot data
 		std::vector<GameObject3DAlt> objAltArr(m_ArrSize, GameObject3DAlt{});
 		BenchmarkObjAlt(objAltArr, benchmarkCount);
+		/*std::thread t3(BenchmarkObjAlt, objAltArr, benchmarkCount);
+		t3.join();*/
 	}
 	conf.values.ys = m_yDataObjAlt.data();
 	conf.values.color = ImColor(0, 0, 255);
