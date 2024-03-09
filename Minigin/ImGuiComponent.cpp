@@ -40,6 +40,10 @@ dae::ImGuiComponent::~ImGuiComponent()
 
 void dae::ImGuiComponent::Update(float)
 {
+}
+
+void dae::ImGuiComponent::RenderUI(float)
+{
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();

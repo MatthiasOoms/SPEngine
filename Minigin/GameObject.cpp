@@ -43,6 +43,7 @@ void dae::GameObject::Render(const float deltaTime) const
 	for (size_t idx{}; idx < m_pComponents.size(); ++idx)
 	{
 		m_pComponents[idx]->Render(deltaTime);
+		m_pComponents[idx]->RenderUI(deltaTime);
 	}
 }
 

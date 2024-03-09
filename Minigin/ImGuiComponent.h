@@ -35,6 +35,8 @@ namespace dae
 		ImGuiComponent(GameObject* pOwner);
 		virtual ~ImGuiComponent();
 
+		void RenderUI(float elapsedSec) override;
+
 		ImGuiComponent(const ImGuiComponent& other) = delete;
 		ImGuiComponent(ImGuiComponent&& other) = delete;
 		ImGuiComponent& operator=(const ImGuiComponent& other) = delete;
