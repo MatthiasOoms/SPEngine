@@ -9,7 +9,7 @@
 
 #include <chrono>
 #include <numeric>
-//#include <thread>
+#include <thread>
 
 dae::ImGuiComponent::ImGuiComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
@@ -63,7 +63,7 @@ void dae::ImGuiComponent::PlotIntegers()
 		// Plot data
 		std::vector<int> intArr(m_ArrSize, int{});
 		BenchmarkIntegers(intArr, benchmarkCount);
-		/*std::thread t1(&BenchmarkIntegers, intArr, benchmarkCount);
+		/*std::thread t1(&dae::ImGuiComponent::BenchmarkIntegers, this, std::ref(intArr), benchmarkCount);
 		t1.join();*/
 	}
 
@@ -97,7 +97,7 @@ void dae::ImGuiComponent::PlotObj()
 		// Plot data
 		std::vector<GameObject3D> objArr(m_ArrSize, GameObject3D{});
 		BenchmarkObj(objArr, benchmarkCount);
-		/*std::thread t2(BenchmarkObj, objArr, benchmarkCount);
+		/*std::thread t2(&dae::ImGuiComponent::BenchmarkObj, this, std::ref(objArr), benchmarkCount);
 		t2.join();*/
 		
 	}
@@ -123,7 +123,7 @@ void dae::ImGuiComponent::PlotObj()
 		// Plot data
 		std::vector<GameObject3DAlt> objAltArr(m_ArrSize, GameObject3DAlt{});
 		BenchmarkObjAlt(objAltArr, benchmarkCount);
-		/*std::thread t3(BenchmarkObjAlt, objAltArr, benchmarkCount);
+		/*std::thread t3(&dae::ImGuiComponent::BenchmarkObjAlt, this, std::ref(objAltArr), benchmarkCount);
 		t3.join();*/
 	}
 	conf.values.ys = m_yDataObjAlt.data();
