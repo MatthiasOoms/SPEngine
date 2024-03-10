@@ -13,13 +13,13 @@ namespace dae
         , m_NeedsUpdate{ false }
     {
         // Add TextureComponent if not already made
-        if (!m_pOwner->HasComponent<TextureComponent>())
+        if (!GetOwner()->HasComponent<TextureComponent>())
         {
-            m_pTextureComponent = m_pOwner->AddComponent<TextureComponent>();
+            m_pTextureComponent = GetOwner()->AddComponent<TextureComponent>();
         }
         else
         {
-            m_pTextureComponent = m_pOwner->GetComponent<TextureComponent>();
+            m_pTextureComponent = GetOwner()->GetComponent<TextureComponent>();
         }
     }
 

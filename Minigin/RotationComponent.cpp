@@ -8,7 +8,7 @@ dae::RotationComponent::RotationComponent(GameObject* pOwner)
 	, m_RotAngle{}
 	, m_RotSpeed{ 180 }
 {
-	float distance{ GetDistance(m_pOwner->GetTransform().GetLocalPosition().x, m_pOwner->GetTransform().GetLocalPosition().y, m_pOwner->GetTransform().GetLocalPosition().z) };
+	float distance{ GetDistance(GetOwner()->GetTransform().GetLocalPosition().x, GetOwner()->GetTransform().GetLocalPosition().y, GetOwner()->GetTransform().GetLocalPosition().z) };
 	m_Distance = distance;
 }
 
@@ -19,11 +19,11 @@ void dae::RotationComponent::Update(float elapsedSec)
 	// Prevent undefined behavior due to overflow
 	if (m_RotAngle >= 2 * M_PI)
 	{
-		m_RotAngle -= 2 * M_PI;
+		m_RotAngle -= 2 * float(M_PI);
 	}
 
 	glm::vec3 buffer{ cosf(m_RotAngle) * m_Distance, sinf(m_RotAngle) * m_Distance, 0 };
-	m_pOwner->SetLocalPosition(buffer.x, buffer.y, buffer.z);
+	GetOwner()->SetLocalPosition(buffer.x, buffer.y, buffer.z);
 }
 
 void dae::RotationComponent::SetRotationSpeed(float rotSpeed)

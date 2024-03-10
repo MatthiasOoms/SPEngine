@@ -6,13 +6,13 @@ dae::FPSComponent::FPSComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
 	, m_pTextComponent{ nullptr }
 {
-	if (m_pOwner->HasComponent<dae::TextComponent>())
+	if (GetOwner()->HasComponent<dae::TextComponent>())
 	{
-		m_pTextComponent = m_pOwner->GetComponent<dae::TextComponent>();
+		m_pTextComponent = GetOwner()->GetComponent<dae::TextComponent>();
 	}
 	else
 	{
-		m_pTextComponent = m_pOwner->AddComponent<dae::TextComponent>();
+		m_pTextComponent = GetOwner()->AddComponent<dae::TextComponent>();
 	}
 }
 
