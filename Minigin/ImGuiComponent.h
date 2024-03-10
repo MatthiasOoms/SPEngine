@@ -48,9 +48,9 @@ namespace dae
 		void PlotObj();
 
 	private:
-		void BenchmarkIntegers(std::vector<int> intVec, int benchmarks);
-		void BenchmarkObj(std::vector<GameObject3D> objVec, int benchmarks);
-		void BenchmarkObjAlt(std::vector<GameObject3DAlt> objAltVec, int benchmarks);
+		void BenchmarkIntegers(std::vector<int>& intVec, int benchmarks);
+		void BenchmarkObj(std::vector<GameObject3D>& objVec, int benchmarks);
+		void BenchmarkObjAlt(std::vector<GameObject3DAlt>& objAltVec, int benchmarks);
 
 		const int m_ArrSize{ 10'000'000 };
 		const int m_MaxStepSize{ 1024 };

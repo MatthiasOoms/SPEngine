@@ -77,7 +77,7 @@ void dae::ImGuiComponent::PlotIntegers()
 	conf.grid_y.show = true;
 	conf.grid_y.size = 10'000.f;
 	conf.scale.min = 0.f;
-	conf.scale.max = 10'000.f;
+	conf.scale.max = 50'000.f;
 	conf.tooltip.show = true;
 	conf.tooltip.format = "x=%.2f, y=%.2f";
 	conf.frame_size = ImVec2(200, 100);
@@ -154,131 +154,152 @@ void dae::ImGuiComponent::PlotObj()
 	ImGui::Plot("CombinedPlot", conf_Combined);
 }
 
-void dae::ImGuiComponent::BenchmarkIntegers(std::vector<int> intVec, int benchmarks)
+void dae::ImGuiComponent::BenchmarkIntegers(std::vector<int>& intVec, int benchmarks)
 {
-	int currentStep{};
-	for (int stepSize{ 1 }; stepSize <= m_MaxStepSize; stepSize *= 2)
+	if (benchmarks > 0)
 	{
-		if (m_yDataIntegers.size() < m_Steps.size())
+		int currentStep{};
+		for (int stepSize{ 1 }; stepSize <= m_MaxStepSize; stepSize *= 2)
 		{
-			m_yDataIntegers.push_back(0);
-		}
-		std::vector<long long> elapsedTimes(benchmarks);
-
-		// Fill array with durations
-		for (size_t i{}; i < benchmarks; i++)
-		{
-			// Get start
-			auto start = std::chrono::high_resolution_clock::now();
-			// Do something
-			for (int idx{}; idx < m_ArrSize; idx += stepSize)
+			if (m_yDataIntegers.size() < m_Steps.size())
 			{
-				intVec[idx] *= 2;
+				m_yDataIntegers.push_back(0);
 			}
-			// Get end
-			auto end = std::chrono::high_resolution_clock::now();
+			std::vector<long long> elapsedTimes(benchmarks);
 
-			// Calculate duration
-			auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-			elapsedTimes[i] = elapsedTime;
+			// Fill array with durations
+			for (size_t i{}; i < benchmarks; i++)
+			{
+				// Get start
+				auto start = std::chrono::high_resolution_clock::now();
+				// Do something
+				for (int idx{}; idx < m_ArrSize; idx += stepSize)
+				{
+					intVec[idx] *= 2;
+				}
+				// Get end
+				auto end = std::chrono::high_resolution_clock::now();
+
+				// Calculate duration
+				auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+				elapsedTimes[i] = elapsedTime;
+			}
+
+			if (benchmarks >= 3)
+			{
+				// Remove lowest
+				auto min = std::min_element(elapsedTimes.begin(), elapsedTimes.end());
+				elapsedTimes.erase(min);
+				// Remove highest
+				auto max = std::max_element(elapsedTimes.begin(), elapsedTimes.end());
+				elapsedTimes.erase(max);
+			}
+
+			// Get average
+			auto avgTime = std::accumulate(elapsedTimes.begin(), elapsedTimes.end(), 0.0) / elapsedTimes.size();
+
+			m_yDataIntegers[currentStep] = float(avgTime);
+			++currentStep;
 		}
-
-		// Remove lowest
-		auto min = std::min_element(elapsedTimes.begin(), elapsedTimes.end());
-		elapsedTimes.erase(min);
-		// Remove highest
-		auto max = std::max_element(elapsedTimes.begin(), elapsedTimes.end());
-		elapsedTimes.erase(max);
-		// Get average
-		auto avgTime = std::accumulate(elapsedTimes.begin(), elapsedTimes.end(), 0.0) / elapsedTimes.size();
-
-		m_yDataIntegers[currentStep] = float(avgTime);
-		++currentStep;
 	}
 }
 
-void dae::ImGuiComponent::BenchmarkObj(std::vector<GameObject3D> objVec, int benchmarks)
+void dae::ImGuiComponent::BenchmarkObj(std::vector<GameObject3D>& objVec, int benchmarks)
 {
-	int currentStep{};
-	for (int stepSize{ 1 }; stepSize <= m_MaxStepSize; stepSize *= 2)
+	if (benchmarks > 0)
 	{
-		if (m_yDataObj.size() < m_Steps.size())
+		int currentStep{};
+		for (int stepSize{ 1 }; stepSize <= m_MaxStepSize; stepSize *= 2)
 		{
-			m_yDataObj.push_back(0);
-		}
-		std::vector<long long> elapsedTimes(benchmarks);
-
-		// Fill array with durations
-		for (size_t i{}; i < benchmarks; i++)
-		{
-			// Get start
-			auto start = std::chrono::high_resolution_clock::now();
-			// Do something
-			for (int idx{}; idx < m_ArrSize; idx += stepSize)
+			if (m_yDataObj.size() < m_Steps.size())
 			{
-				objVec[idx].ID *= 2;
+				m_yDataObj.push_back(0);
 			}
-			// Get end
-			auto end = std::chrono::high_resolution_clock::now();
+			std::vector<long long> elapsedTimes(benchmarks);
 
-			// Calculate duration
-			auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-			elapsedTimes[i] = elapsedTime;
+			// Fill array with durations
+			for (size_t i{}; i < benchmarks; i++)
+			{
+				// Get start
+				auto start = std::chrono::high_resolution_clock::now();
+				// Do something
+				for (int idx{}; idx < m_ArrSize; idx += stepSize)
+				{
+					objVec[idx].ID *= 2;
+				}
+				// Get end
+				auto end = std::chrono::high_resolution_clock::now();
+
+				// Calculate duration
+				auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+				elapsedTimes[i] = elapsedTime;
+			}
+
+			if (benchmarks >= 3)
+			{
+				// Remove lowest
+				auto min = std::min_element(elapsedTimes.begin(), elapsedTimes.end());
+				elapsedTimes.erase(min);
+				// Remove highest
+				auto max = std::max_element(elapsedTimes.begin(), elapsedTimes.end());
+				elapsedTimes.erase(max);
+			}
+
+			// Get average
+			auto avgTime = std::accumulate(elapsedTimes.begin(), elapsedTimes.end(), 0.0) / elapsedTimes.size();
+
+			m_yDataObj[currentStep] = float(avgTime);
+			++currentStep;
 		}
-
-		// Remove lowest
-		auto min = std::min_element(elapsedTimes.begin(), elapsedTimes.end());
-		elapsedTimes.erase(min);
-		// Remove highest
-		auto max = std::max_element(elapsedTimes.begin(), elapsedTimes.end());
-		elapsedTimes.erase(max);
-		// Get average
-		auto avgTime = std::accumulate(elapsedTimes.begin(), elapsedTimes.end(), 0.0) / elapsedTimes.size();
-
-		m_yDataObj[currentStep] = float(avgTime);
-		++currentStep;
 	}
 }
 
-void dae::ImGuiComponent::BenchmarkObjAlt(std::vector<GameObject3DAlt> objAltVec, int benchmarks)
+void dae::ImGuiComponent::BenchmarkObjAlt(std::vector<GameObject3DAlt>& objAltVec, int benchmarks)
 {
-	int currentStep{};
-	for (int stepSize{ 1 }; stepSize <= m_MaxStepSize; stepSize *= 2)
+	if (benchmarks > 0)
 	{
-		if (m_yDataObjAlt.size() < m_Steps.size())
+		int currentStep{};
+		for (int stepSize{ 1 }; stepSize <= m_MaxStepSize; stepSize *= 2)
 		{
-			m_yDataObjAlt.push_back(0);
-		}
-		std::vector<long long> elapsedTimes(benchmarks);
-
-		// Fill array with durations
-		for (size_t i{}; i < benchmarks; i++)
-		{
-			// Get start
-			auto start = std::chrono::high_resolution_clock::now();
-			// Do something
-			for (int idx{}; idx < m_ArrSize; idx += stepSize)
+			if (m_yDataObjAlt.size() < m_Steps.size())
 			{
-				objAltVec[idx].ID *= 2;
+				m_yDataObjAlt.push_back(0);
 			}
-			// Get end
-			auto end = std::chrono::high_resolution_clock::now();
+			std::vector<long long> elapsedTimes(benchmarks);
 
-			// Calculate duration
-			auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-			elapsedTimes[i] = elapsedTime;
+			// Fill array with durations
+			for (size_t i{}; i < benchmarks; i++)
+			{
+				// Get start
+				auto start = std::chrono::high_resolution_clock::now();
+				// Do something
+				for (int idx{}; idx < m_ArrSize; idx += stepSize)
+				{
+					objAltVec[idx].ID *= 2;
+				}
+				// Get end
+				auto end = std::chrono::high_resolution_clock::now();
+
+				// Calculate duration
+				auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+				elapsedTimes[i] = elapsedTime;
+			}
+
+			if (benchmarks >= 3)
+			{
+				// Remove lowest
+				auto min = std::min_element(elapsedTimes.begin(), elapsedTimes.end());
+				elapsedTimes.erase(min);
+				// Remove highest
+				auto max = std::max_element(elapsedTimes.begin(), elapsedTimes.end());
+				elapsedTimes.erase(max);
+			}
+
+			// Get average
+			auto avgTime = std::accumulate(elapsedTimes.begin(), elapsedTimes.end(), 0.0) / elapsedTimes.size();
+
+			m_yDataObjAlt[currentStep] = float(avgTime);
+			++currentStep;
 		}
-
-		// Remove lowest
-		auto min = std::min_element(elapsedTimes.begin(), elapsedTimes.end());
-		elapsedTimes.erase(min);
-		// Remove highest
-		auto max = std::max_element(elapsedTimes.begin(), elapsedTimes.end());
-		elapsedTimes.erase(max);
-		// Get average
-		auto avgTime = std::accumulate(elapsedTimes.begin(), elapsedTimes.end(), 0.0) / elapsedTimes.size();
-
-		m_yDataObjAlt[currentStep] = float(avgTime);
-		++currentStep;
 	}
 }
