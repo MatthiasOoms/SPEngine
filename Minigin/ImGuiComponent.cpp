@@ -168,7 +168,7 @@ void dae::ImGuiComponent::BenchmarkIntegers(std::vector<int>& intVec, int benchm
 			std::vector<long long> elapsedTimes(benchmarks);
 
 			// Fill array with durations
-			for (size_t i{}; i < benchmarks; i++)
+			for (int i{}; i < benchmarks; i++)
 			{
 				// Get start
 				auto start = std::chrono::high_resolution_clock::now();
@@ -218,7 +218,7 @@ void dae::ImGuiComponent::BenchmarkObj(std::vector<GameObject3D>& objVec, int be
 			std::vector<long long> elapsedTimes(benchmarks);
 
 			// Fill array with durations
-			for (size_t i{}; i < benchmarks; i++)
+			for (int i{}; i < benchmarks; i++)
 			{
 				// Get start
 				auto start = std::chrono::high_resolution_clock::now();
@@ -268,7 +268,7 @@ void dae::ImGuiComponent::BenchmarkObjAlt(std::vector<GameObject3DAlt>& objAltVe
 			std::vector<long long> elapsedTimes(benchmarks);
 
 			// Fill array with durations
-			for (size_t i{}; i < benchmarks; i++)
+			for (int i{}; i < benchmarks; i++)
 			{
 				// Get start
 				auto start = std::chrono::high_resolution_clock::now();
