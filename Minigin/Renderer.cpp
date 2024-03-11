@@ -3,6 +3,10 @@
 #include "SceneManager.h"
 #include "Texture2D.h"
 
+#include <imgui.h>
+#include <backends/imgui_impl_sdl2.h>
+#include <backends/imgui_impl_opengl3.h>
+
 int GetOpenGLDriverIndex()
 {
 	auto openglIndex = -1;
@@ -33,7 +37,14 @@ void dae::Renderer::Render(const float deltaTime) const
 	SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderClear(m_renderer);
 
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+
 	SceneManager::GetInstance().Render(deltaTime);
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	
 	SDL_RenderPresent(m_renderer);
 }

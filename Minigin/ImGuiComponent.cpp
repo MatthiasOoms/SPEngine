@@ -41,15 +41,8 @@ dae::ImGuiComponent::~ImGuiComponent()
 
 void dae::ImGuiComponent::RenderUI(float)
 {
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
-	ImGui::NewFrame();
-
 	PlotIntegers();
 	PlotObj();
-
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void dae::ImGuiComponent::PlotIntegers()
