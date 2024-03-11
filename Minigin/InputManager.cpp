@@ -62,7 +62,7 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 
 		if (pCurrentKeyState[command.first.first])
 		{
-			if (command.first.second == keyState::isPressed)
+			if (command.first.second == keyState::isHeld)
 			{
 				command.second->Execute(elapsedSec);
 			}
@@ -94,7 +94,7 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 					}
 					break;
 				}
-				case keyState::isPressed:
+				case keyState::isHeld:
 				{
 					if (controller->IsPressed(command.first.first.second))
 					{

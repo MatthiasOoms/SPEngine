@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <map>
+#include <SDL_scancode.h>
 
 namespace dae
 {
