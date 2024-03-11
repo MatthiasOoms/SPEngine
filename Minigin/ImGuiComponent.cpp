@@ -89,7 +89,7 @@ void dae::ImGuiComponent::PlotIntegers()
 void dae::ImGuiComponent::PlotObj()
 {
 	static int benchmarkCount = 100;
-	ImGui::InputInt("# Samples", &benchmarkCount, 1, 10);
+	ImGui::InputInt("# Samples Obj", &benchmarkCount, 1, 10);
 
 	// Get plot data
 	if (ImGui::Button("Trash the cache with objects!"))
