@@ -14,11 +14,6 @@
 dae::ImGuiComponent::ImGuiComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
 {
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui_ImplSDL2_InitForOpenGL(Renderer::GetInstance().GetWindow(), SDL_GL_GetCurrentContext());
-	ImGui_ImplOpenGL3_Init();
-
 	// Plot step sizes
 	for (int stepSize{ 1 }; stepSize <= m_MaxStepSize; stepSize *= 2)
 	{
@@ -34,9 +29,6 @@ dae::ImGuiComponent::ImGuiComponent(GameObject* pOwner)
 
 dae::ImGuiComponent::~ImGuiComponent()
 {
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
 }
 
 void dae::ImGuiComponent::RenderUI(float)
