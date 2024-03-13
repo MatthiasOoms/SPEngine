@@ -9,7 +9,12 @@ namespace dae
 	{
 	public:
 		Transform(GameObject* pOwner);
+		
 		~Transform();
+		Transform(const Transform& other) = delete;
+		Transform(Transform&& other) = delete;
+		Transform& operator=(const Transform& other) = delete;
+		Transform& operator=(Transform&& other) = delete;
 
 		const glm::vec3& GetLocalPosition() const { return m_LocalPosition; }
 		const glm::vec3& GetWorldPosition() const { return m_WorldPosition; }

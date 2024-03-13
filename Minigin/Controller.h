@@ -40,7 +40,12 @@ namespace dae
 		bool IsPressed(ControllerButton button) const;
 
 		explicit Controller(unsigned int controllerIdx);
+
 		~Controller();
+		Controller(const Controller& other) = delete;
+		Controller(Controller&& other) = delete;
+		Controller& operator=(const Controller& other) = delete;
+		Controller& operator=(Controller&& other) = delete;
 	};
 }
 
