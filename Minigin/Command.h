@@ -9,7 +9,13 @@ namespace dae
 	{
 	public:
 		explicit Command();
+
 		virtual ~Command();
+		Command(const Command& other) = delete;
+		Command(Command&& other) = delete;
+		Command& operator=(const Command& other) = delete;
+		Command& operator=(Command&& other) = delete;
+
 		virtual void Execute(float) = 0;
 	};
 
@@ -24,7 +30,13 @@ namespace dae
 		GameObject* GetGameObject() { return m_pGameObject; }
 	public:
 		MoveCommand(GameObject* pGameObject, glm::vec3 dir, float speed);
+
 		virtual ~MoveCommand() = default;
+		MoveCommand(const MoveCommand& other) = delete;
+		MoveCommand(MoveCommand&& other) = delete;
+		MoveCommand& operator=(const MoveCommand& other) = delete;
+		MoveCommand& operator=(MoveCommand&& other) = delete;
+
 		void Execute(float elapsedSec) override;
 	};
 }
