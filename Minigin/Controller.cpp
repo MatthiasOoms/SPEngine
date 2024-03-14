@@ -7,7 +7,7 @@
 
 namespace dae
 {
-	class Controller::ControllerImpl
+	class Controller::ControllerImpl final
 	{
 		XINPUT_STATE m_PreviousState{};
 		XINPUT_STATE m_CurrentState{};
