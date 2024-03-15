@@ -18,15 +18,15 @@ namespace dae
 
 	class InputManager final : public Singleton<InputManager>
 	{
-		using ControllerKey = std::pair<unsigned, Controller::ControllerButton>;
+		using ControllerKey = std::pair<unsigned int, Controller::ControllerButton>;
 		using ControllerKeyState = std::pair<ControllerKey, keyState>;
 		using ControllerCommandsMap = std::map<ControllerKeyState, std::unique_ptr<Command>>;
 
 		using KeyboardKey = std::pair<SDL_Scancode, keyState>;
-		using KeyboardCommands = std::map<KeyboardKey, std::unique_ptr<Command>>;
+		using KeyboardCommandsMap = std::map<KeyboardKey, std::unique_ptr<Command>>;
 
 		ControllerCommandsMap m_ConsoleCommands{};
-		KeyboardCommands m_KeyboardCommands{};
+		KeyboardCommandsMap m_KeyboardCommands{};
 		std::vector<std::unique_ptr<Controller>> m_Controllers{};
 
 		std::vector<Uint8> m_pPreviousKeyState{};

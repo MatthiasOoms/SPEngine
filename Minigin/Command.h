@@ -31,7 +31,7 @@ namespace dae
 	public:
 		MoveCommand(GameObject* pGameObject, glm::vec3 dir, float speed);
 
-		virtual ~MoveCommand() = default;
+		virtual ~MoveCommand() override = default;
 		MoveCommand(const MoveCommand& other) = delete;
 		MoveCommand(MoveCommand&& other) = delete;
 		MoveCommand& operator=(const MoveCommand& other) = delete;
