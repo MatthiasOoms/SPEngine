@@ -36,11 +36,11 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 	std::vector<Uint8> myPreviousState{ m_pPreviousKeyState.begin(), m_pPreviousKeyState.end() };
 
 	std::vector<Uint8> myChangedState(myCurrentState.size()); // For calculations
-	std::vector<Uint8> myHeldState(myCurrentState.size()); // Pressed this frame
+	std::vector<Uint8> myPressedState(myCurrentState.size()); // Pressed this frame
 	std::vector<Uint8> myReleasedState(myCurrentState.size()); // Released this frame
 
 	std::transform(myCurrentState.begin(), myCurrentState.end(), myPreviousState.begin(), myChangedState.begin(), std::bit_xor<Uint8>());
-	std::transform(myCurrentState.begin(), myCurrentState.end(), myChangedState.begin(), myHeldState.begin(), std::bit_and<Uint8>());
+	std::transform(myCurrentState.begin(), myCurrentState.end(), myChangedState.begin(), myPressedState.begin(), std::bit_and<Uint8>());
 	std::transform(myCurrentState.begin(), myCurrentState.end(), myChangedState.begin(), myReleasedState.begin(),
 		[](Uint8 currentKey, Uint8 changedKey)
 		{
@@ -52,7 +52,7 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 
 	for (auto const& command : m_KeyboardCommands)
 	{
-		if (myHeldState[command.first.first])
+		if (myPressedState[command.first.first])
 		{
 			if (command.first.second == keyState::isDown)
 			{

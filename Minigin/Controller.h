@@ -6,7 +6,7 @@ namespace dae
 		class ControllerImpl;
 		ControllerImpl* pImpl;
 	public:
-		enum class ControllerButton
+		enum struct ControllerButton
 		{
 			DPadUp = 0x0001,
 			DPadDown = 0x0002,
@@ -24,7 +24,7 @@ namespace dae
 			ButtonY = 0x8000
 		};
 
-		enum class ControllerIdx
+		enum struct ControllerIdx
 		{
 			First,
 			Second,

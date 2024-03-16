@@ -9,7 +9,7 @@
 
 namespace dae
 {
-	enum class keyState
+	enum struct keyState
 	{
 		isDown,		// Down this frame
 		isHeld,		// Held this frame
