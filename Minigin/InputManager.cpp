@@ -122,11 +122,11 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 
 int dae::InputManager::AddController()
 {
-	if (int(m_Controllers.size()) < m_MaxControllers)
+	if (static_cast<int>(m_Controllers.size()) < m_MaxControllers)
 	{
-		m_Controllers.push_back(std::make_unique<Controller>(int(m_Controllers.size())));
+		m_Controllers.push_back(std::make_unique<Controller>(static_cast<int>(m_Controllers.size())));
 	}
-	return int(m_Controllers.size());
+	return static_cast<int>(m_Controllers.size());
 }
 
 void dae::InputManager::AddCommand(int controllerIdx, Controller::ControllerButton button, keyState state, std::unique_ptr<Command> pCommand)

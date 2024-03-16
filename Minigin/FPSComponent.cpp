@@ -20,6 +20,6 @@ void dae::FPSComponent::Update(const float deltaTime)
 {
 	if (m_pTextComponent != nullptr)
 	{
-		m_pTextComponent->SetText(std::to_string(int(1.f / deltaTime)));
+		m_pTextComponent->SetText(std::to_string(static_cast<int>(1.f / deltaTime)));
 	}
 }
