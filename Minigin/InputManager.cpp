@@ -3,19 +3,6 @@
 #include <functional>
 #include <algorithm>
 
-dae::InputManager::InputManager()
-{
-	for (int i{}; i < m_MaxControllers; ++i)
-	{
-		// Controller is connected
-		AddController();
-	}
-
-	int size{};
-	auto temp = SDL_GetKeyboardState(&size);
-	m_pPreviousKeyState = std::vector<Uint8>{ temp, temp + size };
-}
-
 bool dae::InputManager::ProcessInput(float elapsedSec)
 {
 	SDL_Event e;
@@ -125,6 +112,18 @@ int dae::InputManager::AddController()
 	if (static_cast<int>(m_Controllers.size()) < m_MaxControllers)
 	{
 		m_Controllers.push_back(std::make_unique<Controller>(static_cast<int>(m_Controllers.size())));
+	}
+	return static_cast<int>(m_Controllers.size());
+}
+
+int dae::InputManager::AddControllersMax()
+{
+	for (int i{}; i < m_MaxControllers; ++i)
+	{
+		if (static_cast<int>(m_Controllers.size()) < m_MaxControllers)
+		{
+			m_Controllers.push_back(std::make_unique<Controller>(static_cast<int>(m_Controllers.size())));
+		}
 	}
 	return static_cast<int>(m_Controllers.size());
 }

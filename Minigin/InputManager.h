@@ -33,22 +33,15 @@ namespace dae
 		KeyboardCommandsMap m_KeyboardCommands{};
 		std::vector<std::unique_ptr<Controller>> m_Controllers{};
 
-		std::vector<Uint8> m_pPreviousKeyState{};
+		std::vector<Uint8> m_pPreviousKeyState{ std::vector<Uint8>(SDL_NUM_SCANCODES) };
 
 		const int m_MaxControllers{ 4 };
 
 	public:
-		InputManager();
-
-		~InputManager() = default;
-		InputManager(const InputManager& other) = delete;
-		InputManager(InputManager&& other) = delete;
-		InputManager& operator=(const InputManager& other) = delete;
-		InputManager& operator=(InputManager&& other) = delete;
-
 		bool ProcessInput(float elapsedSec);
 
 		int AddController();
+		int AddControllersMax();
 		void AddCommand(int controllerIdx, Controller::ControllerButton button, keyState state, std::unique_ptr<Command> pCommand);
 		void AddCommand(SDL_Scancode key, keyState state, std::unique_ptr<Command> pCommand);
 		void RemoveCommand(int controllerIdx, Controller::ControllerButton button, keyState state);
