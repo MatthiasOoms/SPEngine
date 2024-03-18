@@ -223,7 +223,6 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
     <ClCompile Include="ScoreObserverComponent.cpp" />
-    <ClCompile Include="SteamAchievements.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
