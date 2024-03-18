@@ -141,3 +141,16 @@ void dae::InputManager::AddCommand(SDL_Scancode key, keyState state, std::unique
 	KeyboardKey keyPair = std::make_pair(key, state);
 	m_KeyboardCommands[keyPair] = std::move(pCommand);
 }
+
+void dae::InputManager::RemoveCommand(int controllerIdx, Controller::ControllerButton button, keyState state)
+{
+	ControllerKey keyPair{ std::make_pair(controllerIdx, button) };
+	ControllerKeyState statePair{ std::make_pair(keyPair, state) };
+	m_ConsoleCommands.erase(statePair);
+}
+
+void dae::InputManager::RemoveCommand(SDL_Scancode key, keyState state)
+{
+	KeyboardKey keyPair = std::make_pair(key, state);
+	m_KeyboardCommands.erase(keyPair);
+}

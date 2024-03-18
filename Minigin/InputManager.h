@@ -1,4 +1,7 @@
 #pragma once
+
+// TODO : Use Include guards instead of #pragma once
+
 #include "Singleton.h"
 #include "Controller.h"
 #include "Command.h"
@@ -48,6 +51,8 @@ namespace dae
 		int AddController();
 		void AddCommand(int controllerIdx, Controller::ControllerButton button, keyState state, std::unique_ptr<Command> pCommand);
 		void AddCommand(SDL_Scancode key, keyState state, std::unique_ptr<Command> pCommand);
+		void RemoveCommand(int controllerIdx, Controller::ControllerButton button, keyState state);
+		void RemoveCommand(SDL_Scancode key, keyState state);
 	};
 
 }
