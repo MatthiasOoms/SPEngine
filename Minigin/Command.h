@@ -39,5 +39,41 @@ namespace dae
 
 		void Execute(float elapsedSec) override;
 	};
+
+	class KillCommand final : public Command
+	{
+	private:
+		GameObject* m_pGameObject;
+	protected:
+		GameObject* GetGameObject() { return m_pGameObject; }
+	public:
+		KillCommand(GameObject* pGameObject);
+
+		virtual ~KillCommand() override = default;
+		KillCommand(const KillCommand& other) = delete;
+		KillCommand(KillCommand&& other) = delete;
+		KillCommand& operator=(const KillCommand& other) = delete;
+		KillCommand& operator=(KillCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
+
+	class ScoreSmallCommand final : public Command
+	{
+	private:
+		GameObject* m_pGameObject;
+	protected:
+		GameObject* GetGameObject() { return m_pGameObject; }
+	public:
+		ScoreSmallCommand(GameObject* pGameObject);
+
+		virtual ~ScoreSmallCommand() override = default;
+		ScoreSmallCommand(const ScoreSmallCommand& other) = delete;
+		ScoreSmallCommand(ScoreSmallCommand&& other) = delete;
+		ScoreSmallCommand& operator=(const ScoreSmallCommand& other) = delete;
+		ScoreSmallCommand& operator=(ScoreSmallCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
 }
 
