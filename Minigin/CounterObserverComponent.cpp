@@ -16,14 +16,10 @@ void dae::CounterObserverComponent::OnNotify(GameObject* obj, Event event)
 {
 	switch (event)
 	{
-	case dae::Event::PlayerDeath:
+	case dae::Event::ObserverAdd:
 		UpdateText(obj);
 		break;
-	case dae::Event::EnemyDeath:
-		break;
-	case dae::Event::ScoreChange:
-		break;
-	case dae::Event::AddObserver:
+	case dae::Event::CountChange:
 		UpdateText(obj);
 		break;
 	default:
