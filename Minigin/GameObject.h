@@ -25,8 +25,9 @@ namespace dae
 
 		template <typename Comp> Comp* AddComponent();
 		template <typename Comp> Comp* GetComponent() const;
-		template <typename Comp> std::vector<Comp*> GetAllComponentsOfType() const;
 		template <typename Comp> bool HasComponent() const;
+		template <typename Comp> Comp* GetComponent(int idx) const;
+		template <typename Comp> bool HasComponent(int idx) const;
 		template <typename Comp> void RemoveComponent();
 		GameObject* GetParent() const;
 		void SetParent(GameObject* pParent, bool keepWorldPosition);
@@ -84,26 +85,6 @@ namespace dae
 			}
 		}
 		return nullptr;
-	}
-
-	template<typename Comp>
-	inline std::vector<Comp*> GameObject::GetAllComponentsOfType() const
-	{
-		Comp* temp;
-		std::vector<Comp*> tempVec;
-		for (size_t idx{}; idx < m_pComponents.size(); idx++)
-		{
-			temp = dynamic_cast<Comp*>(m_pComponents[idx]);
-			if (temp != nullptr)
-			{
-				tempVec.push_back(temp);
-			}
-		}
-		if (tempVec.size() > 0)
-		{
-			return tempVec;
-		}
-		return {};
 	}
 
 	template<typename Comp>
