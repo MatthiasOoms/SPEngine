@@ -3,7 +3,6 @@
 #include "Component.h"
 #include "Observer.h"
 
-// TODO: Maybe make Score and Lives into a CounterComponent so I only need 1 component and 1 observer
 namespace dae
 {
 	class GameObject;
