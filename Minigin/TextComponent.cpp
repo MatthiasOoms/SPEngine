@@ -49,11 +49,8 @@ namespace dae
 
     void TextComponent::SetText(const std::string& text)
     {
-        if (text != "")
-        {
-            m_Text = text;
-            m_NeedsUpdate = true;
-        }
+        m_Text = text;
+        m_NeedsUpdate = true;
     }
 
     void TextComponent::SetFont(const std::shared_ptr<Font>& font)

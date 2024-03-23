@@ -1,6 +1,7 @@
 #include "Command.h"
 #include "GameObject.h"
-#include "CounterComponent.h"
+#include "LivesComponent.h"
+#include "ScoreComponent.h"
 
 dae::Command::Command()
 {
@@ -31,9 +32,9 @@ dae::KillCommand::KillCommand(GameObject* pGameObject)
 
 void dae::KillCommand::Execute(float)
 {
-	if (GetGameObject()->HasComponent<CounterComponent>())
+	if (GetGameObject()->HasComponent<LivesComponent>())
 	{
-		GetGameObject()->GetComponent<CounterComponent>()->IncrementCount(-1);
+		GetGameObject()->GetComponent<LivesComponent>()->LowerLives();
 	}
 }
 
@@ -45,8 +46,8 @@ dae::ScoreSmallCommand::ScoreSmallCommand(GameObject* pGameObject)
 
 void dae::ScoreSmallCommand::Execute(float)
 {
-	if (GetGameObject()->HasComponent<CounterComponent>())
+	if (GetGameObject()->HasComponent<ScoreComponent>())
 	{
-		GetGameObject()->GetComponent<CounterComponent>()->IncrementCount(100);
+		GetGameObject()->GetComponent<ScoreComponent>()->IncreaseScore(100);
 	}
 }

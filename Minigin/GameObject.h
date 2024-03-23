@@ -26,8 +26,6 @@ namespace dae
 		template <typename Comp> Comp* AddComponent();
 		template <typename Comp> Comp* GetComponent() const;
 		template <typename Comp> bool HasComponent() const;
-		template <typename Comp> Comp* GetComponent(int idx) const;
-		template <typename Comp> bool HasComponent(int idx) const;
 		template <typename Comp> void RemoveComponent();
 		GameObject* GetParent() const;
 		void SetParent(GameObject* pParent, bool keepWorldPosition);
