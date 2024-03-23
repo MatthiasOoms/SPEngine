@@ -5,8 +5,8 @@
 
 dae::CounterComponent::CounterComponent(GameObject* pOwner)
 	: Component(pOwner)
-	, m_Count{ 0 }
 {
+	SetCount(3);
 	m_pSubject = new Subject{};
 }
 
@@ -19,7 +19,7 @@ dae::CounterComponent::~CounterComponent()
 void dae::CounterComponent::AddObserver(Observer* pObserver)
 {
 	m_pSubject->AddObserver(pObserver);
-	m_pSubject->OnNotify(GetOwner(), Event::ObserverAdd);
+	m_pSubject->OnNotify(GetOwner(), Event::AddObserver);
 }
 
 int dae::CounterComponent::GetCount() const
@@ -30,11 +30,10 @@ int dae::CounterComponent::GetCount() const
 void dae::CounterComponent::IncrementCount(int amount)
 {
 	m_Count += amount;
-	m_pSubject->OnNotify(GetOwner(), Event::CountChange);
+	m_pSubject->OnNotify(GetOwner(), Event::PlayerDeath);
 }
 
 void dae::CounterComponent::SetCount(int lives)
 {
 	m_Count = lives;
-	m_pSubject->OnNotify(GetOwner(), Event::CountChange);
 }

@@ -6,8 +6,10 @@ namespace dae
 
 	enum class Event
 	{
-		ObserverAdd,
-		CountChange
+		AddObserver,
+		PlayerDeath,
+		EnemyDeath,
+		ScoreChange
 	};
 
 	class Observer
