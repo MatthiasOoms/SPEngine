@@ -33,7 +33,14 @@ void dae::KillCommand::Execute(float)
 {
 	if (GetGameObject()->HasComponent<CounterComponent>())
 	{
-		GetGameObject()->GetComponent<CounterComponent>()->IncrementCount(-1);
+		auto counters = GetGameObject()->GetAllComponentsOfType<CounterComponent>();
+		for (int i{}; i < counters.size(); ++i)
+		{
+			if (counters[i]->GetName() == "Lives")
+			{
+				counters[i]->IncrementCount(-1);
+			}
+		}
 	}
 }
 
@@ -47,6 +54,13 @@ void dae::ScoreSmallCommand::Execute(float)
 {
 	if (GetGameObject()->HasComponent<CounterComponent>())
 	{
-		GetGameObject()->GetComponent<CounterComponent>()->IncrementCount(100);
+		auto counters = GetGameObject()->GetAllComponentsOfType<CounterComponent>();
+		for (int i{}; i < counters.size(); ++i)
+		{
+			if (counters[i]->GetName() == "Score")
+			{
+				counters[i]->IncrementCount(100);
+			}
+		}
 	}
 }

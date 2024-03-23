@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include <string>
 
 namespace dae
 {
@@ -22,12 +23,14 @@ namespace dae
 
 		void IncrementCount(int amount);
 		void SetCount(int health);
+		void SetName(std::string name);
 		void AddObserver(Observer* pObserver);
 		int GetCount() const;
+		std::string GetName() const;
 
 	private:
 		int m_Count;
-
+		std::string m_Name;
 		Subject* m_pSubject;
 	};
 }

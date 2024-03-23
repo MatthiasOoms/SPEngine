@@ -7,7 +7,8 @@ namespace dae
 	enum class Event
 	{
 		ObserverAdd,
-		CountChange
+		LivesChange,
+		ScoreChange
 	};
 
 	class Observer

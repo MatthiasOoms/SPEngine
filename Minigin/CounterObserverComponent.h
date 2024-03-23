@@ -17,7 +17,8 @@ namespace dae
 		virtual ~CounterObserverComponent();
 
 		virtual void OnNotify(GameObject* obj, Event event) override;
-		void UpdateText(GameObject* obj);
+		void UpdateLivesText(GameObject* obj);
+		void UpdateScoreText(GameObject* obj);
 
 		void SetPrefix(const std::string& prefix) { m_Prefix = prefix; }
 		void SetSuffix(const std::string& suffix) { m_Suffix = suffix; }

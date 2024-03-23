@@ -27,14 +27,24 @@ int dae::CounterComponent::GetCount() const
 	return m_Count;
 }
 
+std::string dae::CounterComponent::GetName() const
+{
+	return m_Name;
+}
+
 void dae::CounterComponent::IncrementCount(int amount)
 {
 	m_Count += amount;
-	m_pSubject->OnNotify(GetOwner(), Event::CountChange);
+	m_pSubject->OnNotify(GetOwner(), Event::LivesChange);
 }
 
 void dae::CounterComponent::SetCount(int lives)
 {
 	m_Count = lives;
-	m_pSubject->OnNotify(GetOwner(), Event::CountChange);
+	m_pSubject->OnNotify(GetOwner(), Event::LivesChange);
+}
+
+void dae::CounterComponent::SetName(std::string name)
+{
+	m_Name = name;
 }
