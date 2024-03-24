@@ -1,5 +1,7 @@
 #include "Command.h"
 #include "GameObject.h"
+#include "LivesComponent.h"
+#include "ScoreComponent.h"
 
 dae::Command::Command()
 {
@@ -20,4 +22,32 @@ dae::MoveCommand::MoveCommand(GameObject* pGameObject, glm::vec3 dir, float spee
 void dae::MoveCommand::Execute(float elapsedSec)
 {
 	GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + (m_MoveDir * m_MoveSpeed * elapsedSec));
+}
+
+dae::KillCommand::KillCommand(GameObject* pGameObject)
+	: Command{ }
+	, m_pGameObject{ pGameObject }
+{
+}
+
+void dae::KillCommand::Execute(float)
+{
+	if (GetGameObject()->HasComponent<LivesComponent>())
+	{
+		GetGameObject()->GetComponent<LivesComponent>()->LowerLives();
+	}
+}
+
+dae::ScoreSmallCommand::ScoreSmallCommand(GameObject* pGameObject)
+	: Command{ }
+	, m_pGameObject{ pGameObject }
+{
+}
+
+void dae::ScoreSmallCommand::Execute(float)
+{
+	if (GetGameObject()->HasComponent<ScoreComponent>())
+	{
+		GetGameObject()->GetComponent<ScoreComponent>()->IncreaseScore(100);
+	}
 }
