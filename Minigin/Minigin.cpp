@@ -12,6 +12,8 @@
 #include <chrono>
 #include <thread>
 
+#include <steam_api_common.h>
+
 SDL_Window* g_window{};
 
 void PrintSDLVersion()
@@ -94,6 +96,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	while (doContinue)
 	{
+		SteamAPI_RunCallbacks();
+
 		// Do Tick calculation
 		const auto currentTime = std::chrono::high_resolution_clock::now();
 		const float deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
