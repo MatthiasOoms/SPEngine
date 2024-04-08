@@ -65,10 +65,9 @@ void dae::GameObject::SetParent(GameObject* pParent, bool keepWorldPosition)
 	}
 
 	// If the parent is a child of self, do nothing
-	// TODO: Check if parent is not a grandchild of self!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	for (size_t i{}; i < m_pChildren.size(); ++i)
 	{
-		if (pParent == m_pChildren[i])
+		if (IsChildOf(pParent))
 		{
 			return;
 		}
@@ -118,6 +117,25 @@ dae::GameObject* dae::GameObject::GetChildAt(int idx) const
 
 	// If the index is invalid, return nullptr
 	return nullptr;
+}
+
+bool dae::GameObject::IsChildOf(GameObject* pParent) const
+{
+	for (auto child : m_pChildren)
+	{
+		if (pParent == child)
+		{
+			return true;
+		}
+		if (child->GetChildCount() > 0)
+		{
+			if (child->IsChildOf(pParent))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 void dae::GameObject::Kill()

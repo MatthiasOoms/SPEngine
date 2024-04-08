@@ -32,6 +32,8 @@ namespace dae
 		int GetChildCount() const;
 		GameObject* GetChildAt(int idx) const;
 
+		bool IsChildOf(GameObject* pParent) const;
+
 		void Kill();
 		bool IsDead();
 
