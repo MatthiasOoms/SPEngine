@@ -2,6 +2,7 @@
 #include "LivesComponent.h"
 #include "TextComponent.h"
 #include "GameObject.h"
+#include "Subject.h"
 
 dae::LivesObserverComponent::LivesObserverComponent(GameObject* pObj)
 	: Component(pObj)
@@ -10,6 +11,10 @@ dae::LivesObserverComponent::LivesObserverComponent(GameObject* pObj)
 
 dae::LivesObserverComponent::~LivesObserverComponent()
 {
+	for (auto pSubject : m_pSubjects)
+	{
+		pSubject->RemoveObserver(this);
+	}
 }
 
 void dae::LivesObserverComponent::OnNotify(GameObject* obj, Event event)

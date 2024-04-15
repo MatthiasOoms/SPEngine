@@ -10,6 +10,10 @@ dae::ScoreObserverComponent::ScoreObserverComponent(GameObject* pObj)
 
 dae::ScoreObserverComponent::~ScoreObserverComponent()
 {
+	for (auto pSubject : m_pSubjects)
+	{
+		pSubject->RemoveObserver(this);
+	}
 }
 
 void dae::ScoreObserverComponent::OnNotify(GameObject* obj, Event event)

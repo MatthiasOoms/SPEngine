@@ -22,5 +22,6 @@ namespace dae
 
 	private:
 		std::string m_ScoreText;
+		std::vector<Subject*> m_pSubjects;
 	};
 }
