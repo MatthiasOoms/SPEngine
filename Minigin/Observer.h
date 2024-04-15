@@ -15,7 +15,7 @@ namespace dae
 	class Observer
 	{
 	public:
-		virtual ~Observer() {};
+		virtual ~Observer();
 		virtual void AddSubject(Subject* pSubject);
 		virtual void OnNotify(GameObject* obj, Event event) = 0;
 
