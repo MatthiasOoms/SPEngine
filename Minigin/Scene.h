@@ -1,6 +1,6 @@
 #pragma once
-#include "SceneManager.h"
 #include "GameObject.h"
+#include "SceneManager.h"
 
 namespace dae
 {

@@ -19,13 +19,13 @@ dae::ScoreComponent::~ScoreComponent()
 void dae::ScoreComponent::IncreaseScore(int amount)
 {
 	m_Score += amount;
-	m_pSubject->OnNotify(GetOwner(), Event::ScoreChange);
+	m_pSubject->OnNotify(GetOwner(), Event::EnemyDeath);
 }
 
 void dae::ScoreComponent::SetScore(int score)
 {
 	m_Score = score;
-	m_pSubject->OnNotify(GetOwner(), Event::ScoreChange);
+	m_pSubject->OnNotify(GetOwner(), Event::EnemyDeath);
 }
 
 void dae::ScoreComponent::AddObserver(Observer* pObserver)
