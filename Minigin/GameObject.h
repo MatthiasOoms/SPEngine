@@ -88,7 +88,7 @@ namespace dae
 	template<typename Comp>
 	inline void GameObject::RemoveComponent()
 	{
-		Comp* temp;
+		Comp* temp{};
 		for (size_t idx{}; idx < m_pComponents.size(); idx++)
 		{
 			temp = dynamic_cast<Comp*>(m_pComponents[idx]);
