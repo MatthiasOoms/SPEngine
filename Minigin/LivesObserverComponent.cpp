@@ -31,6 +31,11 @@ void dae::LivesObserverComponent::OnNotify(GameObject* obj, Event event)
 	}
 }
 
+void dae::LivesObserverComponent::OnSubjectRemoved(GameObject* obj)
+{
+	obj;
+}
+
 void dae::LivesObserverComponent::UpdateText(GameObject* obj)
 {
 	// Get lives and put in text

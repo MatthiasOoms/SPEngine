@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "Component.h"
 #include "Observer.h"
 
@@ -7,6 +8,7 @@ namespace dae
 {
 	class GameObject;
 	class ScoreComponent;
+	class Subject;
 
 	class ScoreObserverComponent final : public Component, public Observer
 	{
@@ -18,6 +20,7 @@ namespace dae
 		virtual ~ScoreObserverComponent();
 
 		virtual void OnNotify(GameObject* obj, Event event) override;
+		virtual void OnSubjectRemoved(GameObject* obj) override;
 		void UpdateText(GameObject* obj);
 
 	private:

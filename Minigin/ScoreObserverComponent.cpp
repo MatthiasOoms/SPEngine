@@ -2,6 +2,7 @@
 #include "ScoreComponent.h"
 #include "TextComponent.h"
 #include "GameObject.h"
+#include "Subject.h"
 
 dae::ScoreObserverComponent::ScoreObserverComponent(GameObject* pObj)
 	: Component(pObj)
@@ -28,6 +29,11 @@ void dae::ScoreObserverComponent::OnNotify(GameObject* obj, Event event)
 	default:
 		break;
 	}
+}
+
+void dae::ScoreObserverComponent::OnSubjectRemoved(GameObject* obj)
+{
+	obj;
 }
 
 void dae::ScoreObserverComponent::UpdateText(GameObject* obj)
