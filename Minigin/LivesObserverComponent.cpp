@@ -31,9 +31,8 @@ void dae::LivesObserverComponent::OnNotify(GameObject* obj, Event event)
 	}
 }
 
-void dae::LivesObserverComponent::OnSubjectRemoved(GameObject* obj)
+void dae::LivesObserverComponent::OnSubjectRemoved(GameObject*)
 {
-	obj;
 }
 
 void dae::LivesObserverComponent::UpdateText(GameObject* obj)

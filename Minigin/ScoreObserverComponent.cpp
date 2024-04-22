@@ -31,9 +31,8 @@ void dae::ScoreObserverComponent::OnNotify(GameObject* obj, Event event)
 	}
 }
 
-void dae::ScoreObserverComponent::OnSubjectRemoved(GameObject* obj)
+void dae::ScoreObserverComponent::OnSubjectRemoved(GameObject*)
 {
-	obj;
 }
 
 void dae::ScoreObserverComponent::UpdateText(GameObject* obj)
