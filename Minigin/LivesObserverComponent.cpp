@@ -1,6 +1,8 @@
 #include "LivesObserverComponent.h"
+#include "SoundServiceLocator.h"
 #include "LivesComponent.h"
 #include "TextComponent.h"
+#include "SoundSystem.h"
 #include "GameObject.h"
 #include "Subject.h"
 
@@ -19,10 +21,14 @@ dae::LivesObserverComponent::~LivesObserverComponent()
 
 void dae::LivesObserverComponent::OnNotify(GameObject* obj, Event event)
 {
+	auto& soundSystem = SoundServiceLocator::GetSoundSystem();
+	Sound temp = { "../Data/Death.mp3", "Death", 100, 0 };
+
 	switch (event)
 	{
 	case dae::Event::PlayerDeath:
 		UpdateText(obj);
+		soundSystem.PushOnQueue(temp);
 		break;
 	case dae::Event::EnemyDeath:
 		break;

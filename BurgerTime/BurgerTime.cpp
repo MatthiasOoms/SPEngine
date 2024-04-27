@@ -46,7 +46,8 @@ void load()
 	auto& input = dae::InputManager::GetInstance();
 
 	// Load and Play Sound
-	soundSystem.Load("../Data/Death.mp3");
+	dae::Sound temp{ "../Data/Soundtrack.mp3", "Soundtrack", 100, -1 };
+	soundSystem.PushOnQueue(temp);
 
 	// Controllers
 	input.AddControllersMax();
@@ -195,40 +196,12 @@ void load()
 	scene.Add(std::move(toLivesDisplayBean));
 	scene.Add(std::move(toScoreDisplayBean));
 
-	// Events
-	// Death
-	// Separate getting the component and lowering the lives to prevent calling on nullptr
-	auto livesComp = goc->GetComponent<dae::LivesComponent>();
-	if (livesComp)
-	{
-		livesComp->LowerLives(2);
-	}
-
-	livesComp = gob->GetComponent<dae::LivesComponent>();
-	if (livesComp)
-	{
-		livesComp->LowerLives();
-	}
-
-	// Score
-	// Separate getting the component and lowering the lives to prevent calling on nullptr
-	auto scoreComp = goc->GetComponent<dae::ScoreComponent>();
-	if (scoreComp)
-	{
-		scoreComp->IncreaseScore(100);
-	}
-	scoreComp = gob->GetComponent<dae::ScoreComponent>();
-	if (scoreComp)
-	{
-		scoreComp->SetScore(50);
-	}
-
 	// Text
 	auto toKill = std::make_unique<dae::GameObject>();
 	toKill->AddComponent<dae::TextureComponent>();
 	toKill->GetTransform().SetLocalPosition(10, 150, 0);
 	toKill->AddComponent<dae::TextComponent>()->SetFont(font);
-	toKill->GetComponent<dae::TextComponent>()->SetText("Z/X: Kill");
+	toKill->GetComponent<dae::TextComponent>()->SetText("Z/X: Kill (With Death sound)");
 	scene.Add(std::move(toKill));
 
 	auto toScore = std::make_unique<dae::GameObject>();

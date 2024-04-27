@@ -37,8 +37,6 @@ void dae::KillCommand::Execute(float)
 	if (GetGameObject()->HasComponent<LivesComponent>())
 	{
 		GetGameObject()->GetComponent<LivesComponent>()->LowerLives();
-		auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
-		soundSystem.Play("Death", 100);
 	}
 }
 

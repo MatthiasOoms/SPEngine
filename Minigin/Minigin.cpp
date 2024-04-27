@@ -9,6 +9,8 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "SoundServiceLocator.h"
+#include "SoundSystem.h"
 #include <chrono>
 #include <thread>
 
@@ -86,6 +88,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
+	auto& soundManager = SoundServiceLocator::GetSoundSystem();
 	auto& input = InputManager::GetInstance();
 
 	bool doContinue = true;
@@ -109,6 +112,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		//	  lag -= msPerFrame;
 		//}
 
+		soundManager.CheckQueue();
 		sceneManager.Update(deltaTime);
 		renderer.Render(deltaTime);
 

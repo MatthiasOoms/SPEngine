@@ -1,44 +1,53 @@
 #include "SDLSoundSystem.h"
 #include <iostream>
-#include <vector>
 #include <thread>
 #include <string>
+#include <queue>
 #include <mutex>
 #include <map>
 
 #include <SDL.h>
 #include <SDL_mixer.h> 
+#include "SoundServiceLocator.h"
 
 class dae::SDLSoundSystem::SDLSoundSystemImpl
 {
+private:
 	std::map<const sound_name, Mix_Chunk*> m_pSoundEffects;
 	std::mutex m_SoundEffectsMutex{};
+	std::queue<Sound> m_Queue;
+	// std::jthread m_Thread{};
 
-public:
-	void Play(const sound_name name, const float volume)
+	void InternalPlay(Sound audio)
 	{
-		if (m_pSoundEffects.count(name) <= 0)
+		if (m_pSoundEffects.count(audio.name) <= 0)
 		{
-			std::cerr << "Sound name not found: " << name << std::endl;
+			std::cerr << "Sound name not found: " << audio.name << std::endl;
 			return;
 		}
 
-		Mix_Chunk* soundEffect{ m_pSoundEffects[name] }; // Put current sound in there
+		Mix_Chunk* soundEffect{ m_pSoundEffects[audio.name] }; // Put current sound in there
 
 		if (soundEffect == nullptr)
 		{
-			std::cerr << "Invalid sound for name: " << name << std::endl;
+			std::cerr << "Invalid sound for name: " << audio.name << std::endl;
 			return;
 		}
 
-		int channel = Mix_PlayChannel(-1, soundEffect, 0);
+		int channel = Mix_PlayChannel(-1, soundEffect, audio.loops);
 		if (channel == -1)
 		{
 			std::cerr << "Failed to play sound: " << Mix_GetError() << std::endl;
 			return;
 		}
 
-		Mix_Volume(channel, static_cast<int>(volume * MIX_MAX_VOLUME));
+		Mix_Volume(channel, static_cast<int>(audio.volume * MIX_MAX_VOLUME));
+	}
+
+public:
+	void Play(Sound audio)
+	{
+		InternalPlay(audio);
 	}
 
 	void Pause()
@@ -56,41 +65,61 @@ public:
 		Mix_HaltChannel(-1);
 	}
 
-	bool Load(const std::string& filePath)
+	bool Load(Sound audio)
 	{
 		bool loaded = false;
-		std::jthread soundLoaderThread([this, filePath, &loaded]()
+		std::jthread soundLoaderThread([this, audio, &loaded]()
 			{
-				Mix_Chunk* soundEffect = Mix_LoadWAV(filePath.c_str());
-				if (soundEffect == nullptr)
-				{
-					std::cerr << "Failed to load sound effect: " << Mix_GetError() << std::endl;
-					loaded = false;
-					return;
-				}
-
-				loaded = true;
-
-				// Get the start of the name
-				const std::string nameStart = filePath.substr(filePath.find_last_of("/") + 1);
-				const std::string fileName = nameStart.substr(0, nameStart.find_last_of("."));
-
 				// Check if the sound is already loaded
-				if (m_pSoundEffects.count(fileName) <= 0)
+				if (m_pSoundEffects.count(audio.name) <= 0)
 				{
-					// If not, add it to the map
-					std::lock_guard<std::mutex> lock(m_SoundEffectsMutex);
-					m_pSoundEffects.emplace(std::make_pair(fileName, soundEffect));
-				}
+					// If not, load the sound
+					Mix_Chunk* soundEffect = Mix_LoadWAV(audio.filePath.c_str());
 
-				// TODO: Implement RAII like in the 2D Texture
-				// Freeing the chunk removes from memory, using deleted sound
-				//Mix_FreeChunk(soundEffect);
+					// Check if the sound is loaded
+					if (soundEffect == nullptr)
+					{
+						std::cout << "Failed to load sound effect: " << Mix_GetError() << std::endl;
+						return;
+					}
+					// If success, add it to the map
+					std::lock_guard<std::mutex> lock(m_SoundEffectsMutex);
+					m_pSoundEffects.emplace(std::make_pair(audio.name, soundEffect));
+				}
+				loaded = true;
 			}
 		);
 
 		soundLoaderThread.join();
 		return loaded;
+	}
+
+	void CheckQueue()
+	{
+		// Check if the queue is empty
+		while (m_Queue.size() > 0)
+		{
+			// Get the sound system (SDL or Logging)
+			auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
+
+			// Load the oldest object in the Queue
+			soundSystem.Load(m_Queue.front());
+
+			// If the sound is loaded, play it
+			if (m_pSoundEffects.count(m_Queue.front().name))
+			{
+				// Play the sound
+				soundSystem.Play(m_Queue.front());
+			}
+
+			// Remove the sound from the queue
+			m_Queue.pop();
+		}
+	}
+
+	void PushOnQueue(Sound audio)
+	{
+		m_Queue.push(audio);
 	}
 
 	void Cleanup()
@@ -105,6 +134,11 @@ public:
 		SDL_Quit();
 	}
 };
+
+void dae::SDLSoundSystem::InternalPlay(Sound audio)
+{
+	pImpl->Play(audio);
+}
 
 dae::SDLSoundSystem::SDLSoundSystem()
 {
@@ -121,9 +155,9 @@ dae::SDLSoundSystem::SDLSoundSystem()
 	pImpl = new SDLSoundSystemImpl{};
 }
 
-void dae::SDLSoundSystem::Play(const sound_name id, const float volume)
+void dae::SDLSoundSystem::Play(Sound audio)
 {
-	pImpl->Play(id, volume);
+	pImpl->Play(audio);
 }
 
 void dae::SDLSoundSystem::Pause()
@@ -136,14 +170,24 @@ void dae::SDLSoundSystem::Resume()
 	pImpl->Resume();
 }
 
+void dae::SDLSoundSystem::CheckQueue()
+{
+	pImpl->CheckQueue();
+}
+
+void dae::SDLSoundSystem::PushOnQueue(Sound audio)
+{
+	pImpl->PushOnQueue(audio);
+}
+
 void dae::SDLSoundSystem::Stop()
 {
 	pImpl->Stop();
 }
 
-bool dae::SDLSoundSystem::Load(const std::string& filePath)
+bool dae::SDLSoundSystem::Load(Sound audio)
 {
-	return pImpl->Load(filePath);
+	return pImpl->Load(audio);
 }
 
 dae::SDLSoundSystem::~SDLSoundSystem()

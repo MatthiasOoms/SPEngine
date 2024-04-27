@@ -6,10 +6,16 @@ namespace dae
 {
 	class NullSoundSystem final : public SoundSystem
 	{
-		void Play(const sound_name, const float) override {}
+	private:
+		void InternalPlay(Sound) override {};
+
+	public:
+		void Play(Sound) override {};
 		void Pause() override {};
 		void Resume() override {};
+		void CheckQueue() override {};
+		void PushOnQueue(Sound) override {};
 		void Stop() override {};
-		bool Load(const std::string&) override { return true; };
+		bool Load(Sound) override { return true; };
 	};
 }

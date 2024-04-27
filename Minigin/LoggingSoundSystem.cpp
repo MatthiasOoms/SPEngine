@@ -1,15 +1,20 @@
 #include "LoggingSoundSystem.h"
 
+void dae::LoggingSoundSystem::InternalPlay(Sound)
+{
+	// Unused
+}
+
 dae::LoggingSoundSystem::LoggingSoundSystem(std::unique_ptr<SoundSystem>&& ss)
 {
 	_real_ss = (std::move(ss));
 	std::cout << "Creating Logging Sound System" << std::endl;
 }
 
-void dae::LoggingSoundSystem::Play(const sound_name name, const float volume)
+void dae::LoggingSoundSystem::Play(Sound audio)
 {
-	_real_ss->Play(name, volume);
-	std::cout << "Playing " << name << " at volume " << volume << std::endl;
+	_real_ss->Play(audio);
+	std::cout << "Playing " << audio.name << " at volume " << audio.volume << std::endl;
 }
 
 void dae::LoggingSoundSystem::Pause()
@@ -25,16 +30,29 @@ void dae::LoggingSoundSystem::Resume()
 	std::cout << "Resuming sounds" << std::endl;
 }
 
+void dae::LoggingSoundSystem::CheckQueue()
+{
+	_real_ss->CheckQueue();
+	// Do not print since it happens every frame
+	//std::cout << "Checking sound queue" << std::endl;
+}
+
+void dae::LoggingSoundSystem::PushOnQueue(Sound audio)
+{
+	_real_ss->PushOnQueue(audio);
+	std::cout << "Pushing sound on queue" << std::endl;
+}
+
 void dae::LoggingSoundSystem::Stop()
 {
 	_real_ss->Stop();
 	std::cout << "Stopping sounds" << std::endl;
 }
 
-bool dae::LoggingSoundSystem::Load(const std::string& filePath)
+bool dae::LoggingSoundSystem::Load(Sound audio)
 {
-	std::cout << "Loading " << filePath << ": ";
-	if (_real_ss->Load(filePath))
+	std::cout << "Loading " << audio.filePath << ": ";
+	if (_real_ss->Load(audio))
 	{
 		std::cout << "Succeded " << std::endl;
 		return true;
