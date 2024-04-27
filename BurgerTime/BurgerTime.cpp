@@ -47,7 +47,6 @@ void load()
 
 	// Load and Play Sound
 	soundSystem.Load("../Data/Death.mp3");
-	soundSystem.Play(0, 100);
 
 	// Controllers
 	input.AddControllersMax();

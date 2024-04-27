@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "LivesComponent.h"
 #include "ScoreComponent.h"
+#include "SoundServiceLocator.h"
+#include "SDLSoundSystem.h"
 
 dae::Command::Command()
 {
@@ -35,6 +37,8 @@ void dae::KillCommand::Execute(float)
 	if (GetGameObject()->HasComponent<LivesComponent>())
 	{
 		GetGameObject()->GetComponent<LivesComponent>()->LowerLives();
+		auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
+		soundSystem.Play(0, 100);
 	}
 }
 
