@@ -2,29 +2,32 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <string>
 #include <mutex>
+#include <map>
 
 #include <SDL.h>
 #include <SDL_mixer.h> 
 
 class dae::SDLSoundSystem::SDLSoundSystemImpl
 {
-	std::vector<Mix_Chunk*> m_pSoundEffects;
+	std::map<const sound_name, Mix_Chunk*> m_pSoundEffects;
 	std::mutex m_SoundEffectsMutex{};
+
 public:
-	void Play(const sound_id id, const float volume)
+	void Play(const sound_name name, const float volume)
 	{
-		if (id >= m_pSoundEffects.size())
+		if (m_pSoundEffects.count(name) <= 0)
 		{
-			std::cerr << "Sound ID out of range: " << id << std::endl;
+			std::cerr << "Sound name not found: " << name << std::endl;
 			return;
 		}
 
-		Mix_Chunk* soundEffect{ m_pSoundEffects[id] }; // Put current sound in there
+		Mix_Chunk* soundEffect{ m_pSoundEffects[name] }; // Put current sound in there
 
 		if (soundEffect == nullptr)
 		{
-			std::cerr << "Invalid sound ID: " << id << std::endl;
+			std::cerr << "Invalid sound for name: " << name << std::endl;
 			return;
 		}
 
@@ -53,32 +56,48 @@ public:
 		Mix_HaltChannel(-1);
 	}
 
-	void Load(const std::string& filePath)
+	bool Load(const std::string& filePath)
 	{
-		std::jthread soundLoaderThread([this, filePath]()
+		bool loaded = false;
+		std::jthread soundLoaderThread([this, filePath, &loaded]()
 			{
 				Mix_Chunk* soundEffect = Mix_LoadWAV(filePath.c_str());
 				if (soundEffect == nullptr)
 				{
 					std::cerr << "Failed to load sound effect: " << Mix_GetError() << std::endl;
+					loaded = false;
 					return;
 				}
 
-				std::lock_guard<std::mutex> lock(m_SoundEffectsMutex);
-				m_pSoundEffects.push_back(soundEffect);
+				loaded = true;
+
+				// Get the start of the name
+				const std::string nameStart = filePath.substr(filePath.find_last_of("/") + 1);
+				const std::string fileName = nameStart.substr(0, nameStart.find_last_of("."));
+
+				// Check if the sound is already loaded
+				if (m_pSoundEffects.count(fileName) <= 0)
+				{
+					// If not, add it to the map
+					std::lock_guard<std::mutex> lock(m_SoundEffectsMutex);
+					m_pSoundEffects.emplace(std::make_pair(fileName, soundEffect));
+				}
 
 				// TODO: Implement RAII like in the 2D Texture
 				// Freeing the chunk removes from memory, using deleted sound
 				//Mix_FreeChunk(soundEffect);
 			}
 		);
+
+		soundLoaderThread.join();
+		return loaded;
 	}
 
 	void Cleanup()
 	{
 		for (auto sound : m_pSoundEffects)
 		{
-			Mix_FreeChunk(sound);
+			Mix_FreeChunk(sound.second);
 		}
 
 		Mix_CloseAudio();
@@ -102,7 +121,7 @@ dae::SDLSoundSystem::SDLSoundSystem()
 	pImpl = new SDLSoundSystemImpl{};
 }
 
-void dae::SDLSoundSystem::Play(const sound_id id, const float volume)
+void dae::SDLSoundSystem::Play(const sound_name id, const float volume)
 {
 	pImpl->Play(id, volume);
 }
@@ -122,9 +141,9 @@ void dae::SDLSoundSystem::Stop()
 	pImpl->Stop();
 }
 
-void dae::SDLSoundSystem::Load(const std::string& filePath)
+bool dae::SDLSoundSystem::Load(const std::string& filePath)
 {
-	pImpl->Load(filePath);
+	return pImpl->Load(filePath);
 }
 
 dae::SDLSoundSystem::~SDLSoundSystem()

@@ -6,10 +6,10 @@ dae::LoggingSoundSystem::LoggingSoundSystem(std::unique_ptr<SoundSystem>&& ss)
 	std::cout << "Creating Logging Sound System" << std::endl;
 }
 
-void dae::LoggingSoundSystem::Play(const sound_id id, const float volume)
+void dae::LoggingSoundSystem::Play(const sound_name name, const float volume)
 {
-	_real_ss->Play(id, volume);
-	std::cout << "Playing " << id << " at volume " << volume << std::endl;
+	_real_ss->Play(name, volume);
+	std::cout << "Playing " << name << " at volume " << volume << std::endl;
 }
 
 void dae::LoggingSoundSystem::Pause()
@@ -31,8 +31,17 @@ void dae::LoggingSoundSystem::Stop()
 	std::cout << "Stopping sounds" << std::endl;
 }
 
-void dae::LoggingSoundSystem::Load(const std::string& filePath)
+bool dae::LoggingSoundSystem::Load(const std::string& filePath)
 {
-	_real_ss->Load(filePath);
-	std::cout << "Loading " << filePath << std::endl;
+	std::cout << "Loading " << filePath << ": ";
+	if (_real_ss->Load(filePath))
+	{
+		std::cout << "Succeded " << std::endl;
+		return true;
+	}
+	else
+	{
+		std::cout << "Failed " << std::endl;
+		return false;
+	}
 }
