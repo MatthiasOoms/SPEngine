@@ -25,11 +25,29 @@
 #include "ScoreObserverComponent.h"
 #include "ScoreComponent.h"
 
+#include <SDL_mixer.h>
+#include "SoundServiceLocator.h"
+#include "LoggingSoundSystem.h"
+#include "SDLSoundSystem.h"
+
 void load()
 {
+#if _DEBUG
+	dae::SoundServiceLocator::RegisterSoundSystem(
+		std::make_unique<dae::LoggingSoundSystem>(std::make_unique<dae::SDLSoundSystem>())
+	);
+#else
+	dae::SoundServiceLocator::RegisterSoundSystem(std::make_unique<dae::SDLSoundSystem>());
+#endif
+
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
+	auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
 	auto& resourceManager = dae::ResourceManager::GetInstance();
 	auto& input = dae::InputManager::GetInstance();
+
+	// Load and Play Sound
+	soundSystem.Load("../Data/Death.mp3");
+	soundSystem.Play(0, 100);
 
 	// Controllers
 	input.AddControllersMax();
