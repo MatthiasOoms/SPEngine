@@ -29,12 +29,13 @@
 #include "SoundServiceLocator.h"
 #include "LoggingSoundSystem.h"
 #include "SDLSoundSystem.h"
+#include "NullSoundSystem.h"
 
 void load()
 {
 #if _DEBUG
 	dae::SoundServiceLocator::RegisterSoundSystem(
-		std::make_unique<dae::LoggingSoundSystem>(std::make_unique<dae::SDLSoundSystem>())
+		std::make_unique<dae::LoggingSoundSystem>(std::make_unique<dae::NullSoundSystem>())
 	);
 #else
 	dae::SoundServiceLocator::RegisterSoundSystem(std::make_unique<dae::SDLSoundSystem>());

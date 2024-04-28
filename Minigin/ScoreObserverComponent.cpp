@@ -1,8 +1,6 @@
 #include "ScoreObserverComponent.h"
-#include "SoundServiceLocator.h"
 #include "ScoreComponent.h"
 #include "TextComponent.h"
-#include "SoundSystem.h"
 #include "GameObject.h"
 #include "Subject.h"
 
@@ -21,9 +19,6 @@ dae::ScoreObserverComponent::~ScoreObserverComponent()
 
 void dae::ScoreObserverComponent::OnNotify(GameObject* obj, Event event)
 {
-	auto& soundSystem = SoundServiceLocator::GetSoundSystem();
-	Sound temp = { "../Data/Death.mp3", "Death", 1, 0 };
-
 	switch (event)
 	{
 	case dae::Event::PlayerDeath:

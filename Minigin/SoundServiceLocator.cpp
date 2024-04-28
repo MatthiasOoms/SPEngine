@@ -1,5 +1,6 @@
 #include "SoundServiceLocator.h"
-#include "SDLSoundSystem.h"
+#include "NullSoundSystem.h"
+//#include "SDLSoundSystem.h"
 
 std::unique_ptr<dae::SoundSystem> dae::SoundServiceLocator::m_pInstance = nullptr;
 
@@ -12,7 +13,7 @@ void dae::SoundServiceLocator::RegisterSoundSystem(std::unique_ptr<SoundSystem>&
 {
 	if (ss == nullptr)
 	{
-		m_pInstance = std::make_unique<SDLSoundSystem>();
+		m_pInstance = std::make_unique<NullSoundSystem>();
 	}
 	else
 	{
