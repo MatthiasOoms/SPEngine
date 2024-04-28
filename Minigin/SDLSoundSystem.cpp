@@ -50,7 +50,7 @@ private:
 	}
 
 public:
-	void Play(Sound audio)
+	void PlaySoundEffect(Sound audio)
 	{
 		InternalPlay(audio);
 	}
@@ -96,9 +96,14 @@ public:
 		Mix_ResumeMusic();
 	}
 
-	void Stop()
+	void StopSoundEffects()
 	{
 		Mix_HaltChannel(-1);
+	}
+
+	void StopMusic()
+	{
+		Mix_HaltMusic();
 	}
 
 	void Load(Sound audio)
@@ -139,7 +144,7 @@ public:
 				if (m_pSoundEffects.count(m_Queue.front().name))
 				{
 					// Play the sound
-					soundSystem.Play(m_Queue.front());
+					soundSystem.PlaySoundEffect(m_Queue.front());
 
 					// Remove the sound from the queue
 					std::lock_guard<std::mutex> lock(m_SoundEffectsMutex);
@@ -171,7 +176,7 @@ public:
 
 void dae::SDLSoundSystem::InternalPlay(Sound audio)
 {
-	pImpl->Play(audio);
+	pImpl->PlaySoundEffect(audio);
 }
 
 dae::SDLSoundSystem::SDLSoundSystem()
@@ -190,9 +195,9 @@ dae::SDLSoundSystem::SDLSoundSystem()
 	m_Thread = std::jthread(&dae::SDLSoundSystem::CheckQueue, this);
 }
 
-void dae::SDLSoundSystem::Play(Sound audio)
+void dae::SDLSoundSystem::PlaySoundEffect(Sound audio)
 {
-	pImpl->Play(audio);
+	pImpl->PlaySoundEffect(audio);
 }
 
 void dae::SDLSoundSystem::PlayMusic(Sound music)
@@ -230,9 +235,14 @@ void dae::SDLSoundSystem::PushOnQueue(Sound audio)
 	pImpl->PushOnQueue(audio);
 }
 
-void dae::SDLSoundSystem::Stop()
+void dae::SDLSoundSystem::StopSoundEffects()
 {
-	pImpl->Stop();
+	pImpl->StopSoundEffects();
+}
+
+void dae::SDLSoundSystem::StopMusic()
+{
+	pImpl->StopMusic();
 }
 
 void dae::SDLSoundSystem::Load(Sound audio)

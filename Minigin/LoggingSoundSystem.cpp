@@ -11,9 +11,9 @@ dae::LoggingSoundSystem::LoggingSoundSystem(std::unique_ptr<SoundSystem>&& ss)
 	std::cout << "Creating Logging Sound System" << std::endl;
 }
 
-void dae::LoggingSoundSystem::Play(Sound audio)
+void dae::LoggingSoundSystem::PlaySoundEffect(Sound audio)
 {
-	_real_ss->Play(audio);
+	_real_ss->PlaySoundEffect(audio);
 	std::cout << "Playing " << audio.name << " at volume " << audio.volume << std::endl;
 }
 
@@ -60,10 +60,16 @@ void dae::LoggingSoundSystem::PushOnQueue(Sound audio)
 	std::cout << "Pushing sound on queue" << std::endl;
 }
 
-void dae::LoggingSoundSystem::Stop()
+void dae::LoggingSoundSystem::StopSoundEffects()
 {
-	_real_ss->Stop();
+	_real_ss->StopSoundEffects();
 	std::cout << "Stopping sounds" << std::endl;
+}
+
+void dae::LoggingSoundSystem::StopMusic()
+{
+	_real_ss->StopMusic();
+	std::cout << "Stopping music" << std::endl;
 }
 
 void dae::LoggingSoundSystem::Load(Sound audio)

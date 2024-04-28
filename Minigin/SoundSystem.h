@@ -20,7 +20,7 @@ namespace dae
 
 	public:
 		virtual ~SoundSystem() = default;
-		virtual void Play(Sound audio) = 0;
+		virtual void PlaySoundEffect(Sound audio) = 0;
 		virtual void PlayMusic(Sound music) = 0;
 		virtual void PauseSoundEffects() = 0;
 		virtual void PauseMusic() = 0;
@@ -28,7 +28,8 @@ namespace dae
 		virtual void ResumeMusic() = 0;
 		virtual void CheckQueue() = 0;
 		virtual void PushOnQueue(Sound audio) = 0;
-		virtual void Stop() = 0;
+		virtual void StopSoundEffects() = 0;
+		virtual void StopMusic() = 0;
 		virtual void Load(Sound audio) = 0;
 	};
 }

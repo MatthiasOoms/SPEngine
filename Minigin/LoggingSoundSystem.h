@@ -12,7 +12,7 @@ namespace dae
 	public:
 		LoggingSoundSystem(std::unique_ptr<SoundSystem>&& ss);
 		virtual ~LoggingSoundSystem() = default;
-		void Play(Sound audio) override;
+		void PlaySoundEffect(Sound audio) override;
 		void PlayMusic(Sound music) override;
 		void PauseSoundEffects() override;
 		void PauseMusic() override;
@@ -20,7 +20,8 @@ namespace dae
 		void ResumeMusic() override;
 		void CheckQueue() override;
 		void PushOnQueue(Sound audio) override;
-		void Stop() override;
+		void StopSoundEffects() override;
+		void StopMusic() override;
 		void Load(Sound audio) override;
 	};
 }
