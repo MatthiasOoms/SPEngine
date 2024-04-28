@@ -17,17 +17,34 @@ void dae::LoggingSoundSystem::Play(Sound audio)
 	std::cout << "Playing " << audio.name << " at volume " << audio.volume << std::endl;
 }
 
-void dae::LoggingSoundSystem::Pause()
+void dae::LoggingSoundSystem::PlayMusic(Sound music)
 {
-	_real_ss->Pause();
-	std::cout << "Pausing sounds" << std::endl;
-
+	_real_ss->PlayMusic(music);
+	std::cout << "Playing music " << music.name << " at volume " << music.volume << std::endl;
 }
 
-void dae::LoggingSoundSystem::Resume()
+void dae::LoggingSoundSystem::PauseSoundEffects()
 {
-	_real_ss->Resume();
+	_real_ss->PauseSoundEffects();
+	std::cout << "Pausing sounds" << std::endl;
+}
+
+void dae::LoggingSoundSystem::PauseMusic()
+{
+	_real_ss->PauseMusic();
+	std::cout << "Pausing music" << std::endl;
+}
+
+void dae::LoggingSoundSystem::ResumeSoundEffects()
+{
+	_real_ss->ResumeSoundEffects();
 	std::cout << "Resuming sounds" << std::endl;
+}
+
+void dae::LoggingSoundSystem::ResumeMusic()
+{
+	_real_ss->ResumeMusic();
+	std::cout << "Resuming music" << std::endl;
 }
 
 void dae::LoggingSoundSystem::CheckQueue()

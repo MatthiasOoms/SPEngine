@@ -50,14 +50,45 @@ public:
 		InternalPlay(audio);
 	}
 
-	void Pause()
+	void PlayMusic(Sound music)
+	{
+		// Load the music
+		Mix_Music* pMusic = Mix_LoadMUS(music.filePath.c_str());
+		if (pMusic == nullptr)
+		{
+			std::cerr << "Failed to load music: " << Mix_GetError() << std::endl;
+			return;
+		}
+
+		// Play the music
+		if (Mix_PlayMusic(pMusic, music.loops) == -1)
+		{
+			std::cerr << "Failed to play music: " << Mix_GetError() << std::endl;
+			return;
+		}
+
+		// Set the volume
+		Mix_VolumeMusic(static_cast<int>(music.volume * MIX_MAX_VOLUME));
+	}
+
+	void PauseSoundEffects()
 	{
 		Mix_Pause(-1);
 	}
 
-	void Resume()
+	void PauseMusic()
+	{
+		Mix_PauseMusic();
+	}
+
+	void ResumeSoundEffects()
 	{
 		Mix_Resume(-1);
+	}
+
+	void ResumeMusic()
+	{
+		Mix_ResumeMusic();
 	}
 
 	void Stop()
@@ -160,14 +191,29 @@ void dae::SDLSoundSystem::Play(Sound audio)
 	pImpl->Play(audio);
 }
 
-void dae::SDLSoundSystem::Pause()
+void dae::SDLSoundSystem::PlayMusic(Sound music)
 {
-	pImpl->Pause();
+	pImpl->PlayMusic(music);
 }
 
-void dae::SDLSoundSystem::Resume()
+void dae::SDLSoundSystem::PauseSoundEffects()
 {
-	pImpl->Resume();
+	pImpl->PauseSoundEffects();
+}
+
+void dae::SDLSoundSystem::PauseMusic()
+{
+	pImpl->PauseMusic();
+}
+
+void dae::SDLSoundSystem::ResumeSoundEffects()
+{
+	pImpl->ResumeSoundEffects();
+}
+
+void dae::SDLSoundSystem::ResumeMusic()
+{
+	pImpl->ResumeMusic();
 }
 
 void dae::SDLSoundSystem::CheckQueue()

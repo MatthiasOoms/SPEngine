@@ -9,7 +9,7 @@ namespace dae
 	{
 		std::string filePath;
 		sound_name name;
-		int volume;
+		float volume;
 		int loops;
 	};
 
@@ -21,8 +21,11 @@ namespace dae
 	public:
 		virtual ~SoundSystem() = default;
 		virtual void Play(Sound audio) = 0;
-		virtual void Pause() = 0;
-		virtual void Resume() = 0;
+		virtual void PlayMusic(Sound music) = 0;
+		virtual void PauseSoundEffects() = 0;
+		virtual void PauseMusic() = 0;
+		virtual void ResumeSoundEffects() = 0;
+		virtual void ResumeMusic() = 0;
 		virtual void CheckQueue() = 0;
 		virtual void PushOnQueue(Sound audio) = 0;
 		virtual void Stop() = 0;

@@ -46,8 +46,8 @@ void load()
 	auto& input = dae::InputManager::GetInstance();
 
 	// Load and Play Sound
-	dae::Sound temp{ "../Data/Soundtrack.mp3", "Soundtrack", 100, -1 };
-	soundSystem.PushOnQueue(temp);
+	dae::Sound temp{ "../Data/Soundtrack.mp3", "Soundtrack", 1, -1 };
+	soundSystem.PlayMusic(temp);
 
 	// Controllers
 	input.AddControllersMax();
