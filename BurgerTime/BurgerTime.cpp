@@ -33,12 +33,12 @@
 
 void load()
 {
-#if _DEBUG
+#if NDEBUG
+	dae::SoundServiceLocator::RegisterSoundSystem(std::make_unique<dae::SDLSoundSystem>());
+#else
 	dae::SoundServiceLocator::RegisterSoundSystem(
 		std::make_unique<dae::LoggingSoundSystem>(std::make_unique<dae::NullSoundSystem>())
 	);
-#else
-	dae::SoundServiceLocator::RegisterSoundSystem(std::make_unique<dae::SDLSoundSystem>());
 #endif
 
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");

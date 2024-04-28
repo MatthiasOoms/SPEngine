@@ -38,6 +38,6 @@ namespace dae
 		};
 		void PushOnQueue(Sound audio) override { m_Queue.push(audio); };
 		void Stop() override {};
-		bool Load(Sound) override { return true; };
+		void Load(Sound) override {};
 	};
 }

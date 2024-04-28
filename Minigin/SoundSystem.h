@@ -29,6 +29,6 @@ namespace dae
 		virtual void CheckQueue() = 0;
 		virtual void PushOnQueue(Sound audio) = 0;
 		virtual void Stop() = 0;
-		virtual bool Load(Sound audio) = 0;
+		virtual void Load(Sound audio) = 0;
 	};
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "SoundSystem.h"
 #include <string>
+#include <thread>
 
 namespace dae
 {
@@ -8,6 +9,8 @@ namespace dae
 	{
 		class SDLSoundSystemImpl;
 		SDLSoundSystemImpl* pImpl;
+
+		std::jthread m_Thread;
 
 		void InternalPlay(Sound audio) override;
 	public:
@@ -21,7 +24,7 @@ namespace dae
 		void CheckQueue() override;
 		void PushOnQueue(Sound audio) override;
 		void Stop() override;
-		bool Load(Sound audio) override;
+		void Load(Sound audio) override;
 		~SDLSoundSystem() override;
 	};
 }

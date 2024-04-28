@@ -21,6 +21,6 @@ namespace dae
 		void CheckQueue() override;
 		void PushOnQueue(Sound audio) override;
 		void Stop() override;
-		bool Load(Sound audio) override;
+		void Load(Sound audio) override;
 	};
 }

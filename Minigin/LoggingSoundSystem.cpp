@@ -66,17 +66,8 @@ void dae::LoggingSoundSystem::Stop()
 	std::cout << "Stopping sounds" << std::endl;
 }
 
-bool dae::LoggingSoundSystem::Load(Sound audio)
+void dae::LoggingSoundSystem::Load(Sound audio)
 {
+	_real_ss->Load(audio);
 	std::cout << "Loading " << audio.filePath << ": ";
-	if (_real_ss->Load(audio))
-	{
-		std::cout << "Succeded " << std::endl;
-		return true;
-	}
-	else
-	{
-		std::cout << "Failed " << std::endl;
-		return false;
-	}
 }

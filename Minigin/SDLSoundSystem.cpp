@@ -16,7 +16,7 @@ private:
 	std::map<const sound_name, Mix_Chunk*> m_pSoundEffects;
 	std::mutex m_SoundEffectsMutex{};
 	std::queue<Sound> m_Queue;
-	// std::jthread m_Thread{};
+	bool m_IsActive{ true };
 
 	void InternalPlay(Sound audio)
 	{
@@ -96,55 +96,51 @@ public:
 		Mix_HaltChannel(-1);
 	}
 
-	bool Load(Sound audio)
+	void Load(Sound audio)
 	{
-		bool loaded = false;
-		std::jthread soundLoaderThread([this, audio, &loaded]()
+		// Check if the sound is already loaded
+		if (m_pSoundEffects.count(audio.name) <= 0)
+		{
+			// If not, load the sound
+			Mix_Chunk* soundEffect = Mix_LoadWAV(audio.filePath.c_str());
+
+			// Check if the sound is loaded
+			if (soundEffect == nullptr)
 			{
-				// Check if the sound is already loaded
-				if (m_pSoundEffects.count(audio.name) <= 0)
-				{
-					// If not, load the sound
-					Mix_Chunk* soundEffect = Mix_LoadWAV(audio.filePath.c_str());
-
-					// Check if the sound is loaded
-					if (soundEffect == nullptr)
-					{
-						std::cout << "Failed to load sound effect: " << Mix_GetError() << std::endl;
-						return;
-					}
-					// If success, add it to the map
-					std::lock_guard<std::mutex> lock(m_SoundEffectsMutex);
-					m_pSoundEffects.emplace(std::make_pair(audio.name, soundEffect));
-				}
-				loaded = true;
+				std::cout << "Failed to load sound effect: " << Mix_GetError() << std::endl;
+				return;
 			}
-		);
 
-		soundLoaderThread.join();
-		return loaded;
+			// If success, add it to the map
+			std::lock_guard<std::mutex> lock(m_SoundEffectsMutex);
+			m_pSoundEffects.emplace(std::make_pair(audio.name, soundEffect));
+		}
 	}
 
 	void CheckQueue()
 	{
-		// Check if the queue is empty
-		while (m_Queue.size() > 0)
+		while (m_IsActive)
 		{
-			// Get the sound system (SDL or Logging)
-			auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
-
-			// Load the oldest object in the Queue
-			soundSystem.Load(m_Queue.front());
-
-			// If the sound is loaded, play it
-			if (m_pSoundEffects.count(m_Queue.front().name))
+			// Check if the queue is empty
+			while (m_Queue.size() > 0)
 			{
-				// Play the sound
-				soundSystem.Play(m_Queue.front());
-			}
+				// Get the sound system (SDL or Logging)
+				auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
 
-			// Remove the sound from the queue
-			m_Queue.pop();
+				// Load the oldest object in the Queue
+				soundSystem.Load(m_Queue.front());
+
+				// If the sound is loaded, play it
+				if (m_pSoundEffects.count(m_Queue.front().name))
+				{
+					// Play the sound
+					soundSystem.Play(m_Queue.front());
+
+					// Remove the sound from the queue
+					std::lock_guard<std::mutex> lock(m_SoundEffectsMutex);
+					m_Queue.pop();
+				}
+			}
 		}
 	}
 
@@ -155,6 +151,8 @@ public:
 
 	void Cleanup()
 	{
+		m_IsActive = false;
+
 		for (auto sound : m_pSoundEffects)
 		{
 			Mix_FreeChunk(sound.second);
@@ -184,6 +182,7 @@ dae::SDLSoundSystem::SDLSoundSystem()
 	}
 
 	pImpl = new SDLSoundSystemImpl{};
+	m_Thread = std::jthread(&dae::SDLSoundSystem::CheckQueue, this);
 }
 
 void dae::SDLSoundSystem::Play(Sound audio)
@@ -231,14 +230,15 @@ void dae::SDLSoundSystem::Stop()
 	pImpl->Stop();
 }
 
-bool dae::SDLSoundSystem::Load(Sound audio)
+void dae::SDLSoundSystem::Load(Sound audio)
 {
-	return pImpl->Load(audio);
+	pImpl->Load(audio);
 }
 
 dae::SDLSoundSystem::~SDLSoundSystem()
 {
 	pImpl->Cleanup();
+	m_Thread.join();
 
 	delete pImpl;
 	pImpl = nullptr;
