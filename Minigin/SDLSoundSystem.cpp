@@ -20,20 +20,24 @@ private:
 
 	void InternalPlay(Sound audio)
 	{
+		// If the sound is not loaded, return
 		if (m_pSoundEffects.count(audio.name) <= 0)
 		{
 			std::cerr << "Sound name not found: " << audio.name << std::endl;
 			return;
 		}
 
-		Mix_Chunk* soundEffect{ m_pSoundEffects[audio.name] }; // Put current sound in there
+		// Get the sound effect
+		Mix_Chunk* soundEffect{ m_pSoundEffects[audio.name] };
 
+		// Check if the sound effect is valid
 		if (soundEffect == nullptr)
 		{
 			std::cerr << "Invalid sound for name: " << audio.name << std::endl;
 			return;
 		}
 
+		// Play the sound effect
 		int channel = Mix_PlayChannel(-1, soundEffect, audio.loops);
 		if (channel == -1)
 		{
@@ -41,6 +45,7 @@ private:
 			return;
 		}
 
+		// Set the volume
 		Mix_Volume(channel, static_cast<int>(audio.volume * MIX_MAX_VOLUME));
 	}
 
