@@ -1,8 +1,8 @@
+#pragma once
 #include "SoundServiceLocator.h"
 #include "NullSoundSystem.h"
-//#include "SDLSoundSystem.h"
 
-std::unique_ptr<dae::SoundSystem> dae::SoundServiceLocator::m_pInstance = nullptr;
+std::unique_ptr<dae::SoundSystem> dae::SoundServiceLocator::m_pInstance = std::make_unique<NullSoundSystem>();
 
 dae::SoundSystem& dae::SoundServiceLocator::GetSoundSystem()
 {

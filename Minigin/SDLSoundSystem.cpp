@@ -1,3 +1,4 @@
+#pragma once
 #include "SDLSoundSystem.h"
 #include <iostream>
 #include <thread>
