@@ -18,10 +18,9 @@ namespace dae
 		void PauseMusic() override;
 		void ResumeSoundEffects() override;
 		void ResumeMusic() override;
-		void CheckQueue() override;
-		void PushOnQueue(Sound audio) override;
 		void StopSoundEffects() override;
 		void StopMusic() override;
 		void Load(Sound audio) override;
+		void PushOnQueue(Sound audio) override;
 	};
 }

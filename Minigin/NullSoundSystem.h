@@ -10,7 +10,6 @@ namespace dae
 	{
 	private:
 		void InternalPlay(Sound) override {};
-		std::queue<Sound> m_Queue;
 
 	public:
 		void PlaySoundEffect(Sound) override {};
@@ -19,24 +18,7 @@ namespace dae
 		void PauseMusic() {};
 		void ResumeSoundEffects() override {};
 		void ResumeMusic() override {};
-		void CheckQueue() override {
-			// Check if the queue is empty
-			while (m_Queue.size() > 0)
-			{
-				// Get the sound system (SDL or Logging)
-				auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
-
-				// Load the oldest object in the Queue
-				soundSystem.Load(m_Queue.front());
-
-				// Play the sound
-				soundSystem.PlaySoundEffect(m_Queue.front());
-
-				// Remove the sound from the queue
-				m_Queue.pop();
-			}
-		};
-		void PushOnQueue(Sound audio) override { m_Queue.push(audio); };
+		void PushOnQueue(Sound audio) override {};
 		void StopSoundEffects() override {};
 		void StopMusic() override {};
 		void Load(Sound) override {};

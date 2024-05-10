@@ -47,13 +47,6 @@ void dae::LoggingSoundSystem::ResumeMusic()
 	std::cout << "Resuming music" << std::endl;
 }
 
-void dae::LoggingSoundSystem::CheckQueue()
-{
-	_real_ss->CheckQueue();
-	// Do not print since it happens every frame
-	//std::cout << "Checking sound queue" << std::endl;
-}
-
 void dae::LoggingSoundSystem::PushOnQueue(Sound audio)
 {
 	_real_ss->PushOnQueue(audio);

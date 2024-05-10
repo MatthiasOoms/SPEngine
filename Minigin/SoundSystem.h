@@ -26,7 +26,7 @@ namespace dae
 		virtual void PauseMusic() = 0;
 		virtual void ResumeSoundEffects() = 0;
 		virtual void ResumeMusic() = 0;
-		virtual void CheckQueue() = 0;
+		//virtual void CheckQueue() = 0;
 		virtual void PushOnQueue(Sound audio) = 0;
 		virtual void StopSoundEffects() = 0;
 		virtual void StopMusic() = 0;

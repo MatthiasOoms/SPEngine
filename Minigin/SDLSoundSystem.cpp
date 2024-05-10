@@ -135,20 +135,23 @@ public:
 			// Check if the queue is empty
 			while (m_Queue.size() > 0)
 			{
-				// Get the sound system (SDL or Logging)
-				auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
+				//Sound
+				{
+					// Load the oldest object in the Queue
+					std::scoped_lock lock(m_SoundEffectsMutex);
+					auto temp = m_Queue.front();
+					// Unlock lock
+				}
 
-				// Load the oldest object in the Queue
-				soundSystem.Load(m_Queue.front());
+				Load(m_Queue.front());
 
 				// If the sound is loaded, play it
 				if (m_pSoundEffects.count(m_Queue.front().name))
 				{
 					// Play the sound
-					soundSystem.PlaySoundEffect(m_Queue.front());
+					PlaySoundEffect(m_Queue.front());
 
 					// Remove the sound from the queue
-					std::lock_guard<std::mutex> lock(m_SoundEffectsMutex);
 					m_Queue.pop();
 				}
 			}
