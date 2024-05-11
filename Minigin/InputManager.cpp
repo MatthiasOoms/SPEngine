@@ -1,12 +1,14 @@
 #include <SDL.h>
-#include "InputManager.h"
 #include <functional>
 #include <algorithm>
+#include "InputManager.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 bool dae::InputManager::ProcessInput(float elapsedSec)
 {
 	SDL_Event e;
-	while (SDL_PollEvent(&e)) 
+	while (SDL_PollEvent(&e))
 	{
 		if (e.type == SDL_QUIT) 
 		{
@@ -35,9 +37,9 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 		}
 	);
 
-
-
-	for (auto const& command : m_KeyboardCommands)
+	auto& sceneManager{ SceneManager::GetInstance() };
+	auto sceneName{ sceneManager.GetActiveScene()->GetName() };
+	for (auto const& command : m_KeyboardCommands[sceneName])
 	{
 		if (myPressedState[command.first.first])
 		{
@@ -67,7 +69,7 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 	for (auto const& controller : m_Controllers)
 	{
 		controller->Update();
-		for (auto const& command : m_ConsoleCommands)
+		for (auto const& command : m_ConsoleCommands[sceneName])
 		{
 			if (command.first.first.first == controller->GetIdx())
 			{
@@ -128,28 +130,28 @@ int dae::InputManager::AddControllersMax()
 	return static_cast<int>(m_Controllers.size());
 }
 
-void dae::InputManager::AddCommand(int controllerIdx, Controller::ControllerButton button, keyState state, std::unique_ptr<Command> pCommand)
+void dae::InputManager::AddCommand(std::string sceneName, int controllerIdx, Controller::ControllerButton button, keyState state, std::unique_ptr<Command> pCommand)
 {
 	ControllerKey keyPair{ std::make_pair(controllerIdx, button) };
 	ControllerKeyState statePair{ std::make_pair(keyPair, state) };
-	m_ConsoleCommands.insert(std::make_pair(statePair, std::move(pCommand)));
+	m_ConsoleCommands[sceneName].insert(std::make_pair(statePair, std::move(pCommand)));
 }
 
-void dae::InputManager::AddCommand(SDL_Scancode key, keyState state, std::unique_ptr<Command> pCommand)
+void dae::InputManager::AddCommand(std::string sceneName, SDL_Scancode key, keyState state, std::unique_ptr<Command> pCommand)
 {
 	KeyboardKey keyPair = std::make_pair(key, state);
-	m_KeyboardCommands[keyPair] = std::move(pCommand);
+	m_KeyboardCommands[sceneName][keyPair] = std::move(pCommand);
 }
 
-void dae::InputManager::RemoveCommand(int controllerIdx, Controller::ControllerButton button, keyState state)
+void dae::InputManager::RemoveCommand(std::string sceneName, int controllerIdx, Controller::ControllerButton button, keyState state)
 {
 	ControllerKey keyPair{ std::make_pair(controllerIdx, button) };
 	ControllerKeyState statePair{ std::make_pair(keyPair, state) };
-	m_ConsoleCommands.erase(statePair);
+	m_ConsoleCommands[sceneName].erase(statePair);
 }
 
-void dae::InputManager::RemoveCommand(SDL_Scancode key, keyState state)
+void dae::InputManager::RemoveCommand(std::string sceneName, SDL_Scancode key, keyState state)
 {
 	KeyboardKey keyPair = std::make_pair(key, state);
-	m_KeyboardCommands.erase(keyPair);
+	m_KeyboardCommands[sceneName].erase(keyPair);
 }

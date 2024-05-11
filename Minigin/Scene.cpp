@@ -5,66 +5,66 @@
 
 using namespace dae;
 
-unsigned int Scene::m_idCounter = 0;
+unsigned int Scene::m_IdCounter = 0;
 
-Scene::Scene(const std::string& name) : m_name(name) {}
+Scene::Scene(const std::string& name) : m_Name(name) {}
 
 Scene::~Scene() = default;
 
 void Scene::Add(std::unique_ptr<GameObject> object)
 {
-	m_objects.emplace_back(std::move(object));
+	m_Objects.emplace_back(std::move(object));
 }
 
 void Scene::Remove(std::unique_ptr<GameObject>& object)
 {
-	m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), object), m_objects.end());
+	m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), object), m_Objects.end());
 }
 
 void Scene::RemoveAll()
 {
-	m_objects.clear();
+	m_Objects.clear();
 }
 
 void Scene::Update(const float deltaTime)
 {
-	for(size_t i{}; i < m_objects.size(); ++i)
+	for(size_t i{}; i < m_Objects.size(); ++i)
 	{
-		m_objects[i]->Update(deltaTime);
+		m_Objects[i]->Update(deltaTime);
 	}
 
 	// Remove dead objects
-	for (int i{ static_cast<int>(m_objects.size() - 1) }; i >= 0; i--)
+	for (int i{ static_cast<int>(m_Objects.size() - 1) }; i >= 0; i--)
 	{
-		if (m_objects[i]->IsDead())
+		if (m_Objects[i]->IsDead())
 		{
 			// If object has parent, set parent of children
-			if (m_objects[i]->GetParent() != nullptr)
+			if (m_Objects[i]->GetParent() != nullptr)
 			{
-				for (int j{}; j < m_objects[i]->GetChildCount(); j++)
+				for (int j{}; j < m_Objects[i]->GetChildCount(); j++)
 				{
-					m_objects[i]->GetChildAt(j)->SetParent(m_objects[i]->GetParent(), true);
+					m_Objects[i]->GetChildAt(j)->SetParent(m_Objects[i]->GetParent(), true);
 				}
 			}
 			else
 			{
 				// If object has no parent, set children to nullptr
-				for (int j{}; j < m_objects[i]->GetChildCount(); j++)
+				for (int j{}; j < m_Objects[i]->GetChildCount(); j++)
 				{
-					m_objects[i]->GetChildAt(j)->SetParent(nullptr, true);
+					m_Objects[i]->GetChildAt(j)->SetParent(nullptr, true);
 				}
 			}
 
 			// Remove object
-			m_objects[i].reset();
-			Remove(m_objects[i]);
+			m_Objects[i].reset();
+			Remove(m_Objects[i]);
 		}
 	}
 }
 
 void Scene::Render(const float deltaTime) const
 {
-	for (const auto& object : m_objects)
+	for (const auto& object : m_Objects)
 	{
 		object->Render(deltaTime);
 	}

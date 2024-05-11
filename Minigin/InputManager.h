@@ -9,6 +9,7 @@
 #include <memory>
 #include <map>
 #include <SDL_scancode.h>
+#include <string>
 
 namespace dae
 {
@@ -25,12 +26,14 @@ namespace dae
 		using ControllerKey = std::pair<unsigned int, Controller::ControllerButton>;
 		using ControllerKeyState = std::pair<ControllerKey, keyState>;
 		using ControllerCommandsMap = std::map<ControllerKeyState, std::unique_ptr<Command>>;
+		using SceneControllerCommandsMap = std::map<std::string, ControllerCommandsMap>;
 
 		using KeyboardKey = std::pair<SDL_Scancode, keyState>;
 		using KeyboardCommandsMap = std::map<KeyboardKey, std::unique_ptr<Command>>;
+		using SceneKeyboardCommandsMap = std::map<std::string, KeyboardCommandsMap>;
 
-		ControllerCommandsMap m_ConsoleCommands{};
-		KeyboardCommandsMap m_KeyboardCommands{};
+		SceneControllerCommandsMap m_ConsoleCommands{};
+		SceneKeyboardCommandsMap m_KeyboardCommands{};
 		std::vector<std::unique_ptr<Controller>> m_Controllers{};
 
 		std::vector<Uint8> m_pPreviousKeyState{ std::vector<Uint8>(SDL_NUM_SCANCODES) };
@@ -42,10 +45,10 @@ namespace dae
 
 		int AddController();
 		int AddControllersMax();
-		void AddCommand(int controllerIdx, Controller::ControllerButton button, keyState state, std::unique_ptr<Command> pCommand);
-		void AddCommand(SDL_Scancode key, keyState state, std::unique_ptr<Command> pCommand);
-		void RemoveCommand(int controllerIdx, Controller::ControllerButton button, keyState state);
-		void RemoveCommand(SDL_Scancode key, keyState state);
+		void AddCommand(std::string sceneName, int controllerIdx, Controller::ControllerButton button, keyState state, std::unique_ptr<Command> pCommand);
+		void AddCommand(std::string sceneName, SDL_Scancode key, keyState state, std::unique_ptr<Command> pCommand);
+		void RemoveCommand(std::string sceneName, int controllerIdx, Controller::ControllerButton button, keyState state);
+		void RemoveCommand(std::string sceneName, SDL_Scancode key, keyState state);
 	};
 
 }
