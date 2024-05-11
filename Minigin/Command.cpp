@@ -4,6 +4,7 @@
 #include "ScoreComponent.h"
 #include "SoundServiceLocator.h"
 #include "SDLSoundSystem.h"
+#include "SceneManager.h"
 
 dae::Command::Command()
 {
@@ -52,4 +53,14 @@ void dae::ScoreSmallCommand::Execute(float)
 	{
 		GetGameObject()->GetComponent<ScoreComponent>()->IncreaseScore(100);
 	}
+}
+
+dae::SceneSwapCommand::SceneSwapCommand(std::string m_Scene)
+	: Command{}
+	, m_Scene{ m_Scene }
+{}
+
+void dae::SceneSwapCommand::Execute(float)
+{
+	SceneManager::GetInstance().SetActiveScene(m_Scene);
 }

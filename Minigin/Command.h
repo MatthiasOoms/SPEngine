@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <string>
 
 namespace dae
 {
@@ -72,6 +73,24 @@ namespace dae
 		ScoreSmallCommand(ScoreSmallCommand&& other) = delete;
 		ScoreSmallCommand& operator=(const ScoreSmallCommand& other) = delete;
 		ScoreSmallCommand& operator=(ScoreSmallCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
+
+	class SceneSwapCommand final : public Command
+	{
+	private:
+		std::string m_Scene;
+	protected:
+		std::string GetScene() { return m_Scene; }
+	public:
+		SceneSwapCommand(std::string m_Scene);
+
+		virtual ~SceneSwapCommand() override = default;
+		SceneSwapCommand(const SceneSwapCommand& other) = delete;
+		SceneSwapCommand(SceneSwapCommand&& other) = delete;
+		SceneSwapCommand& operator=(const SceneSwapCommand& other) = delete;
+		SceneSwapCommand& operator=(SceneSwapCommand&& other) = delete;
 
 		void Execute(float elapsedSec) override;
 	};
