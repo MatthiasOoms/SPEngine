@@ -19,6 +19,7 @@ namespace dae
         virtual void Update(float elapsedSec) override;
         virtual void Render(float elapsedSec) const override;
 
+		void SetState(PlayerState* pState);
         PlayerState* GetCurrentState() const { return m_pCurrentState; }
 
     private:

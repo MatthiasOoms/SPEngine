@@ -41,6 +41,7 @@ namespace dae
 		std::vector<std::unique_ptr<Controller>> m_Controllers{};
 
 		std::vector<Uint8> m_pPreviousKeyState{ std::vector<Uint8>(SDL_NUM_SCANCODES) };
+		std::vector<Uint8> m_pCurrentPressed{ std::vector<Uint8>(SDL_NUM_SCANCODES) };
 
 		const int m_MaxControllers{ 4 };
 
@@ -48,6 +49,7 @@ namespace dae
 
 	public:
 		bool ProcessInput(float elapsedSec);
+		bool IsKeyPressed(SDL_Scancode key);
 
 		int AddController();
 		int AddControllersMax();

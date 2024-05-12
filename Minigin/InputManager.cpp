@@ -15,7 +15,6 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 			return false;
 		}
 	}
-
 	int size{};
 	auto pCurrentKeyState = SDL_GetKeyboardState(&size);
 
@@ -25,11 +24,10 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 	std::vector<Uint8> myPreviousState{ m_pPreviousKeyState.begin(), m_pPreviousKeyState.end() };
 
 	std::vector<Uint8> myChangedState(myCurrentState.size()); // For calculations
-	std::vector<Uint8> myPressedState(myCurrentState.size()); // Pressed this frame
 	std::vector<Uint8> myReleasedState(myCurrentState.size()); // Released this frame
 
 	std::transform(myCurrentState.begin(), myCurrentState.end(), myPreviousState.begin(), myChangedState.begin(), std::bit_xor<Uint8>());
-	std::transform(myCurrentState.begin(), myCurrentState.end(), myChangedState.begin(), myPressedState.begin(), std::bit_and<Uint8>());
+	std::transform(myCurrentState.begin(), myCurrentState.end(), myChangedState.begin(), m_pCurrentPressed.begin(), std::bit_and<Uint8>());
 	std::transform(myCurrentState.begin(), myCurrentState.end(), myChangedState.begin(), myReleasedState.begin(),
 		[](Uint8 currentKey, Uint8 changedKey)
 		{
@@ -42,7 +40,7 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 	// Local commands
 	for (auto const& command : m_KeyboardCommands[sceneName])
 	{
-		if (myPressedState[command.first.first])
+		if (IsKeyPressed(command.first.first))
 		{
 			if (command.first.second == keyState::isDown)
 			{
@@ -69,7 +67,7 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 	// Global commands
 	for (auto const& command : m_GlobalKeyboardCommands)
 	{
-		if (myPressedState[command.first.first])
+		if (IsKeyPressed(command.first.first))
 		{
 			if (command.first.second == keyState::isDown)
 			{
@@ -171,6 +169,15 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 	m_pPreviousKeyState = std::move(myCurrentState);
 
 	return true;
+}
+
+bool dae::InputManager::IsKeyPressed(SDL_Scancode key)
+{
+	if (m_pCurrentPressed[key])
+	{
+		return true;
+	}
+	return false;
 }
 
 int dae::InputManager::AddController()

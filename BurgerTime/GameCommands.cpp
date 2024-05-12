@@ -3,6 +3,10 @@
 #include "ScoreComponent.h"
 #include "LivesComponent.h"
 #include "SceneManager.h"
+#include "PlayerComponent.h"
+#include "WalkPlayerState.h"
+#include "IdlePlayerState.h"
+#include "ClimbPlayerState.h"
 
 dae::MoveCommand::MoveCommand(GameObject* pGameObject, glm::vec3 dir, float speed)
 	: Command{}
@@ -53,4 +57,76 @@ dae::SceneSwapCommand::SceneSwapCommand(std::string m_Scene)
 void dae::SceneSwapCommand::Execute(float)
 {
 	SceneManager::GetInstance().SetActiveScene(GetScene());
+}
+
+dae::MoveEndCommand::MoveEndCommand(GameObject* pGameObject)
+	: Command{}
+	, m_pGameObject{ pGameObject }
+{
+}
+
+void dae::MoveEndCommand::Execute(float)
+{
+	if (GetGameObject()->HasComponent<PlayerComponent>())
+	{
+		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
+		if (dynamic_cast<IdlePlayerState*>(stateComp->GetCurrentState()) == nullptr)
+		{
+			stateComp->SetState(new IdlePlayerState{ GetGameObject() });
+		}
+	}
+}
+
+dae::MoveStartCommand::MoveStartCommand(GameObject* pGameObject)
+	: Command{}
+	, m_pGameObject{ pGameObject }
+{
+}
+
+void dae::MoveStartCommand::Execute(float)
+{
+	if (GetGameObject()->HasComponent<PlayerComponent>())
+	{
+		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
+		if (dynamic_cast<WalkPlayerState*>(stateComp->GetCurrentState()) == nullptr)
+		{
+			stateComp->SetState(new WalkPlayerState{ GetGameObject() });
+		}
+	}
+}
+
+dae::ClimbStartCommand::ClimbStartCommand(GameObject* pGameObject)
+	: Command{}
+	, m_pGameObject{ pGameObject }
+{
+}
+
+void dae::ClimbStartCommand::Execute(float)
+{
+	if (GetGameObject()->HasComponent<PlayerComponent>())
+	{
+		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
+		if (dynamic_cast<ClimbPlayerState*>(stateComp->GetCurrentState()) == nullptr)
+		{
+			stateComp->SetState(new ClimbPlayerState{ GetGameObject() });
+		}
+	}
+}
+
+dae::ClimbEndCommand::ClimbEndCommand(GameObject* pGameObject)
+	: Command{}
+	, m_pGameObject{ pGameObject }
+{
+}
+
+void dae::ClimbEndCommand::Execute(float)
+{
+	if (GetGameObject()->HasComponent<PlayerComponent>())
+	{
+		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
+		if (dynamic_cast<IdlePlayerState*>(stateComp->GetCurrentState()) == nullptr)
+		{
+			stateComp->SetState(new IdlePlayerState{ GetGameObject() });
+		}
+	}
 }

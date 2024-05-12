@@ -2,10 +2,12 @@
 
 namespace dae
 {
+	class GameObject;
+
 	class PlayerState
 	{
 	public:
-		PlayerState() = default;
+		PlayerState(GameObject* player);
 		virtual ~PlayerState() = default;
 
 		PlayerState(const PlayerState& other) = delete;
@@ -16,9 +18,13 @@ namespace dae
 		virtual void Update(float elapsedSec) = 0;
 		virtual void Render(float elapsedSec) = 0;
 
-		virtual PlayerState* HandleState(float elapsedSec) = 0;
-
 		virtual void OnEnter() = 0;
 		virtual void OnExit() = 0;
+
+	protected:
+		GameObject* GetPlayer() const { return m_pPlayer; }
+
+	private:
+		GameObject* m_pPlayer;
 	};
 }
