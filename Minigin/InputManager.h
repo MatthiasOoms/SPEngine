@@ -23,6 +23,7 @@ namespace dae
 
 	class InputManager final : public Singleton<InputManager>
 	{
+	private:
 		// ControllerKey = <ControllerIndex, Button>
 		using ControllerKey = std::pair<unsigned int, Controller::ControllerButton>;
 		using ControllerKeyState = std::pair<ControllerKey, keyState>;
