@@ -236,7 +236,7 @@ void load()
 		scene.Add(std::move(goc));
 		scene.Add(std::move(gob));
 
-		//input.AddCommand("Demo", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Menu"));
+		input.AddCommand("Demo", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Menu"));
 	}
 
 	// Menu scene
@@ -274,10 +274,9 @@ void load()
 		go->AddComponent<dae::FPSComponent>();
 		scene.Add(std::move(go));
 
-		//input.AddCommand("Menu", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Demo"));
+		input.AddCommand("Menu", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Demo"));
 	}
 
-	input.AddGlobalCommand(SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Demo"));
 	sceneManager.SetActiveScene("Menu");
 }
 

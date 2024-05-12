@@ -190,6 +190,20 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BurgerTime.cpp" />
+    <ClCompile Include="FPSComponent.cpp" />
+    <ClCompile Include="LivesComponent.cpp" />
+    <ClCompile Include="LivesObserverComponent.cpp" />
+    <ClCompile Include="RotationComponent.cpp" />
+    <ClCompile Include="ScoreComponent.cpp" />
+    <ClCompile Include="ScoreObserverComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FPSComponent.h" />
+    <ClInclude Include="LivesComponent.h" />
+    <ClInclude Include="LivesObserverComponent.h" />
+    <ClInclude Include="RotationComponent.h" />
+    <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="ScoreObserverComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
