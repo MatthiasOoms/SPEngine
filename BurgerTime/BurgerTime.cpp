@@ -31,6 +31,7 @@
 #include "LoggingSoundSystem.h"
 #include "SDLSoundSystem.h"
 #include "NullSoundSystem.h"
+#include "GameCommands.h"
 
 void load()
 {
