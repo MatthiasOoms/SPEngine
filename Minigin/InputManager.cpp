@@ -37,9 +37,37 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 		}
 	);
 
-	auto& sceneManager{ SceneManager::GetInstance() };
-	auto sceneName{ sceneManager.GetActiveScene()->GetName() };
+	std::string sceneName{ m_pSceneManager.GetActiveScene()->GetName() };
+
+	// Local commands
 	for (auto const& command : m_KeyboardCommands[sceneName])
+	{
+		if (myPressedState[command.first.first])
+		{
+			if (command.first.second == keyState::isDown)
+			{
+				command.second->Execute(elapsedSec);
+			}
+		}
+
+		if (pCurrentKeyState[command.first.first])
+		{
+			if (command.first.second == keyState::isHeld)
+			{
+				command.second->Execute(elapsedSec);
+			}
+		}
+
+		if (myReleasedState[command.first.first])
+		{
+			if (command.first.second == keyState::isUp)
+			{
+				command.second->Execute(elapsedSec);
+			}
+		}
+	}
+	// Global commands
+	for (auto const& command : m_GlobalKeyboardCommands)
 	{
 		if (myPressedState[command.first.first])
 		{
@@ -68,8 +96,44 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 
 	for (auto const& controller : m_Controllers)
 	{
+		// Update buttons
 		controller->Update();
+		// Local commands
 		for (auto const& command : m_ConsoleCommands[sceneName])
+		{
+			if (command.first.first.first == controller->GetIdx())
+			{
+				switch (command.first.second)
+				{
+				case keyState::isDown:
+				{
+					if (controller->IsDown(command.first.first.second))
+					{
+						command.second->Execute(elapsedSec);
+					}
+					break;
+				}
+				case keyState::isHeld:
+				{
+					if (controller->IsPressed(command.first.first.second))
+					{
+						command.second->Execute(elapsedSec);
+					}
+					break;
+				}
+				case keyState::isUp:
+				{
+					if (controller->IsUp(command.first.first.second))
+					{
+						command.second->Execute(elapsedSec);
+					}
+					break;
+				}
+				}
+			}
+		}
+		// Global commands
+		for (auto const& command : m_GlobalConsoleCommands)
 		{
 			if (command.first.first.first == controller->GetIdx())
 			{
@@ -154,4 +218,30 @@ void dae::InputManager::RemoveCommand(std::string sceneName, SDL_Scancode key, k
 {
 	KeyboardKey keyPair = std::make_pair(key, state);
 	m_KeyboardCommands[sceneName].erase(keyPair);
+}
+
+void dae::InputManager::AddGlobalCommand(int controllerIdx, Controller::ControllerButton button, keyState state, std::unique_ptr<Command> pCommand)
+{
+	ControllerKey keyPair{ std::make_pair(controllerIdx, button) };
+	ControllerKeyState statePair{ std::make_pair(keyPair, state) };
+	m_GlobalConsoleCommands.insert(std::make_pair(statePair, std::move(pCommand)));
+}
+
+void dae::InputManager::AddGlobalCommand(SDL_Scancode key, keyState state, std::unique_ptr<Command> pCommand)
+{
+	KeyboardKey keyPair = std::make_pair(key, state);
+	m_GlobalKeyboardCommands[keyPair] = std::move(pCommand);
+}
+
+void dae::InputManager::RemoveGlobalCommand(int controllerIdx, Controller::ControllerButton button, keyState state)
+{
+	ControllerKey keyPair{ std::make_pair(controllerIdx, button) };
+	ControllerKeyState statePair{ std::make_pair(keyPair, state) };
+	m_GlobalConsoleCommands.erase(statePair);
+}
+
+void dae::InputManager::RemoveGlobalCommand(SDL_Scancode key, keyState state)
+{
+	KeyboardKey keyPair = std::make_pair(key, state);
+	m_GlobalKeyboardCommands.erase(keyPair);
 }

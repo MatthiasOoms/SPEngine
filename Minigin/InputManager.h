@@ -5,6 +5,7 @@
 #include "Singleton.h"
 #include "Controller.h"
 #include "Command.h"
+#include "SceneManager.h"
 #include <vector>
 #include <memory>
 #include <map>
@@ -33,22 +34,32 @@ namespace dae
 		using SceneKeyboardCommandsMap = std::map<std::string, KeyboardCommandsMap>;
 
 		SceneControllerCommandsMap m_ConsoleCommands{};
+		ControllerCommandsMap m_GlobalConsoleCommands{};
 		SceneKeyboardCommandsMap m_KeyboardCommands{};
+		KeyboardCommandsMap m_GlobalKeyboardCommands{};
 		std::vector<std::unique_ptr<Controller>> m_Controllers{};
 
 		std::vector<Uint8> m_pPreviousKeyState{ std::vector<Uint8>(SDL_NUM_SCANCODES) };
 
 		const int m_MaxControllers{ 4 };
 
+		dae::SceneManager& m_pSceneManager{ SceneManager::GetInstance() };
+
 	public:
 		bool ProcessInput(float elapsedSec);
 
 		int AddController();
 		int AddControllersMax();
+
 		void AddCommand(std::string sceneName, int controllerIdx, Controller::ControllerButton button, keyState state, std::unique_ptr<Command> pCommand);
 		void AddCommand(std::string sceneName, SDL_Scancode key, keyState state, std::unique_ptr<Command> pCommand);
 		void RemoveCommand(std::string sceneName, int controllerIdx, Controller::ControllerButton button, keyState state);
 		void RemoveCommand(std::string sceneName, SDL_Scancode key, keyState state);
+
+		void AddGlobalCommand(int controllerIdx, Controller::ControllerButton button, keyState state, std::unique_ptr<Command> pCommand);
+		void AddGlobalCommand(SDL_Scancode key, keyState state, std::unique_ptr<Command> pCommand);
+		void RemoveGlobalCommand(int controllerIdx, Controller::ControllerButton button, keyState state);
+		void RemoveGlobalCommand(SDL_Scancode key, keyState state);
 	};
 
 }

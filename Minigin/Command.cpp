@@ -62,5 +62,5 @@ dae::SceneSwapCommand::SceneSwapCommand(std::string m_Scene)
 
 void dae::SceneSwapCommand::Execute(float)
 {
-	SceneManager::GetInstance().SetActiveScene(m_Scene);
+	SceneManager::GetInstance().SetActiveScene(GetScene());
 }
