@@ -57,7 +57,7 @@ void load()
 		// Load and Play Sound
 		dae::Sound temp{ "../Data/Soundtrack.mp3", "Soundtrack", 1, -1 };
 		soundSystem.PlayMusic(temp);
-		soundSystem.StopMusic();
+		//soundSystem.StopMusic();
 
 		// Controllers
 		input.AddControllersMax();
@@ -265,7 +265,7 @@ void load()
 		scene.Add(std::move(goc));
 		scene.Add(std::move(gob));
 
-		input.AddCommand("Demo", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Menu"));
+		input.AddCommand("Demo", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Menu", "../Data/Soundtrack.mp3"));
 	}
 
 	// Menu scene
@@ -292,7 +292,7 @@ void load()
 		go = std::make_unique<dae::GameObject>();
 		go->AddComponent<dae::TextureComponent>();
 		go->AddComponent<dae::TextComponent>()->SetFont(font);
-		go->GetComponent<dae::TextComponent>()->SetText("Programming 4 Assignment");
+		go->GetComponent<dae::TextComponent>()->SetText("Press \"SPACE\" To Start!");
 		go->GetTransform().SetWorldPosition(80, 20, 0);
 		scene.Add(std::move(go));
 
@@ -303,7 +303,7 @@ void load()
 		go->AddComponent<dae::FPSComponent>();
 		scene.Add(std::move(go));
 
-		input.AddCommand("Menu", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Demo"));
+		input.AddCommand("Menu", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Demo", "../Data/Soundtrack.mp3"));
 	}
 
 	sceneManager.SetActiveScene("Menu");

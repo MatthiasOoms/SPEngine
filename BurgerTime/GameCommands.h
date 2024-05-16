@@ -138,10 +138,12 @@ namespace dae
 	{
 	private:
 		std::string m_Scene;
+		std::string m_MusicPath;
 	protected:
 		std::string GetScene() { return m_Scene; }
+		std::string GetMusicPath() { return m_MusicPath; }
 	public:
-		SceneSwapCommand(std::string m_Scene);
+		SceneSwapCommand(std::string scene, std::string musicPath);
 
 		virtual ~SceneSwapCommand() override = default;
 		SceneSwapCommand(const SceneSwapCommand& other) = delete;

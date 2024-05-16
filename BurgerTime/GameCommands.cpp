@@ -7,6 +7,8 @@
 #include "WalkPlayerState.h"
 #include "IdlePlayerState.h"
 #include "ClimbPlayerState.h"
+#include <SoundServiceLocator.h>
+#include <SoundSystem.h>
 
 dae::MoveCommand::MoveCommand(GameObject* pGameObject, glm::vec3 dir, float speed)
 	: Command{}
@@ -49,14 +51,21 @@ void dae::ScoreSmallCommand::Execute(float)
 	}
 }
 
-dae::SceneSwapCommand::SceneSwapCommand(std::string m_Scene)
+dae::SceneSwapCommand::SceneSwapCommand(std::string scene, std::string musicPath)
 	: Command{}
-	, m_Scene{ m_Scene }
+	, m_Scene{ scene }
+	, m_MusicPath{ musicPath }
 {}
 
 void dae::SceneSwapCommand::Execute(float)
 {
 	SceneManager::GetInstance().SetActiveScene(GetScene());
+	auto& soundSystem = SoundServiceLocator::GetSoundSystem();
+	Sound temp{ GetMusicPath(), "Soundtrack", 1, -1};
+	soundSystem.StopMusic();
+	soundSystem.StopSoundEffects();
+
+	soundSystem.PlayMusic(temp);
 }
 
 dae::MoveEndCommand::MoveEndCommand(GameObject* pGameObject)
