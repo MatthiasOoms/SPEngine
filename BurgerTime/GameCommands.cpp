@@ -3,6 +3,7 @@
 #include "ScoreComponent.h"
 #include "LivesComponent.h"
 #include "SceneManager.h"
+#include "Scene.h"
 #include "PlayerComponent.h"
 #include "WalkPlayerState.h"
 #include "IdlePlayerState.h"
@@ -59,13 +60,23 @@ dae::SceneSwapCommand::SceneSwapCommand(std::string scene, std::string musicPath
 
 void dae::SceneSwapCommand::Execute(float)
 {
-	SceneManager::GetInstance().SetActiveScene(GetScene());
-	auto& soundSystem = SoundServiceLocator::GetSoundSystem();
-	Sound temp{ GetMusicPath(), "Soundtrack", 1, -1};
+	dae::SceneManager::GetInstance().SetActiveScene(GetScene());
+	auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
+	dae::Sound temp{ GetMusicPath(), "Soundtrack", 1, -1};
 	soundSystem.StopMusic();
 	soundSystem.StopSoundEffects();
 
 	soundSystem.PlayMusic(temp);
+
+	auto players = dae::SceneManager::GetInstance().GetActiveScene()->GetObjectsByTag("Player");
+	for (auto player : players)
+	{
+		if (player->HasComponent<dae::PlayerComponent>())
+		{
+			auto playerComp = player->GetComponent<dae::PlayerComponent>();
+			playerComp->SetStaticLevel();
+		}
+	}
 }
 
 dae::MoveEndCommand::MoveEndCommand(GameObject* pGameObject)

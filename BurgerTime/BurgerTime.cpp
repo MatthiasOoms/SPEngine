@@ -33,6 +33,7 @@
 #include "NullSoundSystem.h"
 #include "GameCommands.h"
 #include "PlayerComponent.h"
+#include "CollisionComponent.h"
 
 void load()
 {
@@ -63,19 +64,19 @@ void load()
 		input.AddControllersMax();
 
 		// Background
-		auto go = std::make_unique<dae::GameObject>();
+		auto go = std::make_unique<dae::GameObject>("Background");
 		go->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("background.tga"));
 		scene.Add(std::move(go));
 
 		// Logo
-		go = std::make_unique<dae::GameObject>();
+		go = std::make_unique<dae::GameObject>("Background");
 		go->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("logo.tga"));
 		go->GetTransform().SetWorldPosition(216, 180, 0);
 		scene.Add(std::move(go));
 
 		// Text
 		auto font = resourceManager.LoadFont("Lingua.otf", 36);
-		go = std::make_unique<dae::GameObject>();
+		go = std::make_unique<dae::GameObject>("Background");
 		go->AddComponent<dae::TextureComponent>();
 		go->AddComponent<dae::TextComponent>()->SetFont(font);
 		go->GetComponent<dae::TextComponent>()->SetText("Programming 4 Assignment");
@@ -83,7 +84,7 @@ void load()
 		scene.Add(std::move(go));
 
 		// FPS
-		go = std::make_unique<dae::GameObject>();
+		go = std::make_unique<dae::GameObject>("Background");
 		go->AddComponent<dae::TextureComponent>();
 		go->AddComponent<dae::TextComponent>()->SetFont(font);
 		go->AddComponent<dae::FPSComponent>();
@@ -95,13 +96,13 @@ void load()
 		scene.Add(std::move(go));*/
 
 		// Chef
-		auto goc = std::make_unique<dae::GameObject>();
+		auto goc = std::make_unique<dae::GameObject>("Player");
 		goc->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("BurgerTimeChef.png"));
 		goc->GetTransform().SetLocalPosition(50, 0, 0);
 		//goc->AddComponent<dae::RotationComponent>();
 
 		// Bean
-		auto gob = std::make_unique<dae::GameObject>();
+		auto gob = std::make_unique<dae::GameObject>("Player");
 		//gob->SetParent(goc.get(), false);
 		gob->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("BurgerTimeBean.png"));
 		gob->GetTransform().SetLocalPosition(20, 0, 0);
@@ -122,10 +123,31 @@ void load()
 		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ 0, -1, 0 }, 400.f));
 		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ 0, 1, 0 }, 400.f));
 
+		// Collision test obj
+		auto staticObj = std::make_unique<dae::GameObject>("StaticLevel");
+		staticObj->AddComponent<dae::CollisionComponent>();
+		staticObj->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("platform.png"));
+		staticObj->GetTransform().SetWorldPosition(0, 50, 0);
+		auto staticCollision = staticObj->GetComponent<dae::CollisionComponent>();
+		staticCollision->SetWidth(208);
+		staticCollision->SetHeight(4);
+		scene.Add(std::move(staticObj));
 
 		// Keyboard
 		gob->AddComponent<dae::PlayerComponent>(); // For state functionality
+		if (gob->HasComponent<dae::CollisionComponent>())
+		{
+			auto col = gob->GetComponent<dae::CollisionComponent>();
+			col->SetHeight(16);
+			col->SetWidth(16);
+		}
 		goc->AddComponent<dae::PlayerComponent>(); // For state functionality
+		if (goc->HasComponent<dae::CollisionComponent>())
+		{
+			auto col = goc->GetComponent<dae::CollisionComponent>();
+			col->SetHeight(16);
+			col->SetWidth(16);
+		}
 		{
 			// Start Move
 			input.AddCommand("Demo", SDL_SCANCODE_W, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(gob.get()));
@@ -165,14 +187,14 @@ void load()
 
 		// Print Controls
 		font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
-		go = std::make_unique<dae::GameObject>();
+		go = std::make_unique<dae::GameObject>("Background");
 		go->AddComponent<dae::TextureComponent>();
 		go->AddComponent<dae::TextComponent>()->SetFont(font);
 		go->GetComponent<dae::TextComponent>()->SetText("WASD or DPad to control the Bean (Second controller)");
 		go->GetTransform().SetWorldPosition(10, 75, 0);
 		scene.Add(std::move(go));
 
-		go = std::make_unique<dae::GameObject>();
+		go = std::make_unique<dae::GameObject>("Background");
 		go->AddComponent<dae::TextureComponent>();
 		go->AddComponent<dae::TextComponent>()->SetFont(font);
 		go->GetComponent<dae::TextComponent>()->SetText("Arrows or DPad to control the Chef (First controller)");
@@ -188,28 +210,28 @@ void load()
 		input.AddCommand("Demo", SDL_SCANCODE_V, dae::keyState::isDown, std::make_unique<dae::ScoreSmallCommand>(gob.get()));
 
 		// Lives Display Chef
-		auto toLivesDisplayChef = std::make_unique<dae::GameObject>();
+		auto toLivesDisplayChef = std::make_unique<dae::GameObject>("Background");
 		toLivesDisplayChef->AddComponent<dae::TextureComponent>();
 		toLivesDisplayChef->GetTransform().SetLocalPosition(10, 200, 0);
 		toLivesDisplayChef->AddComponent<dae::TextComponent>()->SetFont(font);
 		toLivesDisplayChef->AddComponent<dae::LivesObserverComponent>();
 
 		// Score Display Chef
-		auto toScoreDisplayChef = std::make_unique<dae::GameObject>();
+		auto toScoreDisplayChef = std::make_unique<dae::GameObject>("Background");
 		toScoreDisplayChef->AddComponent<dae::TextureComponent>();
 		toScoreDisplayChef->GetTransform().SetLocalPosition(10, 225, 0);
 		toScoreDisplayChef->AddComponent<dae::TextComponent>()->SetFont(font);
 		toScoreDisplayChef->AddComponent<dae::ScoreObserverComponent>();
 
 		// Lives Display Bean
-		auto toLivesDisplayBean = std::make_unique<dae::GameObject>();
+		auto toLivesDisplayBean = std::make_unique<dae::GameObject>("Background");
 		toLivesDisplayBean->AddComponent<dae::TextureComponent>();
 		toLivesDisplayBean->GetTransform().SetLocalPosition(10, 250, 0);
 		toLivesDisplayBean->AddComponent<dae::TextComponent>()->SetFont(font);
 		toLivesDisplayBean->AddComponent<dae::LivesObserverComponent>();
 
 		// Score Display Bean
-		auto toScoreDisplayBean = std::make_unique<dae::GameObject>();
+		auto toScoreDisplayBean = std::make_unique<dae::GameObject>("Background");
 		toScoreDisplayBean->AddComponent<dae::TextureComponent>();
 		toScoreDisplayBean->GetTransform().SetLocalPosition(10, 275, 0);
 		toScoreDisplayBean->AddComponent<dae::TextComponent>()->SetFont(font);
@@ -234,14 +256,14 @@ void load()
 		scene.Add(std::move(toScoreDisplayBean));
 
 		// Text
-		auto toKill = std::make_unique<dae::GameObject>();
+		auto toKill = std::make_unique<dae::GameObject>("Background");
 		toKill->AddComponent<dae::TextureComponent>();
 		toKill->GetTransform().SetLocalPosition(10, 150, 0);
 		toKill->AddComponent<dae::TextComponent>()->SetFont(font);
 		toKill->GetComponent<dae::TextComponent>()->SetText("Z/X: Kill (With Death sound)");
 		scene.Add(std::move(toKill));
 
-		auto toScore = std::make_unique<dae::GameObject>();
+		auto toScore = std::make_unique<dae::GameObject>("Background");
 		toScore->AddComponent<dae::TextureComponent>();
 		toScore->GetTransform().SetLocalPosition(10, 175, 0);
 		toScore->AddComponent<dae::TextComponent>()->SetFont(font);
@@ -277,19 +299,19 @@ void load()
 		input.AddControllersMax();
 
 		// Background
-		auto go = std::make_unique<dae::GameObject>();
+		auto go = std::make_unique<dae::GameObject>("Background");
 		go->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("background.tga"));
 		scene.Add(std::move(go));
 
 		// Logo
-		go = std::make_unique<dae::GameObject>();
+		go = std::make_unique<dae::GameObject>("Background");
 		go->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("logo.tga"));
 		go->GetTransform().SetWorldPosition(216, 180, 0);
 		scene.Add(std::move(go));
 
 		// Text
 		auto font = resourceManager.LoadFont("Lingua.otf", 36);
-		go = std::make_unique<dae::GameObject>();
+		go = std::make_unique<dae::GameObject>("Background");
 		go->AddComponent<dae::TextureComponent>();
 		go->AddComponent<dae::TextComponent>()->SetFont(font);
 		go->GetComponent<dae::TextComponent>()->SetText("Press \"SPACE\" To Start!");
@@ -297,7 +319,7 @@ void load()
 		scene.Add(std::move(go));
 
 		// FPS
-		go = std::make_unique<dae::GameObject>();
+		go = std::make_unique<dae::GameObject>("Background");
 		go->AddComponent<dae::TextureComponent>();
 		go->AddComponent<dae::TextComponent>()->SetFont(font);
 		go->AddComponent<dae::FPSComponent>();

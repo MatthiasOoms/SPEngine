@@ -29,7 +29,7 @@ void dae::SceneManager::SetActiveScene(std::string name)
 {
 	for (const auto& scene : m_Scenes)
 	{
-		if (scene->GetName() == name)
+		if (scene->GetSceneName() == name)
 		{
 			m_ActiveScene = scene;
 			return;

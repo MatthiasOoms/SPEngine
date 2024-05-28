@@ -4,17 +4,19 @@
 #include "Renderer.h"
 #include "Component.h"
 
-dae::GameObject::GameObject()
+dae::GameObject::GameObject(std::string tag)
 	: m_pParent{ nullptr }
+	, m_Tag{ tag }
 	, m_IsPositionDirty{ false }
 	, m_IsDead{ false }
 {
 	m_pTransform = std::make_unique<Transform>(this);
 }
 
-dae::GameObject::GameObject(GameObject* pParent)
+dae::GameObject::GameObject(GameObject* pParent, std::string tag)
 	: m_IsPositionDirty{ true }
 	, m_IsDead{ false }
+	, m_Tag{ tag }
 {
 	m_pParent = nullptr;
 	m_pTransform = std::make_unique<Transform>(this);
@@ -49,6 +51,11 @@ void dae::GameObject::Render(const float deltaTime) const
 dae::Transform& dae::GameObject::GetTransform() const
 {
 	return *m_pTransform;
+}
+
+std::string dae::GameObject::GetTag() const
+{
+	return m_Tag;
 }
 
 dae::GameObject* dae::GameObject::GetParent() const

@@ -19,7 +19,6 @@ namespace dae
 
 		virtual void Update(float elapsedSec) = 0;
 		virtual void Render(float elapsedSec) const = 0;
-		void SetOwner(GameObject* pOwner) { m_pOwner = pOwner; }
 
 	protected:
 		GameObject* GetOwner() const { return m_pOwner; }

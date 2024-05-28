@@ -9,6 +9,19 @@ unsigned int Scene::m_IdCounter = 0;
 
 Scene::Scene(const std::string& name) : m_Name(name) {}
 
+std::vector<GameObject*> dae::Scene::GetObjectsByTag(std::string tag) const
+{
+	std::vector<GameObject*> tempVec;
+	for (const auto& object : m_Objects)
+	{
+		if (object->GetTag() == tag)
+		{
+			tempVec.push_back(object.get());
+		}
+	}
+	return tempVec;
+}
+
 Scene::~Scene() = default;
 
 void Scene::Add(std::unique_ptr<GameObject> object)

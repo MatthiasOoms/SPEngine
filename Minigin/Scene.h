@@ -15,7 +15,8 @@ namespace dae
 		void Update(const float deltaTime);
 		void Render(const float deltaTime) const;
 
-		const std::string& GetName() const { return m_Name; }
+		const std::string& GetSceneName() const { return m_Name; }
+		std::vector<GameObject*> GetObjectsByTag(std::string tag) const;
 
 		~Scene();
 		Scene(const Scene& other) = delete;

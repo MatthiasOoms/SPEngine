@@ -2,16 +2,17 @@
 #include "Transform.h"
 #include <memory>
 #include <vector>
+#include <string>
 
 namespace dae
 {
 	class Component;
-
+	
 	class GameObject final
 	{
 	public:
-		GameObject();
-		GameObject(GameObject* pParent);
+		GameObject(std::string tag);
+		GameObject(GameObject* pParent, std::string tag);
 		~GameObject();
 
 		GameObject(const GameObject& other) = delete;
@@ -22,6 +23,7 @@ namespace dae
 		void Update(const float deltaTime);
 		void Render(const float deltaTime) const;
 		Transform& GetTransform() const;
+		std::string GetTag() const;
 
 		template <typename Comp> Comp* AddComponent();
 		template <typename Comp> Comp* GetComponent() const;
@@ -46,6 +48,7 @@ namespace dae
 		// why use smart ptrs inside of the objects
 
 		// After quiz: Should I use smart ptr for parent and child or not?
+		std::string m_Tag;
 		GameObject* m_pParent;
 		std::vector<GameObject*> m_pChildren;
 		std::vector<Component*> m_pComponents;
