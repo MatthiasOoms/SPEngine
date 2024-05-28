@@ -201,6 +201,7 @@ xcopy "$(SolutionDir)Data\*" "$(OutputPath)..\Data\" /E /Y
     <ClCompile Include="IdlePlayerState.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
     <ClCompile Include="LivesObserverComponent.cpp" />
+    <ClCompile Include="PlatformComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="RotationComponent.cpp" />
@@ -216,6 +217,7 @@ xcopy "$(SolutionDir)Data\*" "$(OutputPath)..\Data\" /E /Y
     <ClInclude Include="IdlePlayerState.h" />
     <ClInclude Include="LivesComponent.h" />
     <ClInclude Include="LivesObserverComponent.h" />
+    <ClInclude Include="PlatformComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="RotationComponent.h" />

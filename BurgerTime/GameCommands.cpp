@@ -10,6 +10,7 @@
 #include "ClimbPlayerState.h"
 #include <SoundServiceLocator.h>
 #include <SoundSystem.h>
+#include "PlatformComponent.h"
 
 dae::MoveCommand::MoveCommand(GameObject* pGameObject, glm::vec3 dir, float speed)
 	: Command{}
@@ -67,16 +68,6 @@ void dae::SceneSwapCommand::Execute(float)
 	soundSystem.StopSoundEffects();
 
 	soundSystem.PlayMusic(temp);
-
-	auto players = dae::SceneManager::GetInstance().GetActiveScene()->GetObjectsByTag("Player");
-	for (auto player : players)
-	{
-		if (player->HasComponent<dae::PlayerComponent>())
-		{
-			auto playerComp = player->GetComponent<dae::PlayerComponent>();
-			playerComp->SetStaticLevel();
-		}
-	}
 }
 
 dae::MoveEndCommand::MoveEndCommand(GameObject* pGameObject)

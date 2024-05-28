@@ -34,6 +34,7 @@
 #include "GameCommands.h"
 #include "PlayerComponent.h"
 #include "CollisionComponent.h"
+#include "PlatformComponent.h"
 
 void load()
 {
@@ -126,12 +127,12 @@ void load()
 		// Collision test obj
 		auto staticObj = std::make_unique<dae::GameObject>("StaticLevel");
 		staticObj->AddComponent<dae::CollisionComponent>();
+		staticObj->AddComponent<dae::PlatformComponent>();
 		staticObj->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("platform.png"));
 		staticObj->GetTransform().SetWorldPosition(0, 50, 0);
 		auto staticCollision = staticObj->GetComponent<dae::CollisionComponent>();
 		staticCollision->SetWidth(208);
 		staticCollision->SetHeight(4);
-		scene.Add(std::move(staticObj));
 
 		// Keyboard
 		gob->AddComponent<dae::PlayerComponent>(); // For state functionality
@@ -288,6 +289,10 @@ void load()
 		scene.Add(std::move(gob));
 
 		input.AddCommand("Demo", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Menu", "../Data/Soundtrack.mp3"));
+	
+		// Register objects to platform
+		staticObj->GetComponent<dae::PlatformComponent>()->RegisterObjects("Demo");
+		scene.Add(std::move(staticObj));
 	}
 
 	// Menu scene
