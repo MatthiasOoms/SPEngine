@@ -109,6 +109,40 @@ void load()
 		gob->GetTransform().SetLocalPosition(20, 0, 0);
 		//gob->AddComponent<dae::RotationComponent>();
 		//gob->GetComponent<dae::RotationComponent>()->SetRotationSpeed(360.f);
+		
+
+
+		// Collision test obj
+		auto staticObj = std::make_unique<dae::GameObject>("StaticLevel");
+		staticObj->AddComponent<dae::CollisionComponent>();
+		staticObj->AddComponent<dae::PlatformComponent>();
+		staticObj->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("platform.png"));
+		staticObj->GetTransform().SetWorldPosition(0, 50, 0);
+		if (staticObj->HasComponent<dae::CollisionComponent>() && staticObj->HasComponent<dae::TextureComponent>())
+		{
+			auto platformTexture = staticObj->GetComponent<dae::TextureComponent>();
+			auto platformCollision = staticObj->GetComponent<dae::CollisionComponent>();
+			platformCollision->SetDimensions(platformTexture->GetDimensions());
+		}
+
+		// Player Components and Collision Components
+		gob->AddComponent<dae::CollisionComponent>();
+		gob->AddComponent<dae::PlayerComponent>();
+		if (gob->HasComponent<dae::CollisionComponent>() && gob->HasComponent<dae::TextureComponent>())
+		{
+			auto gobTexture = gob->GetComponent<dae::TextureComponent>();
+			auto gobCol = gob->GetComponent<dae::CollisionComponent>();
+			gobCol->SetDimensions(gobTexture->GetDimensions());
+		}
+		goc->AddComponent<dae::CollisionComponent>();
+		goc->AddComponent<dae::PlayerComponent>();
+		if (goc->HasComponent<dae::CollisionComponent>() && goc->HasComponent<dae::TextureComponent>())
+		{
+			auto gocTexture = goc->GetComponent<dae::TextureComponent>();
+			auto gocCol = goc->GetComponent<dae::CollisionComponent>();
+			gocCol->SetDimensions(gocTexture->GetDimensions());
+		}
+
 
 
 		// Input
@@ -124,31 +158,7 @@ void load()
 		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ 0, -1, 0 }, 400.f));
 		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ 0, 1, 0 }, 400.f));
 
-		// Collision test obj
-		auto staticObj = std::make_unique<dae::GameObject>("StaticLevel");
-		staticObj->AddComponent<dae::CollisionComponent>();
-		staticObj->AddComponent<dae::PlatformComponent>();
-		staticObj->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("platform.png"));
-		staticObj->GetTransform().SetWorldPosition(0, 50, 0);
-		auto platformTexture = staticObj->GetComponent<dae::TextureComponent>();
-		auto platformCollision = staticObj->GetComponent<dae::CollisionComponent>();
-		platformCollision->SetDimensions(platformTexture->GetDimensions());
-
 		// Keyboard
-		gob->AddComponent<dae::PlayerComponent>(); // For state functionality
-		if (gob->HasComponent<dae::CollisionComponent>())
-		{
-			auto col = gob->GetComponent<dae::CollisionComponent>();
-			col->SetHeight(16);
-			col->SetWidth(16);
-		}
-		goc->AddComponent<dae::PlayerComponent>(); // For state functionality
-		if (goc->HasComponent<dae::CollisionComponent>())
-		{
-			auto col = goc->GetComponent<dae::CollisionComponent>();
-			col->SetHeight(16);
-			col->SetWidth(16);
-		}
 		{
 			// Start Move
 			input.AddCommand("Demo", SDL_SCANCODE_W, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(gob.get()));
