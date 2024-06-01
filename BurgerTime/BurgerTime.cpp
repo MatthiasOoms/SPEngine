@@ -130,9 +130,9 @@ void load()
 		staticObj->AddComponent<dae::PlatformComponent>();
 		staticObj->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("platform.png"));
 		staticObj->GetTransform().SetWorldPosition(0, 50, 0);
-		auto staticCollision = staticObj->GetComponent<dae::CollisionComponent>();
-		staticCollision->SetWidth(208);
-		staticCollision->SetHeight(4);
+		auto platformTexture = staticObj->GetComponent<dae::TextureComponent>();
+		auto platformCollision = staticObj->GetComponent<dae::CollisionComponent>();
+		platformCollision->SetDimensions(platformTexture->GetDimensions());
 
 		// Keyboard
 		gob->AddComponent<dae::PlayerComponent>(); // For state functionality

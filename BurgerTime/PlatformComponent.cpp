@@ -83,33 +83,39 @@ void dae::PlatformComponent::RegisterObjects()
 void dae::PlatformComponent::RegisterObjects(std::string scene)
 {
 	// Get all players, enemies and ingredients
-	auto temp = dae::SceneManager::GetInstance().GetScene(scene);
-	m_pPlayers = temp->GetObjectsByTag("Player");
-	m_pEnemies = temp->GetObjectsByTag("Enemy");
-	m_pIngredients = temp->GetObjectsByTag("Ingredient");
-
-	// Add collision components to all players, enemies and ingredients if necessary
-	for (auto pPlayer : m_pPlayers)
+	if (auto temp = dae::SceneManager::GetInstance().GetScene(scene))
 	{
-		if (!pPlayer->HasComponent<CollisionComponent>())
+		m_pPlayers = temp->GetObjectsByTag("Player");
+		m_pEnemies = temp->GetObjectsByTag("Enemy");
+		m_pIngredients = temp->GetObjectsByTag("Ingredient");
+
+		// Add collision components to all players, enemies and ingredients if necessary
+		for (auto pPlayer : m_pPlayers)
 		{
-			pPlayer->AddComponent<CollisionComponent>();
+			if (!pPlayer->HasComponent<CollisionComponent>())
+			{
+				pPlayer->AddComponent<CollisionComponent>();
+			}
+		}
+
+		for (auto pEnemy : m_pEnemies)
+		{
+			if (!pEnemy->HasComponent<CollisionComponent>())
+			{
+				pEnemy->AddComponent<CollisionComponent>();
+			}
+		}
+
+		for (auto pIngredient : m_pIngredients)
+		{
+			if (!pIngredient->HasComponent<CollisionComponent>())
+			{
+				pIngredient->AddComponent<CollisionComponent>();
+			}
 		}
 	}
-
-	for (auto pEnemy : m_pEnemies)
+	else
 	{
-		if (!pEnemy->HasComponent<CollisionComponent>())
-		{
-			pEnemy->AddComponent<CollisionComponent>();
-		}
-	}
-
-	for (auto pIngredient : m_pIngredients)
-	{
-		if (!pIngredient->HasComponent<CollisionComponent>())
-		{
-			pIngredient->AddComponent<CollisionComponent>();
-		}
+		throw std::exception("Scene not found");
 	}
 }

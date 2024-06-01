@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include <glm/vec2.hpp>
 
 namespace dae
 {
@@ -13,6 +14,7 @@ namespace dae
 
 		void SetWidth(int width);
 		void SetHeight(int height);
+		void SetDimensions(glm::ivec2 dimensions);
 		int GetWidth() const;
 		int GetHeight() const;
 

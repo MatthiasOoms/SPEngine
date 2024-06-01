@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include <memory>
+#include <glm/vec2.hpp>
 
 namespace dae
 {
@@ -19,6 +20,7 @@ namespace dae
 		TextureComponent& operator=(TextureComponent&& other) = delete;
 
 		void SetTexture(const std::shared_ptr<Texture2D>& texture);
+		glm::ivec2 GetDimensions();
 		virtual void Render(float elapsedSec) const override;
 
 	private:

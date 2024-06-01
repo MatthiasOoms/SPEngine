@@ -19,6 +19,12 @@ void dae::CollisionComponent::SetHeight(int height)
 	m_Height = height;
 }
 
+void dae::CollisionComponent::SetDimensions(glm::ivec2 dimensions)
+{
+	m_Width = dimensions.x;
+	m_Height = dimensions.y;
+}
+
 int dae::CollisionComponent::GetWidth() const
 {
 	return m_Width;
