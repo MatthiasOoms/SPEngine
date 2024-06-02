@@ -195,7 +195,6 @@ xcopy "$(SolutionDir)Data\*" "$(OutputPath)..\Data\" /E /Y
   <ItemGroup>
     <ClCompile Include="BurgerTime.cpp" />
     <ClCompile Include="ClimbPlayerState.cpp" />
-    <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameCommands.cpp" />
     <ClCompile Include="IdlePlayerState.cpp" />
@@ -211,7 +210,6 @@ xcopy "$(SolutionDir)Data\*" "$(OutputPath)..\Data\" /E /Y
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClimbPlayerState.h" />
-    <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameCommands.h" />
     <ClInclude Include="IdlePlayerState.h" />

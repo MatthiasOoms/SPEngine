@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Renderer.h"
 #include "Transform.h"
+#include "CollisionComponent.h"
 
 namespace dae
 {
@@ -21,12 +22,28 @@ namespace dae
 		m_pTexture = texture;
 	}
 
+	void TextureComponent::SetScale(float scale)
+	{
+		if (scale >= 0)
+		{
+			m_Scale = scale;
+			if (GetOwner()->HasComponent<CollisionComponent>())
+			{
+				GetOwner()->GetComponent<CollisionComponent>()->SetDimensions(GetDimensions());
+			}
+		}
+		else
+		{
+			throw std::exception("TextureComponent::SetScale() > Scale must be greater than or equal to 0");
+		}
+	}
+
 	glm::ivec2 TextureComponent::GetDimensions()
 	{
 		// If a texture is set, return its dimensions
 		if (m_pTexture != nullptr)
 		{
-			return glm::vec2(m_pTexture->GetSize());
+			return (glm::vec2(m_pTexture->GetSize()) * m_Scale);
 		}
 
 		// If no texture is set, throw an exception
@@ -38,7 +55,7 @@ namespace dae
 		if (m_pTexture != nullptr)
 		{
 			const auto& pos = GetOwner()->GetTransform().GetWorldPosition();
-			Renderer::GetInstance().RenderTexture(*m_pTexture, pos.x, pos.y);
+			Renderer::GetInstance().RenderTexture(*m_pTexture, pos.x, pos.y, m_Scale);
 		}
 	}
 }

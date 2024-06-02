@@ -121,6 +121,7 @@ void load()
 		if (staticObj->HasComponent<dae::CollisionComponent>() && staticObj->HasComponent<dae::TextureComponent>())
 		{
 			auto platformTexture = staticObj->GetComponent<dae::TextureComponent>();
+			platformTexture->SetScale(1);
 			auto platformCollision = staticObj->GetComponent<dae::CollisionComponent>();
 			platformCollision->SetDimensions(platformTexture->GetDimensions());
 		}
@@ -131,14 +132,14 @@ void load()
 		if (gob->HasComponent<dae::CollisionComponent>() && gob->HasComponent<dae::TextureComponent>())
 		{
 			auto gobTexture = gob->GetComponent<dae::TextureComponent>();
-			auto gobCol = gob->GetComponent<dae::CollisionComponent>();
-			gobCol->SetDimensions(gobTexture->GetDimensions());
+			gobTexture->SetScale(2);
 		}
 		goc->AddComponent<dae::CollisionComponent>();
 		goc->AddComponent<dae::PlayerComponent>();
 		if (goc->HasComponent<dae::CollisionComponent>() && goc->HasComponent<dae::TextureComponent>())
 		{
 			auto gocTexture = goc->GetComponent<dae::TextureComponent>();
+			gocTexture->SetScale(2);
 			auto gocCol = goc->GetComponent<dae::CollisionComponent>();
 			gocCol->SetDimensions(gocTexture->GetDimensions());
 		}

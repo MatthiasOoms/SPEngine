@@ -20,11 +20,14 @@ namespace dae
 		TextureComponent& operator=(TextureComponent&& other) = delete;
 
 		void SetTexture(const std::shared_ptr<Texture2D>& texture);
+		void SetScale(float scale);
 		glm::ivec2 GetDimensions();
+
 		virtual void Render(float elapsedSec) const override;
 
 	private:
 		std::shared_ptr<Texture2D> m_pTexture;
+		float m_Scale{ 1 };
 	};
 };
 
