@@ -132,7 +132,7 @@ void load()
 		if (gob->HasComponent<dae::CollisionComponent>() && gob->HasComponent<dae::TextureComponent>())
 		{
 			auto gobTexture = gob->GetComponent<dae::TextureComponent>();
-			gobTexture->SetScale(2);
+			gobTexture->SetScale(1);
 		}
 		goc->AddComponent<dae::CollisionComponent>();
 		goc->AddComponent<dae::PlayerComponent>();

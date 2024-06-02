@@ -22,7 +22,7 @@ namespace dae
 		m_pTexture = texture;
 	}
 
-	void TextureComponent::SetScale(float scale)
+	void TextureComponent::SetScale(int scale)
 	{
 		if (scale >= 0)
 		{
@@ -43,7 +43,7 @@ namespace dae
 		// If a texture is set, return its dimensions
 		if (m_pTexture != nullptr)
 		{
-			return (glm::vec2(m_pTexture->GetSize()) * m_Scale);
+			return (glm::vec2(m_pTexture->GetSize() * m_Scale));
 		}
 
 		// If no texture is set, throw an exception
