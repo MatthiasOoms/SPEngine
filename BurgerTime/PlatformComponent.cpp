@@ -1,4 +1,3 @@
-#include "CollisionComponent.h"
 #include "PlatformComponent.h"
 #include "SceneManager.h"
 #include "GameObject.h"
@@ -14,17 +13,17 @@ void dae::PlatformComponent::Update(float)
 {
 	// Get the object's position and dimensions
 	auto objPos = GetOwner()->GetTransform().GetWorldPosition();
-	auto objDims = GetOwner()->GetComponent<CollisionComponent>();
-	int objWidth = objDims->GetWidth();
-	int objHeight = objDims->GetHeight();
+	auto objDims = GetOwner()->GetTransform().GetDimensions();
+	int objWidth = objDims.x;
+	int objHeight = objDims.y;
 
 	for (auto pPlayer : m_pPlayers)
 	{
 		// Get the player's position and dimensions
 		auto playerPos = pPlayer->GetTransform().GetWorldPosition();
-		auto playerDims = pPlayer->GetComponent<CollisionComponent>();
-		int playerWidth = playerDims->GetWidth();
-		int playerHeight = playerDims->GetHeight();
+		auto playerDims = pPlayer->GetTransform().GetDimensions();
+		int playerWidth = playerDims.x;
+		int playerHeight = playerDims.y;
 
 		// If player left or right is in the object
 		if ((playerPos.x < objPos.x + objWidth && playerPos.x > objPos.x) 
@@ -53,31 +52,6 @@ void dae::PlatformComponent::RegisterObjects()
 	m_pPlayers = temp->GetObjectsByTag("Player");
 	m_pEnemies = temp->GetObjectsByTag("Enemy");
 	m_pIngredients = temp->GetObjectsByTag("Ingredient");
-
-	// Add collision components to all players, enemies and ingredients if necessary
-	for (auto pPlayer : m_pPlayers)
-	{
-		if (!pPlayer->HasComponent<CollisionComponent>())
-		{
-			pPlayer->AddComponent<CollisionComponent>();
-		}
-	}
-
-	for (auto pEnemy : m_pEnemies)
-	{
-		if (!pEnemy->HasComponent<CollisionComponent>())
-		{
-			pEnemy->AddComponent<CollisionComponent>();
-		}
-	}
-
-	for (auto pIngredient : m_pIngredients)
-	{
-		if (!pIngredient->HasComponent<CollisionComponent>())
-		{
-			pIngredient->AddComponent<CollisionComponent>();
-		}
-	}
 }
 
 void dae::PlatformComponent::RegisterObjects(std::string scene)
@@ -88,31 +62,6 @@ void dae::PlatformComponent::RegisterObjects(std::string scene)
 		m_pPlayers = temp->GetObjectsByTag("Player");
 		m_pEnemies = temp->GetObjectsByTag("Enemy");
 		m_pIngredients = temp->GetObjectsByTag("Ingredient");
-
-		// Add collision components to all players, enemies and ingredients if necessary
-		for (auto pPlayer : m_pPlayers)
-		{
-			if (!pPlayer->HasComponent<CollisionComponent>())
-			{
-				pPlayer->AddComponent<CollisionComponent>();
-			}
-		}
-
-		for (auto pEnemy : m_pEnemies)
-		{
-			if (!pEnemy->HasComponent<CollisionComponent>())
-			{
-				pEnemy->AddComponent<CollisionComponent>();
-			}
-		}
-
-		for (auto pIngredient : m_pIngredients)
-		{
-			if (!pIngredient->HasComponent<CollisionComponent>())
-			{
-				pIngredient->AddComponent<CollisionComponent>();
-			}
-		}
 	}
 	else
 	{

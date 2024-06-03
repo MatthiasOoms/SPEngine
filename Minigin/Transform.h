@@ -21,9 +21,17 @@ namespace dae
 		void SetLocalPosition(float x, float y, float z);
 		void SetWorldPosition(float x, float y, float z);
 
+		void SetDimensions(glm::ivec2 dimensions);
+		void SetWidth(int width);
+		void SetHeight(int height);
+		glm::ivec2 GetDimensions() const;
+		int GetWidth() const;
+		int GetHeight() const;
+
 	private:
 		glm::vec3 m_LocalPosition;
 		glm::vec3 m_WorldPosition;
+		glm::ivec2 m_Dimensions;
 		GameObject* m_pOwner;
 	};
 }

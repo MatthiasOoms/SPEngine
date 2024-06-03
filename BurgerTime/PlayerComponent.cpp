@@ -3,16 +3,11 @@
 #include "PlayerState.h"
 #include "GameObject.h"
 #include "Scene.h"
-#include "CollisionComponent.h"
 
 dae::PlayerComponent::PlayerComponent(GameObject* pOwner)
 	: Component(pOwner)
 	, m_pCurrentState{ new IdlePlayerState{ pOwner } }
 {
-	if (!GetOwner()->HasComponent<CollisionComponent>())
-	{
-		GetOwner()->AddComponent<CollisionComponent>();
-	}
 }
 
 dae::PlayerComponent::~PlayerComponent()

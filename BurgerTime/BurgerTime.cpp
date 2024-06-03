@@ -33,7 +33,6 @@
 #include "NullSoundSystem.h"
 #include "GameCommands.h"
 #include "PlayerComponent.h"
-#include "CollisionComponent.h"
 #include "PlatformComponent.h"
 
 void load()
@@ -114,34 +113,29 @@ void load()
 
 		// Collision test obj
 		auto staticObj = std::make_unique<dae::GameObject>("StaticLevel");
-		staticObj->AddComponent<dae::CollisionComponent>();
 		staticObj->AddComponent<dae::PlatformComponent>();
 		staticObj->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("platform.png"));
 		staticObj->GetTransform().SetWorldPosition(0, 50, 0);
-		if (staticObj->HasComponent<dae::CollisionComponent>() && staticObj->HasComponent<dae::TextureComponent>())
+		if (staticObj->HasComponent<dae::TextureComponent>())
 		{
 			auto platformTexture = staticObj->GetComponent<dae::TextureComponent>();
 			platformTexture->SetScale(1);
-			auto platformCollision = staticObj->GetComponent<dae::CollisionComponent>();
-			platformCollision->SetDimensions(platformTexture->GetDimensions());
+			staticObj->GetTransform().SetDimensions(platformTexture->GetDimensions());
 		}
 
 		// Player Components and Collision Components
-		gob->AddComponent<dae::CollisionComponent>();
 		gob->AddComponent<dae::PlayerComponent>();
-		if (gob->HasComponent<dae::CollisionComponent>() && gob->HasComponent<dae::TextureComponent>())
+		if (gob->HasComponent<dae::TextureComponent>())
 		{
 			auto gobTexture = gob->GetComponent<dae::TextureComponent>();
 			gobTexture->SetScale(1);
 		}
-		goc->AddComponent<dae::CollisionComponent>();
 		goc->AddComponent<dae::PlayerComponent>();
-		if (goc->HasComponent<dae::CollisionComponent>() && goc->HasComponent<dae::TextureComponent>())
+		if (goc->HasComponent<dae::TextureComponent>())
 		{
 			auto gocTexture = goc->GetComponent<dae::TextureComponent>();
 			gocTexture->SetScale(2);
-			auto gocCol = goc->GetComponent<dae::CollisionComponent>();
-			gocCol->SetDimensions(gocTexture->GetDimensions());
+			goc->GetTransform().SetDimensions(gocTexture->GetDimensions());
 		}
 
 

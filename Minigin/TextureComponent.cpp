@@ -4,7 +4,6 @@
 #include "GameObject.h"
 #include "Renderer.h"
 #include "Transform.h"
-#include "CollisionComponent.h"
 
 namespace dae
 {
@@ -27,10 +26,7 @@ namespace dae
 		if (scale >= 0)
 		{
 			m_Scale = scale;
-			if (GetOwner()->HasComponent<CollisionComponent>())
-			{
-				GetOwner()->GetComponent<CollisionComponent>()->SetDimensions(GetDimensions());
-			}
+			GetOwner()->GetTransform().SetDimensions(GetDimensions());
 		}
 		else
 		{

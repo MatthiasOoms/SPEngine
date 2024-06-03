@@ -5,6 +5,7 @@ dae::Transform::Transform(GameObject* pOwner)
 	: m_pOwner{ pOwner }
 	, m_LocalPosition{}
 	, m_WorldPosition{}
+	, m_Dimensions{}
 {
 	if (m_pOwner->GetParent())
 	{
@@ -40,4 +41,34 @@ void dae::Transform::SetWorldPosition(float x, float y, float z)
 	m_WorldPosition.x = x;
 	m_WorldPosition.y = y;
 	m_WorldPosition.z = z;
+}
+
+void dae::Transform::SetWidth(int width)
+{
+	m_Dimensions.x = width;
+}
+
+void dae::Transform::SetHeight(int height)
+{
+	m_Dimensions.y = height;
+}
+
+glm::ivec2 dae::Transform::GetDimensions() const
+{
+	return m_Dimensions;
+}
+
+void dae::Transform::SetDimensions(glm::ivec2 dimensions)
+{
+	m_Dimensions = dimensions;
+}
+
+int dae::Transform::GetWidth() const
+{
+	return m_Dimensions.x;
+}
+
+int dae::Transform::GetHeight() const
+{
+	return m_Dimensions.y;
 }
