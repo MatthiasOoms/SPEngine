@@ -172,6 +172,20 @@ namespace dae
 
 		void Execute(float elapsedSec) override;
 	};
+
+	class SceneNextCommand final : public Command
+	{
+	public:
+		SceneNextCommand();
+
+		virtual ~SceneNextCommand() override = default;
+		SceneNextCommand(const SceneNextCommand& other) = delete;
+		SceneNextCommand(SceneNextCommand&& other) = delete;
+		SceneNextCommand& operator=(const SceneNextCommand& other) = delete;
+		SceneNextCommand& operator=(SceneNextCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
 }
 
 

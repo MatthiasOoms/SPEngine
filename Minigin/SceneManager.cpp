@@ -39,6 +39,28 @@ void dae::SceneManager::SetActiveScene(std::string name)
 	throw std::exception("Scene not found");
 }
 
+std::shared_ptr<dae::Scene> dae::SceneManager::GetNextScene(std::string scene) const
+{
+	auto& sceneName = m_ActiveScene->GetSceneName();
+	bool returnNext = false;
+	// Loop through all scenes
+	for (const auto& s : m_Scenes)
+	{
+		// If we are the scene to be returned
+		if (returnNext)
+		{
+			return s;
+		}
+		// If the current scene is the active scene
+		if (s->GetSceneName() == sceneName)
+		{
+			// Then we must return the next scene
+			returnNext = true;
+		}
+	}
+	return m_Scenes.front();
+}
+
 std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(std::string scene) const
 {
 	for (const auto& s : m_Scenes)

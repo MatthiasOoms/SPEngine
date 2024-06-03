@@ -225,3 +225,16 @@ void dae::ClimbCommand::Execute(float elapsedSec)
 		GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ 0, m_ClimbSpeed * elapsedSec, 0 });
 	}
 }
+
+dae::SceneNextCommand::SceneNextCommand()
+{
+}
+
+void dae::SceneNextCommand::Execute(float)
+{
+	// Get the next scene and set it as the active scene
+	auto& sceneManager = SceneManager::GetInstance();
+	auto& activeScene = sceneManager.GetActiveScene()->GetSceneName();
+	auto& nextScene = sceneManager.GetNextScene(activeScene)->GetSceneName();
+	sceneManager.SetActiveScene(nextScene);
+}

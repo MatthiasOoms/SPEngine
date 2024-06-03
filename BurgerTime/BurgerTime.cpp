@@ -324,8 +324,6 @@ void load()
 		scene.Add(std::move(staticObj));
 		platformObj->GetComponent<dae::PlatformComponent>()->RegisterObjects("Demo");
 		scene.Add(std::move(platformObj));
-		
-		input.AddCommand("Demo", SDL_SCANCODE_F1, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Menu", "../Data/Soundtrack.mp3"));
 	}
 
 	// Menu scene
@@ -362,10 +360,10 @@ void load()
 		go->AddComponent<dae::FPSComponent>();
 		scene.Add(std::move(go));
 
-		input.AddCommand("Menu", SDL_SCANCODE_F1, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Demo", "../Data/Soundtrack.mp3"));
 		input.AddCommand("Menu", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Demo", "../Data/Soundtrack.mp3"));
 	}
 
+	input.AddGlobalCommand(SDL_SCANCODE_F1, dae::keyState::isDown, std::make_unique<dae::SceneNextCommand>());
 	sceneManager.SetActiveScene("Menu");
 }
 
