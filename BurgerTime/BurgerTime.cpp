@@ -111,11 +111,25 @@ void load()
 		
 
 
+		// Climbing test obj
+		auto ladderObj = std::make_unique<dae::GameObject>("Ladder");
+		ladderObj->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("platform.png"));
+		ladderObj->GetTransform().SetWorldPosition(50, 200, 0);
+		if (ladderObj->HasComponent<dae::TextureComponent>())
+		{
+			auto platformTexture = ladderObj->GetComponent<dae::TextureComponent>();
+			platformTexture->SetScale(1);
+			ladderObj->GetTransform().SetDimensions(platformTexture->GetDimensions());
+			ladderObj->GetTransform().SetHeight(1000);
+		}
+		scene.Add(std::move(ladderObj));
+
+
 		// Collision test obj
 		auto staticObj = std::make_unique<dae::GameObject>("StaticLevel");
 		staticObj->AddComponent<dae::PlatformComponent>();
 		staticObj->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("platform.png"));
-		staticObj->GetTransform().SetWorldPosition(0, 50, 0);
+		staticObj->GetTransform().SetWorldPosition(50, 200, 0);
 		if (staticObj->HasComponent<dae::TextureComponent>())
 		{
 			auto platformTexture = staticObj->GetComponent<dae::TextureComponent>();
@@ -123,7 +137,7 @@ void load()
 			staticObj->GetTransform().SetDimensions(platformTexture->GetDimensions());
 		}
 
-		// Player Components and Collision Components
+		// Player Components
 		gob->AddComponent<dae::PlayerComponent>();
 		if (gob->HasComponent<dae::TextureComponent>())
 		{

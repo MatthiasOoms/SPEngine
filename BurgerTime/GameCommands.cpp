@@ -152,5 +152,32 @@ dae::ClimbCommand::ClimbCommand(GameObject* pGameObject, float speed)
 void dae::ClimbCommand::Execute(float elapsedSec)
 {
 	// Move on the y-axis
-	GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ 0, m_ClimbSpeed * elapsedSec, 0 });
+	bool canClimb = false;
+
+	auto selfPos = m_pGameObject->GetTransform().GetWorldPosition();
+	auto selfDims = m_pGameObject->GetTransform().GetDimensions();
+
+	auto pLadders = SceneManager::GetInstance().GetActiveScene()->GetObjectsByTag("Ladder");
+	for (auto pLadder : pLadders)
+	{
+		// Get the player's position and dimensions
+		auto ladderPos = pLadder->GetTransform().GetWorldPosition();
+		auto ladderDims = pLadder->GetTransform().GetDimensions();
+
+		// If self left or right is in the object
+		if ((selfPos.x < ladderPos.x + ladderDims.x && selfPos.x > ladderPos.x) ||
+			(selfPos.x + selfDims.x < ladderPos.x + ladderDims.x && selfPos.x + selfDims.x > ladderPos.x))
+		{
+			// If self is above the object and has some overlap with the ladder object on the y-axis
+			if (selfPos.y + selfDims.y <= ladderPos.y && selfPos.y + selfDims.y >= ladderPos.y - ladderDims.y)
+			{
+				canClimb = true;
+			}
+		}
+	}
+
+	if (canClimb)
+	{
+		GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ 0, m_ClimbSpeed * elapsedSec, 0 });
+	}
 }
