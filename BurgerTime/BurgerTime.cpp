@@ -143,52 +143,52 @@ void load()
 		// Input
 		// Controller
 		// Move
-		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(gob.get(), glm::vec3{ 1, 0, 0 }, 200.f));
-		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(gob.get(), glm::vec3{ -1, 0, 0 }, 200.f));
-		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(gob.get(), glm::vec3{ 0, -1, 0 }, 200.f));
-		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(gob.get(), glm::vec3{ 0, 1, 0 }, 200.f));
+		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(gob.get(), -200.f));
+		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(gob.get(), 200.f));
+		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(gob.get(), -200.f));
+		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(gob.get(), 200.f));
 		// Move
-		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ 1, 0, 0 }, 400.f));
-		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ -1, 0, 0 }, 400.f));
-		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ 0, -1, 0 }, 400.f));
-		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ 0, 1, 0 }, 400.f));
+		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(goc.get(), -400.f));
+		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(goc.get(), 400.f));
+		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(goc.get(), -400.f));
+		input.AddCommand("Demo", static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(goc.get(), 400.f));
 
 		// Keyboard
 		{
 			// Start Move
 			input.AddCommand("Demo", SDL_SCANCODE_W, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(gob.get()));
 			input.AddCommand("Demo", SDL_SCANCODE_S, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(gob.get()));
-			input.AddCommand("Demo", SDL_SCANCODE_A, dae::keyState::isDown, std::make_unique<dae::MoveStartCommand>(gob.get()));
-			input.AddCommand("Demo", SDL_SCANCODE_D, dae::keyState::isDown, std::make_unique<dae::MoveStartCommand>(gob.get()));
+			input.AddCommand("Demo", SDL_SCANCODE_A, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(gob.get()));
+			input.AddCommand("Demo", SDL_SCANCODE_D, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(gob.get()));
 			// Start Move
 			input.AddCommand("Demo", SDL_SCANCODE_UP, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(goc.get()));
 			input.AddCommand("Demo", SDL_SCANCODE_DOWN, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(goc.get()));
-			input.AddCommand("Demo", SDL_SCANCODE_LEFT, dae::keyState::isDown, std::make_unique<dae::MoveStartCommand>(goc.get()));
-			input.AddCommand("Demo", SDL_SCANCODE_RIGHT, dae::keyState::isDown, std::make_unique<dae::MoveStartCommand>(goc.get()));
+			input.AddCommand("Demo", SDL_SCANCODE_LEFT, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(goc.get()));
+			input.AddCommand("Demo", SDL_SCANCODE_RIGHT, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(goc.get()));
 		}
 		{
 			// Move
-			input.AddCommand("Demo", SDL_SCANCODE_W, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(gob.get(), glm::vec3{ 0, -1, 0 }, 200.f));
-			input.AddCommand("Demo", SDL_SCANCODE_A, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(gob.get(), glm::vec3{ -1, 0, 0 }, 200.f));
-			input.AddCommand("Demo", SDL_SCANCODE_S, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(gob.get(), glm::vec3{ 0, 1, 0 }, 200.f));
-			input.AddCommand("Demo", SDL_SCANCODE_D, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(gob.get(), glm::vec3{ 1, 0, 0 }, 200.f));
+			input.AddCommand("Demo", SDL_SCANCODE_W, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(gob.get(), -200.f));
+			input.AddCommand("Demo", SDL_SCANCODE_S, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(gob.get(), 200.f));
+			input.AddCommand("Demo", SDL_SCANCODE_A, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(gob.get(),-200.f));
+			input.AddCommand("Demo", SDL_SCANCODE_D, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(gob.get(), 200.f));
 			// Move
-			input.AddCommand("Demo", SDL_SCANCODE_UP, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ 0, -1, 0 }, 400.f));
-			input.AddCommand("Demo", SDL_SCANCODE_LEFT, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ -1, 0, 0 }, 400.f));
-			input.AddCommand("Demo", SDL_SCANCODE_DOWN, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ 0, 1, 0 }, 400.f));
-			input.AddCommand("Demo", SDL_SCANCODE_RIGHT, dae::keyState::isHeld, std::make_unique<dae::MoveCommand>(goc.get(), glm::vec3{ 1, 0, 0 }, 400.f));
+			input.AddCommand("Demo", SDL_SCANCODE_UP, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(goc.get(), -400.f));
+			input.AddCommand("Demo", SDL_SCANCODE_DOWN, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(goc.get(), 400.f));
+			input.AddCommand("Demo", SDL_SCANCODE_LEFT, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(goc.get(), -400.f));
+			input.AddCommand("Demo", SDL_SCANCODE_RIGHT, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(goc.get(), 400.f));
 		}
 		{
 			// End Move
 			input.AddCommand("Demo", SDL_SCANCODE_W, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(gob.get()));
 			input.AddCommand("Demo", SDL_SCANCODE_S, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(gob.get()));
-			input.AddCommand("Demo", SDL_SCANCODE_A, dae::keyState::isUp, std::make_unique<dae::MoveEndCommand>(gob.get()));
-			input.AddCommand("Demo", SDL_SCANCODE_D, dae::keyState::isUp, std::make_unique<dae::MoveEndCommand>(gob.get()));
+			input.AddCommand("Demo", SDL_SCANCODE_A, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(gob.get()));
+			input.AddCommand("Demo", SDL_SCANCODE_D, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(gob.get()));
 			// End Move
 			input.AddCommand("Demo", SDL_SCANCODE_UP, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(goc.get()));
 			input.AddCommand("Demo", SDL_SCANCODE_DOWN, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(goc.get()));
-			input.AddCommand("Demo", SDL_SCANCODE_LEFT, dae::keyState::isUp, std::make_unique<dae::MoveEndCommand>(goc.get()));
-			input.AddCommand("Demo", SDL_SCANCODE_RIGHT, dae::keyState::isUp, std::make_unique<dae::MoveEndCommand>(goc.get()));
+			input.AddCommand("Demo", SDL_SCANCODE_LEFT, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(goc.get()));
+			input.AddCommand("Demo", SDL_SCANCODE_RIGHT, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(goc.get()));
 		}
 
 		// Print Controls

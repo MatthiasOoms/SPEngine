@@ -5,20 +5,20 @@ namespace dae
 {
 	class GameObject;
 
-	class MoveStartCommand final : public Command
+	class WalkStartCommand final : public Command
 	{
 	private:
 		GameObject* m_pGameObject;
 	protected:
 		GameObject* GetGameObject() { return m_pGameObject; }
 	public:
-		MoveStartCommand(GameObject* pGameObject);
+		WalkStartCommand(GameObject* pGameObject);
 
-		virtual ~MoveStartCommand() override = default;
-		MoveStartCommand(const MoveStartCommand& other) = delete;
-		MoveStartCommand(MoveStartCommand&& other) = delete;
-		MoveStartCommand& operator=(const MoveStartCommand& other) = delete;
-		MoveStartCommand& operator=(MoveStartCommand&& other) = delete;
+		virtual ~WalkStartCommand() override = default;
+		WalkStartCommand(const WalkStartCommand& other) = delete;
+		WalkStartCommand(WalkStartCommand&& other) = delete;
+		WalkStartCommand& operator=(const WalkStartCommand& other) = delete;
+		WalkStartCommand& operator=(WalkStartCommand&& other) = delete;
 
 		void Execute(float elapsedSec) override;
 	};
@@ -41,23 +41,42 @@ namespace dae
 		void Execute(float elapsedSec) override;
 	};
 
-	class MoveCommand final : public Command
+	class WalkCommand final : public Command
 	{
 	private:
 		GameObject* m_pGameObject;
-		glm::vec3 m_MoveDir;
 		float m_MoveSpeed;
 		//float m_Acceleration; // Not present in my game
 	protected:
 		GameObject* GetGameObject() { return m_pGameObject; }
 	public:
-		MoveCommand(GameObject* pGameObject, glm::vec3 dir, float speed);
+		WalkCommand(GameObject* pGameObject, float speed);
 
-		virtual ~MoveCommand() override = default;
-		MoveCommand(const MoveCommand& other) = delete;
-		MoveCommand(MoveCommand&& other) = delete;
-		MoveCommand& operator=(const MoveCommand& other) = delete;
-		MoveCommand& operator=(MoveCommand&& other) = delete;
+		virtual ~WalkCommand() override = default;
+		WalkCommand(const WalkCommand& other) = delete;
+		WalkCommand(WalkCommand&& other) = delete;
+		WalkCommand& operator=(const WalkCommand& other) = delete;
+		WalkCommand& operator=(WalkCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
+
+	class ClimbCommand final : public Command
+	{
+	private:
+		GameObject* m_pGameObject;
+		float m_ClimbSpeed;
+		//float m_Acceleration; // Not present in my game
+	protected:
+		GameObject* GetGameObject() { return m_pGameObject; }
+	public:
+		ClimbCommand(GameObject* pGameObject, float speed);
+
+		virtual ~ClimbCommand() override = default;
+		ClimbCommand(const ClimbCommand& other) = delete;
+		ClimbCommand(ClimbCommand&& other) = delete;
+		ClimbCommand& operator=(const ClimbCommand& other) = delete;
+		ClimbCommand& operator=(ClimbCommand&& other) = delete;
 
 		void Execute(float elapsedSec) override;
 	};
@@ -80,20 +99,20 @@ namespace dae
 		void Execute(float elapsedSec) override;
 	};
 
-	class MoveEndCommand final : public Command
+	class WalkEndCommand final : public Command
 	{
 	private:
 		GameObject* m_pGameObject;
 	protected:
 		GameObject* GetGameObject() { return m_pGameObject; }
 	public:
-		MoveEndCommand(GameObject* pGameObject);
+		WalkEndCommand(GameObject* pGameObject);
 
-		virtual ~MoveEndCommand() override = default;
-		MoveEndCommand(const MoveEndCommand& other) = delete;
-		MoveEndCommand(MoveEndCommand&& other) = delete;
-		MoveEndCommand& operator=(const MoveEndCommand& other) = delete;
-		MoveEndCommand& operator=(MoveEndCommand&& other) = delete;
+		virtual ~WalkEndCommand() override = default;
+		WalkEndCommand(const WalkEndCommand& other) = delete;
+		WalkEndCommand(WalkEndCommand&& other) = delete;
+		WalkEndCommand& operator=(const WalkEndCommand& other) = delete;
+		WalkEndCommand& operator=(WalkEndCommand&& other) = delete;
 
 		void Execute(float elapsedSec) override;
 	};

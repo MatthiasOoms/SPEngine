@@ -12,17 +12,17 @@
 #include <SoundSystem.h>
 #include "PlatformComponent.h"
 
-dae::MoveCommand::MoveCommand(GameObject* pGameObject, glm::vec3 dir, float speed)
+dae::WalkCommand::WalkCommand(GameObject* pGameObject, float speed)
 	: Command{}
 	, m_pGameObject{ pGameObject }
-	, m_MoveDir{ dir }
 	, m_MoveSpeed{ speed }
 {
 }
 
-void dae::MoveCommand::Execute(float elapsedSec)
+void dae::WalkCommand::Execute(float elapsedSec)
 {
-	GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + (m_MoveDir * m_MoveSpeed * elapsedSec));
+	// Move on the x-axis
+	GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ m_MoveSpeed * elapsedSec, 0, 0 });
 }
 
 dae::KillCommand::KillCommand(GameObject* pGameObject)
@@ -70,13 +70,13 @@ void dae::SceneSwapCommand::Execute(float)
 	soundSystem.PlayMusic(temp);
 }
 
-dae::MoveEndCommand::MoveEndCommand(GameObject* pGameObject)
+dae::WalkEndCommand::WalkEndCommand(GameObject* pGameObject)
 	: Command{}
 	, m_pGameObject{ pGameObject }
 {
 }
 
-void dae::MoveEndCommand::Execute(float)
+void dae::WalkEndCommand::Execute(float)
 {
 	if (GetGameObject()->HasComponent<PlayerComponent>())
 	{
@@ -88,13 +88,13 @@ void dae::MoveEndCommand::Execute(float)
 	}
 }
 
-dae::MoveStartCommand::MoveStartCommand(GameObject* pGameObject)
+dae::WalkStartCommand::WalkStartCommand(GameObject* pGameObject)
 	: Command{}
 	, m_pGameObject{ pGameObject }
 {
 }
 
-void dae::MoveStartCommand::Execute(float)
+void dae::WalkStartCommand::Execute(float)
 {
 	if (GetGameObject()->HasComponent<PlayerComponent>())
 	{
@@ -140,4 +140,17 @@ void dae::ClimbEndCommand::Execute(float)
 			stateComp->SetState(new IdlePlayerState{ GetGameObject() });
 		}
 	}
+}
+
+dae::ClimbCommand::ClimbCommand(GameObject* pGameObject, float speed)
+	: Command{}
+	, m_pGameObject{ pGameObject }
+	, m_ClimbSpeed{ speed }
+{
+}
+
+void dae::ClimbCommand::Execute(float elapsedSec)
+{
+	// Move on the y-axis
+	GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ 0, m_ClimbSpeed * elapsedSec, 0 });
 }
