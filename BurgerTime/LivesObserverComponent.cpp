@@ -22,7 +22,7 @@ dae::LivesObserverComponent::~LivesObserverComponent()
 void dae::LivesObserverComponent::OnNotify(GameObject* obj, Event event)
 {
 	auto& soundSystem = SoundServiceLocator::GetSoundSystem();
-	Sound temp = { "../Data/Death.mp3", "Death", 1, 0 };
+	Sound temp = { "../Data/Death.mp3", "Death", 0 };
 
 	switch (event)
 	{

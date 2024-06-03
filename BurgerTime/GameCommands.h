@@ -186,6 +186,20 @@ namespace dae
 
 		void Execute(float elapsedSec) override;
 	};
+
+	class ToggleSoundCommand final : public Command
+	{
+	public:
+		ToggleSoundCommand();
+
+		virtual ~ToggleSoundCommand() override = default;
+		ToggleSoundCommand(const ToggleSoundCommand& other) = delete;
+		ToggleSoundCommand(ToggleSoundCommand&& other) = delete;
+		ToggleSoundCommand& operator=(const ToggleSoundCommand& other) = delete;
+		ToggleSoundCommand& operator=(ToggleSoundCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
 }
 
 

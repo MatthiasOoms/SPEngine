@@ -56,7 +56,7 @@ void load()
 		auto& scene = sceneManager.CreateScene("Demo");
 
 		// Load and Play Sound
-		dae::Sound temp{ "../Data/Soundtrack.mp3", "Soundtrack", 1, -1 };
+		dae::Sound temp{ "../Data/Soundtrack.mp3", "Soundtrack", -1 };
 		soundSystem.PlayMusic(temp);
 		//soundSystem.StopMusic();
 
@@ -364,6 +364,7 @@ void load()
 	}
 
 	input.AddGlobalCommand(SDL_SCANCODE_F1, dae::keyState::isDown, std::make_unique<dae::SceneNextCommand>());
+	input.AddGlobalCommand(SDL_SCANCODE_M, dae::keyState::isDown, std::make_unique<dae::ToggleSoundCommand>());
 	sceneManager.SetActiveScene("Menu");
 }
 

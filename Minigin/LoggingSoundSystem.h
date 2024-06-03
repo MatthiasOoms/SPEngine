@@ -21,6 +21,9 @@ namespace dae
 		void StopSoundEffects() override;
 		void StopMusic() override;
 		void Load(Sound audio) override;
+		bool ToggleMute() override;
+		void SetSoundEffectVolume(float volume) override;
+		void SetMusicVolume(float volume) override;
 		void PushOnQueue(Sound audio) override;
 	};
 }

@@ -9,8 +9,10 @@
 #include "IdlePlayerState.h"
 #include "ClimbPlayerState.h"
 #include <SoundServiceLocator.h>
-#include <SoundSystem.h>
 #include "PlatformComponent.h"
+#include <NullSoundSystem.h>
+#include <SDLSoundSystem.h>
+#include <SoundSystem.h>
 
 dae::WalkCommand::WalkCommand(GameObject* pGameObject, float speed)
 	: Command{}
@@ -99,7 +101,7 @@ void dae::SceneSwapCommand::Execute(float)
 {
 	dae::SceneManager::GetInstance().SetActiveScene(GetScene());
 	auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
-	dae::Sound temp{ GetMusicPath(), "Soundtrack", 1, -1};
+	dae::Sound temp{ GetMusicPath(), "Soundtrack", -1};
 	soundSystem.StopMusic();
 	soundSystem.StopSoundEffects();
 
@@ -237,4 +239,16 @@ void dae::SceneNextCommand::Execute(float)
 	auto& activeScene = sceneManager.GetActiveScene()->GetSceneName();
 	auto& nextScene = sceneManager.GetNextScene(activeScene)->GetSceneName();
 	sceneManager.SetActiveScene(nextScene);
+}
+
+dae::ToggleSoundCommand::ToggleSoundCommand()
+{
+}
+
+void dae::ToggleSoundCommand::Execute(float)
+{
+	auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
+	
+	// If the game has been muted
+	soundSystem.ToggleMute();
 }

@@ -14,13 +14,13 @@ dae::LoggingSoundSystem::LoggingSoundSystem(std::unique_ptr<SoundSystem>&& ss)
 void dae::LoggingSoundSystem::PlaySoundEffect(Sound audio)
 {
 	_real_ss->PlaySoundEffect(audio);
-	std::cout << "Playing " << audio.name << " at volume " << audio.volume << std::endl;
+	std::cout << "Playing " << audio.name << std::endl;
 }
 
 void dae::LoggingSoundSystem::PlayMusic(Sound music)
 {
 	_real_ss->PlayMusic(music);
-	std::cout << "Playing music " << music.name << " at volume " << music.volume << std::endl;
+	std::cout << "Playing music " << music.name << std::endl;
 }
 
 void dae::LoggingSoundSystem::PauseSoundEffects()
@@ -69,4 +69,22 @@ void dae::LoggingSoundSystem::Load(Sound audio)
 {
 	_real_ss->Load(audio);
 	std::cout << "Loading " << audio.filePath << ": ";
+}
+
+bool dae::LoggingSoundSystem::ToggleMute()
+{
+	std::cout << "Toggling mute" << std::endl;
+	return _real_ss->ToggleMute();
+}
+
+void dae::LoggingSoundSystem::SetSoundEffectVolume(float volume)
+{
+	_real_ss->SetSoundEffectVolume(volume);
+	std::cout << "Setting sound effect volume to " << volume << std::endl;
+}
+
+void dae::LoggingSoundSystem::SetMusicVolume(float volume)
+{
+	_real_ss->SetMusicVolume(volume);
+	std::cout << "Setting music volume to " << volume << std::endl;
 }

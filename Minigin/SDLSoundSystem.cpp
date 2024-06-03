@@ -18,6 +18,9 @@ private:
 	std::mutex m_SoundEffectsMutex{};
 	std::queue<Sound> m_Queue;
 	bool m_IsActive{ true };
+	bool m_IsMuted{ false };
+	float m_VolumeMusic{ 1 };
+	float m_VolumeSoundEffects{ 1 };
 
 	void InternalPlay(Sound audio)
 	{
@@ -45,9 +48,6 @@ private:
 			std::cerr << "Failed to play sound: " << Mix_GetError() << std::endl;
 			return;
 		}
-
-		// Set the volume
-		Mix_Volume(channel, static_cast<int>(audio.volume * MIX_MAX_VOLUME));
 	}
 
 public:
@@ -72,9 +72,6 @@ public:
 			std::cerr << "Failed to play music: " << Mix_GetError() << std::endl;
 			return;
 		}
-
-		// Set the volume
-		Mix_VolumeMusic(static_cast<int>(music.volume * MIX_MAX_VOLUME));
 	}
 
 	void PauseSoundEffects()
@@ -126,6 +123,39 @@ public:
 			std::lock_guard<std::mutex> lock(m_SoundEffectsMutex);
 			m_pSoundEffects.emplace(std::make_pair(audio.name, soundEffect));
 		}
+	}
+
+	bool ToggleMute()
+	{
+		// Toggle the mute
+		m_IsMuted = !m_IsMuted;
+		if (m_IsMuted)
+		{
+			// Mute the sound
+			Mix_Volume(-1, static_cast<int>(0 * MIX_MAX_VOLUME));
+			Mix_VolumeMusic(static_cast<int>(0 * MIX_MAX_VOLUME));
+		}
+		else
+		{
+			// Unmute the sound
+			Mix_Volume(-1, static_cast<int>(m_VolumeSoundEffects * MIX_MAX_VOLUME));
+			Mix_VolumeMusic(static_cast<int>(m_VolumeMusic * MIX_MAX_VOLUME));
+		}
+		return m_IsMuted;
+	}
+	
+	void SetSoundEffectVolume(float vol)
+	{
+		// Set the volume of the sound effects
+		m_VolumeSoundEffects = vol;
+		Mix_Volume(-1, static_cast<int>(vol * MIX_MAX_VOLUME));
+	}
+
+	void SetMusicVolume(float vol)
+	{
+		// Set the volume of the music
+		m_VolumeMusic = vol;
+		Mix_VolumeMusic(static_cast<int>(vol * MIX_MAX_VOLUME));
 	}
 
 	void CheckQueue()
@@ -252,6 +282,21 @@ void dae::SDLSoundSystem::StopMusic()
 void dae::SDLSoundSystem::Load(Sound audio)
 {
 	pImpl->Load(audio);
+}
+
+bool dae::SDLSoundSystem::ToggleMute()
+{
+	return pImpl->ToggleMute();
+}
+
+void dae::SDLSoundSystem::SetSoundEffectVolume(float volume)
+{
+	pImpl->SetSoundEffectVolume(volume);
+}
+
+void dae::SDLSoundSystem::SetMusicVolume(float volume)
+{
+	pImpl->SetMusicVolume(volume);
 }
 
 dae::SDLSoundSystem::~SDLSoundSystem()
