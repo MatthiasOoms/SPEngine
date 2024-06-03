@@ -105,7 +105,7 @@ void load()
 		auto gob = std::make_unique<dae::GameObject>("Player");
 		//gob->SetParent(goc.get(), false);
 		gob->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("BurgerTimeBean.png"));
-		gob->GetTransform().SetLocalPosition(20, 0, 0);
+		gob->GetTransform().SetLocalPosition(75, 0, 0);
 		//gob->AddComponent<dae::RotationComponent>();
 		//gob->GetComponent<dae::RotationComponent>()->SetRotationSpeed(360.f);
 		
@@ -125,8 +125,8 @@ void load()
 		scene.Add(std::move(ladderObj));
 
 
-		// Collision test obj
-		auto staticObj = std::make_unique<dae::GameObject>("StaticLevel");
+		// Collision obj
+		auto staticObj = std::make_unique<dae::GameObject>("Platform");
 		staticObj->AddComponent<dae::PlatformComponent>();
 		staticObj->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("platform.png"));
 		staticObj->GetTransform().SetWorldPosition(50, 200, 0);
@@ -135,6 +135,18 @@ void load()
 			auto platformTexture = staticObj->GetComponent<dae::TextureComponent>();
 			platformTexture->SetScale(1);
 			staticObj->GetTransform().SetDimensions(platformTexture->GetDimensions());
+		}
+
+		// Platform obj
+		auto platformObj = std::make_unique<dae::GameObject>("Platform");
+		platformObj->AddComponent<dae::PlatformComponent>();
+		platformObj->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("platform.png"));
+		platformObj->GetTransform().SetWorldPosition(200, 220, 0);
+		if (platformObj->HasComponent<dae::TextureComponent>())
+		{
+			auto platformTexture = platformObj->GetComponent<dae::TextureComponent>();
+			platformTexture->SetScale(1);
+			platformObj->GetTransform().SetDimensions(platformTexture->GetDimensions());
 		}
 
 		// Player Components
@@ -312,6 +324,8 @@ void load()
 		// Register objects to platform
 		staticObj->GetComponent<dae::PlatformComponent>()->RegisterObjects("Demo");
 		scene.Add(std::move(staticObj));
+		platformObj->GetComponent<dae::PlatformComponent>()->RegisterObjects("Demo");
+		scene.Add(std::move(platformObj));
 	}
 
 	// Menu scene

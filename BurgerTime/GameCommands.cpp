@@ -22,7 +22,43 @@ dae::WalkCommand::WalkCommand(GameObject* pGameObject, float speed)
 void dae::WalkCommand::Execute(float elapsedSec)
 {
 	// Move on the x-axis
-	GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ m_MoveSpeed * elapsedSec, 0, 0 });
+	bool canWalk = false;
+
+	auto selfPos = m_pGameObject->GetTransform().GetWorldPosition();
+	auto selfDims = m_pGameObject->GetTransform().GetDimensions();
+
+	auto pPlatforms = SceneManager::GetInstance().GetActiveScene()->GetObjectsByTag("Platform");
+	for (auto pPlatform : pPlatforms)
+	{
+		// Get the player's position and dimensions
+		auto platformPos = pPlatform->GetTransform().GetWorldPosition();
+		auto platformDims = pPlatform->GetTransform().GetDimensions();
+
+		// If self left is in the object
+		if (selfPos.x <= platformPos.x + platformDims.x && selfPos.x >= platformPos.x)
+		{
+			// If self right is in the object
+			if (selfPos.x + selfDims.x <= platformPos.x + platformDims.x && selfPos.x + selfDims.x >= platformPos.x)
+			{
+				// If self is above the object and has some overlap with the platform object on the y-axis
+				if (selfPos.y + selfDims.y <= platformPos.y && selfPos.y + selfDims.y >= platformPos.y - platformDims.y)
+				{
+					canWalk = true;
+				}
+			}
+		}		
+	}
+
+	// If the player is climbing, they can't walk
+	if (dynamic_cast<ClimbPlayerState*>(GetGameObject()->GetComponent<PlayerComponent>()->GetCurrentState()))
+	{
+		canWalk = false;
+	}
+
+	if (canWalk)
+	{
+		GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ m_MoveSpeed * elapsedSec, 0, 0 });
+	}
 }
 
 dae::KillCommand::KillCommand(GameObject* pGameObject)
@@ -81,9 +117,13 @@ void dae::WalkEndCommand::Execute(float)
 	if (GetGameObject()->HasComponent<PlayerComponent>())
 	{
 		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
+		// If the player is not idle or climbing, set the state to idle
 		if (dynamic_cast<IdlePlayerState*>(stateComp->GetCurrentState()) == nullptr)
 		{
-			stateComp->SetState(new IdlePlayerState{ GetGameObject() });
+			if (dynamic_cast<ClimbPlayerState*>(stateComp->GetCurrentState()) == nullptr)
+			{
+				stateComp->SetState(new IdlePlayerState{ GetGameObject() });
+			}
 		}
 	}
 }
@@ -99,9 +139,13 @@ void dae::WalkStartCommand::Execute(float)
 	if (GetGameObject()->HasComponent<PlayerComponent>())
 	{
 		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
+		// If the player is not walking or climbing, set the state to walking
 		if (dynamic_cast<WalkPlayerState*>(stateComp->GetCurrentState()) == nullptr)
 		{
-			stateComp->SetState(new WalkPlayerState{ GetGameObject() });
+			if (dynamic_cast<ClimbPlayerState*>(stateComp->GetCurrentState()) == nullptr)
+			{
+				stateComp->SetState(new WalkPlayerState{ GetGameObject() });
+			}
 		}
 	}
 }

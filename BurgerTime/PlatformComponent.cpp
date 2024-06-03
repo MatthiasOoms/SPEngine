@@ -26,20 +26,27 @@ void dae::PlatformComponent::Update(float)
 		int playerHeight = playerDims.y;
 
 		// If player left or right is in the object
-		if ((playerPos.x < objPos.x + objWidth && playerPos.x > objPos.x) 
-			|| (playerPos.x + playerWidth < objPos.x + objWidth && playerPos.x + playerWidth > objPos.x))
+		if ((playerPos.x <= objPos.x + objWidth && playerPos.x >= objPos.x) 
+			&& (playerPos.x + playerWidth <= objPos.x + objWidth && playerPos.x + playerWidth >= objPos.x))
 		{
 			// If player bottom is in the object
-			if (playerPos.y + playerHeight > objPos.y && playerPos.y < objPos.y)
+			if (playerPos.y + playerHeight > objPos.y - objHeight && playerPos.y < objPos.y - objHeight)
 			{
 				// Move up
-				pPlayer->SetLocalPosition(glm::vec3{ playerPos.x, objPos.y - playerHeight, playerPos.z });
+				pPlayer->SetLocalPosition(glm::vec3{ playerPos.x, objPos.y - objHeight - playerHeight, playerPos.z });
 			}
-			// If player top is in the object
-			else if (playerPos.y < objPos.y + objHeight && playerPos.y > objPos.y + objHeight - playerHeight)
+		}
+		// If player is on the left side of the object
+		else if (playerPos.y + playerHeight >= objPos.y - objHeight && playerPos.y <= objPos.y - objHeight)
+		{
+			// If player bottom is in the object
+			if (playerPos.x <= objPos.x)
 			{
-				// Move down
-				pPlayer->SetLocalPosition(glm::vec3{ playerPos.x, objPos.y + objHeight, playerPos.z });
+				pPlayer->SetLocalPosition(glm::vec3{ objPos.x, playerPos.y, playerPos.z });
+			}
+			else
+			{
+				pPlayer->SetLocalPosition(glm::vec3{ objPos.x + objWidth - playerWidth, playerPos.y, playerPos.z });
 			}
 		}
 	}
