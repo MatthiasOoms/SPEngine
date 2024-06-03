@@ -19,6 +19,7 @@ dae::LivesComponent::~LivesComponent()
 void dae::LivesComponent::AddObserver(Observer* pObserver)
 {
 	m_pSubject->AddObserver(pObserver);
+	pObserver->OnNotify(GetOwner(), Event::ObserverAdded);
 }
 
 int dae::LivesComponent::GetLives() const

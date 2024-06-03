@@ -31,6 +31,7 @@ void dae::ScoreComponent::SetScore(int score)
 void dae::ScoreComponent::AddObserver(Observer* pObserver)
 {
 	m_pSubject->AddObserver(pObserver);
+	pObserver->OnNotify(GetOwner(), Event::ObserverAdded);
 }
 
 int dae::ScoreComponent::GetScore() const

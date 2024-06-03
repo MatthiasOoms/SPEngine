@@ -26,6 +26,9 @@ void dae::ScoreObserverComponent::OnNotify(GameObject* obj, Event event)
 	case dae::Event::EnemyDeath:
 		UpdateText(obj);
 		break;
+	case dae::Event::ObserverAdded:
+		UpdateText(obj);
+		break;
 	default:
 		break;
 	}
