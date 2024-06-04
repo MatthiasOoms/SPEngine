@@ -55,20 +55,21 @@ void dae::PlatformComponent::Update(float)
 void dae::PlatformComponent::RegisterObjects()
 {
 	// Get all players, enemies and ingredients
-	auto temp = dae::SceneManager::GetInstance().GetActiveScene();
-	m_pPlayers = temp->GetObjectsByTag("Player");
-	m_pEnemies = temp->GetObjectsByTag("Enemy");
-	m_pIngredients = temp->GetObjectsByTag("Ingredient");
+	auto& scene = dae::SceneManager::GetInstance().GetActiveScene();
+	m_pPlayers = scene.GetObjectsByTag("Player");
+	m_pEnemies = scene.GetObjectsByTag("Enemy");
+	m_pIngredients = scene.GetObjectsByTag("Ingredient");
 }
 
 void dae::PlatformComponent::RegisterObjects(std::string scene)
 {
 	// Get all players, enemies and ingredients
-	if (auto temp = dae::SceneManager::GetInstance().GetScene(scene))
+	if (dae::SceneManager::GetInstance().HasScene(scene))
 	{
-		m_pPlayers = temp->GetObjectsByTag("Player");
-		m_pEnemies = temp->GetObjectsByTag("Enemy");
-		m_pIngredients = temp->GetObjectsByTag("Ingredient");
+		auto& currentScene = dae::SceneManager::GetInstance().GetScene(scene);
+		m_pPlayers = currentScene.GetObjectsByTag("Player");
+		m_pEnemies = currentScene.GetObjectsByTag("Enemy");
+		m_pIngredients = currentScene.GetObjectsByTag("Ingredient");
 	}
 	else
 	{

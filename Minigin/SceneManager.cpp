@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include "Scene.h"
+#include <stdexcept>
 
 void dae::SceneManager::Update(const float deltaTime)
 {
@@ -39,7 +40,7 @@ void dae::SceneManager::SetActiveScene(std::string name)
 	throw std::exception("Scene not found");
 }
 
-std::shared_ptr<dae::Scene> dae::SceneManager::GetNextScene(std::string scene) const
+dae::Scene& dae::SceneManager::GetNextScene(std::string scene) const
 {
 	auto& sceneName = m_ActiveScene->GetSceneName();
 	bool returnNext = false;
@@ -49,7 +50,7 @@ std::shared_ptr<dae::Scene> dae::SceneManager::GetNextScene(std::string scene) c
 		// If we are the scene to be returned
 		if (returnNext)
 		{
-			return s;
+			return *s;
 		}
 		// If the current scene is the active scene
 		if (s->GetSceneName() == sceneName)
@@ -58,17 +59,29 @@ std::shared_ptr<dae::Scene> dae::SceneManager::GetNextScene(std::string scene) c
 			returnNext = true;
 		}
 	}
-	return m_Scenes.front();
+	return *m_Scenes.front();
 }
 
-std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(std::string scene) const
+dae::Scene& dae::SceneManager::GetScene(std::string scene) const
 {
 	for (const auto& s : m_Scenes)
 	{
 		if (s->GetSceneName() == scene)
 		{
-			return s;
+			return *s;
 		}
 	}
-	return nullptr;
+	throw std::runtime_error("Scene not found: " + scene);
+}
+
+bool dae::SceneManager::HasScene(std::string scene) const
+{
+	for (const auto& s : m_Scenes)
+	{
+		if (s->GetSceneName() == scene)
+		{
+			return true;
+		}
+	}
+	return false;
 }

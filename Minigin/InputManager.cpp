@@ -35,7 +35,7 @@ bool dae::InputManager::ProcessInput(float elapsedSec)
 		}
 	);
 
-	std::string sceneName{ m_pSceneManager.GetActiveScene()->GetSceneName() };
+	std::string sceneName{ m_pSceneManager.GetActiveScene().GetSceneName() };
 
 	// Local commands
 	for (auto const& command : m_KeyboardCommands[sceneName])
