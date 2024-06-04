@@ -2,8 +2,8 @@
   "Player": {
     "Type": "Player",
     "Position": {
-      "x": 50,
-      "y": 50
+      "x": 55,
+      "y": 40
     }
   },
   "Enemies": [
@@ -55,7 +55,7 @@
         "Type": "Ladder",
         "Position": {
           "x": 100,
-          "y": 40
+          "y": 50
         }
       },
     {

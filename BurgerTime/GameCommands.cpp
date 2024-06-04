@@ -43,7 +43,7 @@ void dae::WalkCommand::Execute(float elapsedSec)
 			if (selfPos.x + selfDims.x <= platformPos.x + platformDims.x && selfPos.x + selfDims.x >= platformPos.x)
 			{
 				// If self is above the object and has some overlap with the platform object on the y-axis
-				if (selfPos.y + selfDims.y <= platformPos.y && selfPos.y + selfDims.y >= platformPos.y - platformDims.y)
+				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
 				{
 					canWalk = true;
 				}
@@ -211,10 +211,8 @@ void dae::ClimbCommand::Execute(float elapsedSec)
 		auto ladderPos = pLadder->GetTransform().GetWorldPosition();
 		auto ladderDims = pLadder->GetTransform().GetDimensions();
 
-		// If self left or right is in the object
-		if ((selfPos.x < ladderPos.x + ladderDims.x && selfPos.x > ladderPos.x) ||
-			(selfPos.x + selfDims.x < ladderPos.x + ladderDims.x && selfPos.x + selfDims.x > ladderPos.x) ||
-			(selfPos.x < ladderPos.x && selfPos.x + selfDims.x > ladderPos.x + ladderDims.x))
+		// If left of Player is left of ladder and right of player is right of ladder
+		if ((selfPos.x < ladderPos.x && selfPos.x + selfDims.x > ladderPos.x + ladderDims.x))
 		{
 			// If bottom of player is in the ladder
 			if (selfPos.y + selfDims.y >= ladderPos.y && selfPos.y + selfDims.y <= ladderPos.y + ladderDims.y)
