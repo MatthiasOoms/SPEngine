@@ -49,17 +49,21 @@ void dae::PlatformComponent::Update(float)
 				pPlayer->SetLocalPosition(glm::vec3{ playerPos.x, objPos.y - playerHeight, playerPos.z });
 			}
 		}
-		// If left or right is not inside
+		// If player height is in the object
 		else if (playerPos.y + playerHeight >= objPos.y && playerPos.y + playerHeight <= objPos.y + objHeight)
 		{
-			// Move player back inside
-			if (playerPos.x <= objPos.x)
+			// If player center is in the object
+			if (playerPos.x + (playerDims.x / 2) < objPos.x + objDims.x && playerPos.x + (playerDims.x / 2) > objPos.x)
 			{
-				pPlayer->SetLocalPosition(glm::vec3{ objPos.x, playerPos.y, playerPos.z });
-			}
-			else
-			{
-				pPlayer->SetLocalPosition(glm::vec3{ objPos.x + objWidth - playerWidth, playerPos.y, playerPos.z });
+				// Move player back inside
+				if (playerPos.x <= objPos.x)
+				{
+					pPlayer->SetLocalPosition(glm::vec3{ objPos.x, playerPos.y, playerPos.z });
+				}
+				else
+				{
+					pPlayer->SetLocalPosition(glm::vec3{ objPos.x + objWidth - playerWidth, playerPos.y, playerPos.z });
+				}
 			}
 		}
 	}

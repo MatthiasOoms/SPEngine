@@ -364,18 +364,13 @@ void load()
 		scene.Add(std::move(platformObj));
 	}
 
-	// Level0
+	// Level1
 	{
 		// Create the scene
-		auto& scene = sceneManager.CreateScene("Level0");
-
-		// Background
-		auto go = std::make_unique<dae::GameObject>("Background");
-		go->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("background.tga"));
-		scene.Add(std::move(go));
-
+		auto& scene = sceneManager.CreateScene("Level1");
+		scene.GetSceneName();
 		// Load the level
-		dae::LevelLoader::GetInstance().LoadLevel("Level0.json", "Level0");
+		dae::LevelLoader::GetInstance().LoadLevel("Level1.json", "Level1");
 	}
 
 	input.AddGlobalCommand(SDL_SCANCODE_F1, dae::keyState::isDown, std::make_unique<dae::SceneNextCommand>());

@@ -69,8 +69,27 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		{
 			// Create a new GameObject
 			auto ladder = std::make_unique<dae::GameObject>("Ladder");
+
 			// Add a TextureComponent to the GameObject
-			ladder->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Ladder.png"));
+			auto texture = ladder->AddComponent<dae::TextureComponent>();
+
+			// Set the texture of the TextureComponent
+			if (layout["Length"] == "1")
+			{
+				texture->SetTexture(resources.LoadTexture("Ladder1.png"));
+			}
+			else if (layout["Length"] == "2")
+			{
+				texture->SetTexture(resources.LoadTexture("Ladder2.png"));
+			}
+			else if (layout["Length"] == "3")
+			{
+				texture->SetTexture(resources.LoadTexture("Ladder3.png"));
+			}
+			else if (layout["Length"] == "4")
+			{
+				texture->SetTexture(resources.LoadTexture("Ladder4.png"));
+			}
 			// Set the position of the GameObject
 			ladder->SetLocalPosition({ layout["Position"]["x"], layout["Position"]["y"], 0 });
 
@@ -196,32 +215,32 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	auto& input = dae::InputManager::GetInstance();
 	// Controller
 	// Move
-	input.AddCommand("Level0", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), -200.f));
-	input.AddCommand("Level0", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), 200.f));
-	input.AddCommand("Level0", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), -200.f));
-	input.AddCommand("Level0", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), 200.f));
+	input.AddCommand("Level1", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), -50.f));
+	input.AddCommand("Level1", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), 50.f));
+	input.AddCommand("Level1", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), -50.f));
+	input.AddCommand("Level1", static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), 50.f));
 
 	// Keyboard
 	{
 		// Start Move
-		input.AddCommand("Level0", SDL_SCANCODE_W, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get()));
-		input.AddCommand("Level0", SDL_SCANCODE_S, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get()));
-		input.AddCommand("Level0", SDL_SCANCODE_A, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get()));
-		input.AddCommand("Level0", SDL_SCANCODE_D, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get()));
+		input.AddCommand("Level1", SDL_SCANCODE_W, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get()));
+		input.AddCommand("Level1", SDL_SCANCODE_S, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get()));
+		input.AddCommand("Level1", SDL_SCANCODE_A, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get()));
+		input.AddCommand("Level1", SDL_SCANCODE_D, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get()));
 	}
 	{
 		// Move
-		input.AddCommand("Level0", SDL_SCANCODE_W, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), -200.f));
-		input.AddCommand("Level0", SDL_SCANCODE_S, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), 200.f));
-		input.AddCommand("Level0", SDL_SCANCODE_A, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), -200.f));
-		input.AddCommand("Level0", SDL_SCANCODE_D, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), 200.f));
+		input.AddCommand("Level1", SDL_SCANCODE_W, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), -50.f));
+		input.AddCommand("Level1", SDL_SCANCODE_S, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), 50.f));
+		input.AddCommand("Level1", SDL_SCANCODE_A, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), -50.f));
+		input.AddCommand("Level1", SDL_SCANCODE_D, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), 50.f));
 	}
 	{
 		// End Move
-		input.AddCommand("Level0", SDL_SCANCODE_W, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
-		input.AddCommand("Level0", SDL_SCANCODE_S, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
-		input.AddCommand("Level0", SDL_SCANCODE_A, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
-		input.AddCommand("Level0", SDL_SCANCODE_D, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
+		input.AddCommand("Level1", SDL_SCANCODE_W, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
+		input.AddCommand("Level1", SDL_SCANCODE_S, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
+		input.AddCommand("Level1", SDL_SCANCODE_A, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
+		input.AddCommand("Level1", SDL_SCANCODE_D, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
 	}
 
 	// Add the GameObjects to the scene

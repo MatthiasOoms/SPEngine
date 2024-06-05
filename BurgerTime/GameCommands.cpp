@@ -211,23 +211,19 @@ void dae::ClimbCommand::Execute(float elapsedSec)
 		auto ladderPos = pLadder->GetTransform().GetWorldPosition();
 		auto ladderDims = pLadder->GetTransform().GetDimensions();
 
-		// If left of Player is left of ladder and right of player is right of ladder
-		if ((selfPos.x < ladderPos.x && selfPos.x + selfDims.x > ladderPos.x + ladderDims.x))
+		// If Player center is in ladder
+		if ((selfPos.x + (selfDims.x / 2) > ladderPos.x && selfPos.x + (selfDims.x / 2) < ladderPos.x + ladderDims.x))
 		{
 			// If bottom of player is in the ladder
 			if (selfPos.y + selfDims.y >= ladderPos.y && selfPos.y + selfDims.y <= ladderPos.y + ladderDims.y)
 			{
 				auto temp = selfPos + glm::vec3{ 0, m_ClimbSpeed * elapsedSec, 0 };
 
-				// If the player bottom is in the ladder
+				// If the new player bottom is in the ladder
 				if (temp.y + selfDims.y >= ladderPos.y && temp.y + selfDims.y <= ladderPos.y + ladderDims.y)
 				{
 					endPos = temp;
 					canClimb = true;
-				}
-				else
-				{
-					endPos = { selfPos.x, ladderPos.y + ladderDims.y, 0 };
 				}
 			}
 		}
