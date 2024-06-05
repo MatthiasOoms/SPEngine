@@ -11,6 +11,9 @@
 #include <InputManager.h>
 #include "GameCommands.h"
 #include <memory>
+#include "HotdogComponent.h"
+#include "EggComponent.h"
+#include "PickleComponent.h"
 //#include <SpriteComponent.h>
 
 void dae::LevelLoader::Init(const std::string& data)
@@ -90,6 +93,11 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 			{
 				texture->SetTexture(resources.LoadTexture("Ladder4.png"));
 			}
+			else
+			{
+				throw std::runtime_error("Invalid ladder length");
+			}
+
 			// Set the position of the GameObject
 			ladder->SetLocalPosition({ layout["Position"]["x"], layout["Position"]["y"], 0 });
 
@@ -127,6 +135,11 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 			{
 				texture->SetTexture(resources.LoadTexture("Platform4.png"));
 			}
+			else
+			{
+				throw std::runtime_error("Invalid platform length");
+			}
+
 			platform->AddComponent<dae::PlatformComponent>();
 			// Set the position of the GameObject
 			platform->SetLocalPosition({ layout["Position"]["x"], layout["Position"]["y"], 0 });
@@ -144,8 +157,40 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		{
 			// Create a new GameObject
 			auto ingredient = std::make_unique<dae::GameObject>("Ingredient");
+
 			// Add a TextureComponent to the GameObject
-			ingredient->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Ingredient.png"));
+			auto texture = ingredient->AddComponent<dae::TextureComponent>();
+
+			// Set the texture of the TextureComponent
+			if (layout["Option"] == "1")
+			{
+				texture->SetTexture(resources.LoadTexture("Ingredient1.png"));
+			}
+			else if (layout["Option"] == "2")
+			{
+				texture->SetTexture(resources.LoadTexture("Ingredient2.png"));
+			}
+			else if (layout["Option"] == "3")
+			{
+				texture->SetTexture(resources.LoadTexture("Ingredient3.png"));
+			}
+			else if (layout["Option"] == "4")
+			{
+				texture->SetTexture(resources.LoadTexture("Ingredient4.png"));
+			}
+			else if (layout["Option"] == "5")
+			{
+				texture->SetTexture(resources.LoadTexture("Ingredient5.png"));
+			}
+			else if (layout["Option"] == "6")
+			{
+				texture->SetTexture(resources.LoadTexture("Ingredient6.png"));
+			}
+			else
+			{
+				throw std::runtime_error("Unknown ingredient option");
+			}
+
 			// Set the position of the GameObject
 			ingredient->SetLocalPosition({ layout["Position"]["x"], layout["Position"]["y"], 0 });
 
@@ -170,8 +215,9 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		if (enemy["Type"] == "Hotdog")
 		{
 			auto hotdog = std::make_unique<dae::GameObject>("Enemy");
-			//hotdog->AddComponent<dae::SpriteComponent>("Hotdog.png");
-			hotdog->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Hotdog.png"));
+			//hotdog->AddComponent<dae::SpriteComponent>("HotdogWalk.png");
+			hotdog->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
+			hotdog->AddComponent<dae::HotdogComponent>();
 			hotdog->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
 
 			gameObjects.push_back(std::move(hotdog));
@@ -181,8 +227,9 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		else if (enemy["Type"] == "Egg")
 		{
 			auto egg = std::make_unique<dae::GameObject>("Enemy");
-			//egg->AddComponent<dae::SpriteComponent>("Egg.png");
-			egg->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Egg.png"));
+			//egg->AddComponent<dae::SpriteComponent>("EggWalk.png");
+			egg->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("EggWalk.png"));
+			egg->AddComponent<dae::EggComponent>();
 			egg->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
 
 			gameObjects.push_back(std::move(egg));
@@ -192,8 +239,9 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		else if (enemy["Type"] == "Pickle")
 		{
 			auto pickle = std::make_unique<dae::GameObject>("Enemy");
-			//pickle->AddComponent<dae::SpriteComponent>("Pickle.png");
-			pickle->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Pickle.png"));
+			//pickle->AddComponent<dae::SpriteComponent>("PickleWalk.png");
+			pickle->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("PickleWalk.png"));
+			pickle->AddComponent<dae::PickleComponent>();
 			pickle->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
 
 			gameObjects.push_back(std::move(pickle));

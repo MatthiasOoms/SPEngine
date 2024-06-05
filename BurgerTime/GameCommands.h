@@ -10,6 +10,9 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 		float m_MoveSpeed;
+
+		void HandlePlayer();
+		void HandleEnemies();
 	protected:
 		GameObject* GetGameObject() { return m_pGameObject; }
 	public:
@@ -29,6 +32,9 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 		float m_MoveSpeed;
+
+		void HandlePlayer();
+		void HandleEnemies();
 	protected:
 		GameObject* GetGameObject() { return m_pGameObject; }
 	public:

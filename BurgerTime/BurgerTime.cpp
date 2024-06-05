@@ -88,7 +88,7 @@ void load()
 		go->AddComponent<dae::FPSComponent>();
 		scene.Add(std::move(go));
 
-		input.AddCommand("Menu", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Demo", "../Data/Soundtrack.mp3"));
+		input.AddCommand("Menu", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Level1", "../Data/Soundtrack.mp3"));
 	}
 
 	// Demo scene
@@ -144,7 +144,7 @@ void load()
 		// Hotdog
 		auto gob = std::make_unique<dae::GameObject>("Player");
 		//gob->SetParent(goc.get(), false);
-		gob->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("Hotdog.png"));
+		gob->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("HotdogWalk.png"));
 		gob->GetTransform().SetLocalPosition(75, 0, 0);
 		//gob->AddComponent<dae::RotationComponent>();
 		//gob->GetComponent<dae::RotationComponent>()->SetRotationSpeed(360.f);

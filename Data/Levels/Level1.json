@@ -321,6 +321,7 @@
     },
     {
       "Type": "Ingredient",
+      "Option": "1",
       "Position": {
         "x": 90,
         "y": 110

@@ -17,12 +17,6 @@ dae::PlatformComponent::PlatformComponent(GameObject* pOwner)
 
 void dae::PlatformComponent::Update(float)
 {
-	// Get the object's position and dimensions
-	auto objPos = GetOwner()->GetTransform().GetWorldPosition();
-	auto objDims = GetOwner()->GetTransform().GetDimensions();
-	int objWidth = objDims.x;
-	int objHeight = objDims.y;
-
 	// Check if any player is on the platform
 	for (auto pPlayer : m_pPlayers)
 	{
@@ -36,40 +30,7 @@ void dae::PlatformComponent::Update(float)
 			}
 		}
 
-		// Get the player's position and dimensions
-		auto playerPos = pPlayer->GetTransform().GetWorldPosition();
-		auto playerDims = pPlayer->GetTransform().GetDimensions();
-		int playerWidth = playerDims.x;
-		int playerHeight = playerDims.y;
-
-		// If player left and right is in the object
-		if ((playerPos.x < objPos.x + objWidth && playerPos.x > objPos.x) 
-			&& (playerPos.x + playerWidth < objPos.x + objWidth && playerPos.x + playerWidth > objPos.x))
-		{
-			// If player bottom is in the object
-			if (playerPos.y + playerHeight <= objPos.y + objHeight && playerPos.y + playerHeight >= objPos.y)
-			{
-				// Move up
-				pPlayer->SetLocalPosition(glm::vec3{ playerPos.x, objPos.y - playerHeight, playerPos.z });
-			}
-		}
-		// If player height is in the object
-		else if (playerPos.y + playerHeight >= objPos.y && playerPos.y + playerHeight <= objPos.y + objHeight)
-		{
-			// If player center is in the object
-			if (playerPos.x + (playerDims.x / 2) < objPos.x + objDims.x && playerPos.x + (playerDims.x / 2) > objPos.x)
-			{
-				// Move player back inside
-				if (playerPos.x <= objPos.x)
-				{
-					pPlayer->SetLocalPosition(glm::vec3{ objPos.x, playerPos.y, playerPos.z });
-				}
-				else
-				{
-					pPlayer->SetLocalPosition(glm::vec3{ objPos.x + objWidth - playerWidth, playerPos.y, playerPos.z });
-				}
-			}
-		}
+		HandleCollision(pPlayer);
 	}
 
 	// Check if any player is on the platform
@@ -102,41 +63,12 @@ void dae::PlatformComponent::Update(float)
 				continue;
 			}
 		}
-
-		// Get the player's position and dimensions
-		auto playerPos = pEnemy->GetTransform().GetWorldPosition();
-		auto playerDims = pEnemy->GetTransform().GetDimensions();
-		int playerWidth = playerDims.x;
-		int playerHeight = playerDims.y;
-
-		// If player left and right is in the object
-		if ((playerPos.x < objPos.x + objWidth && playerPos.x > objPos.x)
-			&& (playerPos.x + playerWidth < objPos.x + objWidth && playerPos.x + playerWidth > objPos.x))
+		else
 		{
-			// If player bottom is in the object
-			if (playerPos.y + playerHeight <= objPos.y + objHeight && playerPos.y + playerHeight >= objPos.y)
-			{
-				// Move up
-				pEnemy->SetLocalPosition(glm::vec3{ playerPos.x, objPos.y - playerHeight, playerPos.z });
-			}
+			throw std::exception("Enemy type not found");
 		}
-		// If player height is in the object
-		else if (playerPos.y + playerHeight >= objPos.y && playerPos.y + playerHeight <= objPos.y + objHeight)
-		{
-			// If player center is in the object
-			if (playerPos.x + (playerDims.x / 2) < objPos.x + objDims.x && playerPos.x + (playerDims.x / 2) > objPos.x)
-			{
-				// Move player back inside
-				if (playerPos.x <= objPos.x)
-				{
-					pEnemy->SetLocalPosition(glm::vec3{ objPos.x, playerPos.y, playerPos.z });
-				}
-				else
-				{
-					pEnemy->SetLocalPosition(glm::vec3{ objPos.x + objWidth - playerWidth, playerPos.y, playerPos.z });
-				}
-			}
-		}
+
+		HandleCollision(pEnemy);
 	}
 }
 
@@ -162,5 +94,49 @@ void dae::PlatformComponent::RegisterObjects(std::string scene)
 	else
 	{
 		throw std::exception("Scene not found");
+	}
+}
+
+void dae::PlatformComponent::HandleCollision(GameObject* pCollider)
+{
+	// Get the object's position and dimensions
+	auto objPos = GetOwner()->GetTransform().GetWorldPosition();
+	auto objDims = GetOwner()->GetTransform().GetDimensions();
+	int objWidth = objDims.x;
+	int objHeight = objDims.y;
+
+	// Get the player's position and dimensions
+	auto colliderPos = pCollider->GetTransform().GetWorldPosition();
+	auto colliderDims = pCollider->GetTransform().GetDimensions();
+	int colliderWidth = colliderDims.x;
+	int colliderHeight = colliderDims.y;
+
+	// If player left and right is in the object
+	if ((colliderPos.x < objPos.x + objWidth && colliderPos.x > objPos.x)
+		&& (colliderPos.x + colliderWidth < objPos.x + objWidth && colliderPos.x + colliderWidth > objPos.x))
+	{
+		// If player bottom is in the object
+		if (colliderPos.y + colliderHeight <= objPos.y + objHeight && colliderPos.y + colliderHeight >= objPos.y)
+		{
+			// Move up
+			pCollider->SetLocalPosition(glm::vec3{ colliderPos.x, objPos.y - colliderHeight, colliderPos.z });
+		}
+	}
+	// If player height is in the object
+	else if (colliderPos.y + colliderHeight >= objPos.y && colliderPos.y + colliderHeight <= objPos.y + objHeight)
+	{
+		// If player center is in the object
+		if (colliderPos.x + (colliderDims.x / 2) < objPos.x + objDims.x && colliderPos.x + (colliderDims.x / 2) > objPos.x)
+		{
+			// Move player back inside
+			if (colliderPos.x <= objPos.x)
+			{
+				pCollider->SetLocalPosition(glm::vec3{ objPos.x, colliderPos.y, colliderPos.z });
+			}
+			else
+			{
+				pCollider->SetLocalPosition(glm::vec3{ objPos.x + objWidth - colliderWidth, colliderPos.y, colliderPos.z });
+			}
+		}
 	}
 }
