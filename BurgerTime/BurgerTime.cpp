@@ -56,6 +56,8 @@ void load()
 	{
 		auto& scene = sceneManager.CreateScene("Menu");
 
+		soundSystem.StopMusic();
+
 		// Add controllers
 		input.AddControllersMax();
 
@@ -90,7 +92,7 @@ void load()
 	}
 
 	// Demo scene
-	{
+	/* {
 		auto& scene = sceneManager.CreateScene("Demo");
 
 		// Load and Play Sound
@@ -129,9 +131,9 @@ void load()
 		scene.Add(std::move(go));
 
 		// Pivot point
-		/*go = std::make_unique<dae::GameObject>();
-		go->GetTransform().SetWorldPosition(310, 300, 0);
-		scene.Add(std::move(go));*/
+		//go = std::make_unique<dae::GameObject>();
+		//go->GetTransform().SetWorldPosition(310, 300, 0);
+		//scene.Add(std::move(go));
 
 		// Chef
 		auto goc = std::make_unique<dae::GameObject>("Player");
@@ -259,8 +261,8 @@ void load()
 			input.AddCommand("Demo", SDL_SCANCODE_Z, dae::keyState::isDown, std::make_unique<dae::KillCommand>(goc.get()));
 			input.AddCommand("Demo", SDL_SCANCODE_X, dae::keyState::isDown, std::make_unique<dae::KillCommand>(gob.get()));
 			// Score
-			input.AddCommand("Demo", SDL_SCANCODE_C, dae::keyState::isDown, std::make_unique<dae::ScoreSmallCommand>(goc.get()));
-			input.AddCommand("Demo", SDL_SCANCODE_V, dae::keyState::isDown, std::make_unique<dae::ScoreSmallCommand>(gob.get()));
+			input.AddCommand("Demo", SDL_SCANCODE_C, dae::keyState::isDown, std::make_unique<dae::HotdogKilledCommand>(goc.get()));
+			input.AddCommand("Demo", SDL_SCANCODE_V, dae::keyState::isDown, std::make_unique<dae::HotdogKilledCommand>(gob.get()));
 		}
 
 		// Print Controls
@@ -340,19 +342,19 @@ void load()
 		toScore->GetComponent<dae::TextComponent>()->SetText("C/V: Score Up");
 		scene.Add(std::move(toScore));
 
-		/*{
-			// Must Remove Commands Before Killing
-			input.RemoveCommand("Demo", SDL_SCANCODE_Z, dae::keyState::isDown);
-			input.RemoveCommand("Demo", SDL_SCANCODE_C, dae::keyState::isDown);
-			input.RemoveCommand("Demo", SDL_SCANCODE_UP, dae::keyState::isHeld);
-			input.RemoveCommand("Demo", SDL_SCANCODE_DOWN, dae::keyState::isHeld);
-			input.RemoveCommand("Demo", SDL_SCANCODE_LEFT, dae::keyState::isHeld);
-			input.RemoveCommand("Demo", SDL_SCANCODE_RIGHT, dae::keyState::isHeld);
-			// Try to remove a non existing command
-			input.RemoveCommand("Demo", SDL_SCANCODE_Q, dae::keyState::isUp);
-			// Mark For Deletion
-			goc->Kill();
-		}*/
+		//{
+		//	// Must Remove Commands Before Killing
+		//	input.RemoveCommand("Demo", SDL_SCANCODE_Z, dae::keyState::isDown);
+		//	input.RemoveCommand("Demo", SDL_SCANCODE_C, dae::keyState::isDown);
+		//	input.RemoveCommand("Demo", SDL_SCANCODE_UP, dae::keyState::isHeld);
+		//	input.RemoveCommand("Demo", SDL_SCANCODE_DOWN, dae::keyState::isHeld);
+		//	input.RemoveCommand("Demo", SDL_SCANCODE_LEFT, dae::keyState::isHeld);
+		//	input.RemoveCommand("Demo", SDL_SCANCODE_RIGHT, dae::keyState::isHeld);
+		//	// Try to remove a non existing command
+		//	input.RemoveCommand("Demo", SDL_SCANCODE_Q, dae::keyState::isUp);
+		//	// Mark For Deletion
+		//	goc->Kill();
+		//}
 
 		scene.Add(std::move(goc));
 		scene.Add(std::move(gob));
@@ -362,7 +364,7 @@ void load()
 		scene.Add(std::move(staticObj));
 		platformObj->GetComponent<dae::PlatformComponent>()->RegisterObjects("Demo");
 		scene.Add(std::move(platformObj));
-	}
+	}*/
 
 	// Level1
 	{

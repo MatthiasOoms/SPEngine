@@ -194,36 +194,52 @@ xcopy "$(SolutionDir)Data\*" "$(OutputPath)..\Data\" /E /Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BurgerTime.cpp" />
+    <ClCompile Include="ClimbEnemyState.cpp" />
     <ClCompile Include="ClimbPlayerState.cpp" />
+    <ClCompile Include="EggComponent.cpp" />
+    <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameCommands.cpp" />
+    <ClCompile Include="HotdogComponent.cpp" />
     <ClCompile Include="IdlePlayerState.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
     <ClCompile Include="LivesObserverComponent.cpp" />
+    <ClCompile Include="PickleComponent.cpp" />
     <ClCompile Include="PlatformComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="RotationComponent.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
     <ClCompile Include="ScoreObserverComponent.cpp" />
+    <ClCompile Include="WalkingEnemyState.cpp" />
     <ClCompile Include="WalkPlayerState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClimbEnemyState.h" />
     <ClInclude Include="ClimbPlayerState.h" />
+    <ClInclude Include="EggComponent.h" />
+    <ClInclude Include="EnemyState.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameCommands.h" />
+    <ClInclude Include="HotdogComponent.h" />
     <ClInclude Include="IdlePlayerState.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="LivesComponent.h" />
     <ClInclude Include="LivesObserverComponent.h" />
+    <ClInclude Include="PickleComponent.h" />
     <ClInclude Include="PlatformComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerState.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RotationComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
     <ClInclude Include="ScoreObserverComponent.h" />
+    <ClInclude Include="WalkingEnemyState.h" />
     <ClInclude Include="WalkPlayerState.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BurgerTime.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,10 +9,11 @@ namespace dae
 	{
 	private:
 		GameObject* m_pGameObject;
+		float m_MoveSpeed;
 	protected:
 		GameObject* GetGameObject() { return m_pGameObject; }
 	public:
-		WalkStartCommand(GameObject* pGameObject);
+		WalkStartCommand(GameObject* pGameObject, float moveSpeed);
 
 		virtual ~WalkStartCommand() override = default;
 		WalkStartCommand(const WalkStartCommand& other) = delete;
@@ -27,10 +28,11 @@ namespace dae
 	{
 	private:
 		GameObject* m_pGameObject;
+		float m_MoveSpeed;
 	protected:
 		GameObject* GetGameObject() { return m_pGameObject; }
 	public:
-		ClimbStartCommand(GameObject* pGameObject);
+		ClimbStartCommand(GameObject* pGameObject, float moveSpeed);
 
 		virtual ~ClimbStartCommand() override = default;
 		ClimbStartCommand(const ClimbStartCommand& other) = delete;
@@ -46,7 +48,6 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 		float m_MoveSpeed;
-		//float m_Acceleration; // Not present in my game
 	protected:
 		GameObject* GetGameObject() { return m_pGameObject; }
 	public:
@@ -135,20 +136,20 @@ namespace dae
 		void Execute(float elapsedSec) override;
 	};
 
-	class ScoreSmallCommand final : public Command
+	class HotdogKilledCommand final : public Command
 	{
 	private:
 		GameObject* m_pGameObject;
 	protected:
 		GameObject* GetGameObject() { return m_pGameObject; }
 	public:
-		ScoreSmallCommand(GameObject* pGameObject);
+		HotdogKilledCommand(GameObject* pGameObject);
 
-		virtual ~ScoreSmallCommand() override = default;
-		ScoreSmallCommand(const ScoreSmallCommand& other) = delete;
-		ScoreSmallCommand(ScoreSmallCommand&& other) = delete;
-		ScoreSmallCommand& operator=(const ScoreSmallCommand& other) = delete;
-		ScoreSmallCommand& operator=(ScoreSmallCommand&& other) = delete;
+		virtual ~HotdogKilledCommand() override = default;
+		HotdogKilledCommand(const HotdogKilledCommand& other) = delete;
+		HotdogKilledCommand(HotdogKilledCommand&& other) = delete;
+		HotdogKilledCommand& operator=(const HotdogKilledCommand& other) = delete;
+		HotdogKilledCommand& operator=(HotdogKilledCommand&& other) = delete;
 
 		void Execute(float elapsedSec) override;
 	};
