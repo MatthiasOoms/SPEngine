@@ -13,9 +13,8 @@ dae::ClimbEnemyState::ClimbEnemyState(GameObject* pPlayer, float speed)
 
 void dae::ClimbEnemyState::Update(float elapsedSec)
 {
-	// I am already touching a ladder because I am in the ClimbState
-	// If the any ladder is below me, I will start climbing it
-	// If the any ladder is above me, I will start climbing it
+	// Get the enemy's position
+	const auto enemyPos{ GetEnemy()->GetTransform().GetWorldPosition() };
 
 	// For every ladder
 	for (auto ladder : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ladder"))
@@ -23,22 +22,29 @@ void dae::ClimbEnemyState::Update(float elapsedSec)
 		// Get the ladder's position
 		const auto ladderPos{ ladder->GetTransform().GetWorldPosition() };
 
-		// Get the enemy's position
-		const auto enemyPos{ GetEnemy()->GetTransform().GetWorldPosition() };
-
-		// If the ladder is below me
-		if (ladderPos.y < enemyPos.y)
+		// If my center x is touching the ladder
+		if (enemyPos.x > ladderPos.x &&
+			enemyPos.x < ladderPos.x + ladder->GetTransform().GetDimensions().x)
 		{
-			// Start climbing the ladder
-			dae::ClimbCommand climbCommand{ GetEnemy(), 75 };
-			climbCommand.Execute(elapsedSec);
-		}
-		// If the ladder is above me
-		else if (ladderPos.y > enemyPos.y)
-		{
-			// Start climbing the ladder
-			dae::ClimbCommand climbCommand{ GetEnemy(), -75 };
-			climbCommand.Execute(elapsedSec);
+			// If I am touching the ladder
+			if (enemyPos.y + GetEnemy()->GetTransform().GetDimensions().y >= ladderPos.y &&
+				enemyPos.y <= ladderPos.y + ladder->GetTransform().GetDimensions().y)
+			{
+				// If the ladder is below me
+				if (ladderPos.y < enemyPos.y)
+				{
+					// Start climbing the ladder
+					dae::ClimbCommand climbCommand{ GetEnemy(), 75 };
+					climbCommand.Execute(elapsedSec);
+				}
+				// If the ladder is above me
+				else if (ladderPos.y > enemyPos.y)
+				{
+					// Start climbing the ladder
+					dae::ClimbCommand climbCommand{ GetEnemy(), -75 };
+					climbCommand.Execute(elapsedSec);
+				}
+			}
 		}
 	}
 }

@@ -29,48 +29,6 @@
 // Platform
 #include "PlatformComponent.h"
 
-bool dae::WalkCommand::CanWalk() const
-{
-	if (GetGameObject()->HasComponent<PlayerComponent>())
-	{
-		// If the player is climbing, they can't walk
-		if (dynamic_cast<ClimbPlayerState*>(GetGameObject()->GetComponent<PlayerComponent>()->GetCurrentState()))
-		{
-			return false;
-		}
-	}
-	else if (GetGameObject()->HasComponent<HotdogComponent>())
-	{
-		// If the enemy is climbing, they can't walk
-		if (dynamic_cast<ClimbEnemyState*>(GetGameObject()->GetComponent<HotdogComponent>()->GetCurrentState()))
-		{
-			return false;
-		}
-	}
-	else if (GetGameObject()->HasComponent<EggComponent>())
-	{
-		// If the enemy is climbing, they can't walk
-		if (dynamic_cast<ClimbEnemyState*>(GetGameObject()->GetComponent<EggComponent>()->GetCurrentState()))
-		{
-			return false;
-		}
-	}
-	else if (GetGameObject()->HasComponent<PickleComponent>())
-	{
-		// If the enemy is climbing, they can't walk
-		if (dynamic_cast<ClimbEnemyState*>(GetGameObject()->GetComponent<PickleComponent>()->GetCurrentState()))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		throw std::exception("Object is not a player or enemy");
-	}
-
-	return true;
-}
-
 dae::WalkCommand::WalkCommand(GameObject* pGameObject, float speed)
 	: Command{}
 	, m_pGameObject{ pGameObject }
@@ -80,57 +38,51 @@ dae::WalkCommand::WalkCommand(GameObject* pGameObject, float speed)
 
 void dae::WalkCommand::Execute(float elapsedSec)
 {
-	auto temp = GetGameObject();
-	if (temp)
+	// Move on the x-axis
+	bool canWalk = false;
+
+	auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
+	auto selfDims = GetGameObject()->GetTransform().GetDimensions();
+
+	auto pPlatforms = SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform");
+	for (auto pPlatform : pPlatforms)
 	{
-		// Move on the x-axis
-		bool canWalk = false;
+		// Get the player's position and dimensions
+		auto platformPos = pPlatform->GetTransform().GetWorldPosition();
+		auto platformDims = pPlatform->GetTransform().GetDimensions();
 
-		auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
-		auto selfDims = GetGameObject()->GetTransform().GetDimensions();
-
-		auto pPlatforms = SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform");
-		for (auto pPlatform : pPlatforms)
+		// If self left is in the object
+		if (selfPos.x <= platformPos.x + platformDims.x && selfPos.x >= platformPos.x)
 		{
-			// Get the player's position and dimensions
-			auto platformPos = pPlatform->GetTransform().GetWorldPosition();
-			auto platformDims = pPlatform->GetTransform().GetDimensions();
-
-			// If self left is in the object
-			if (selfPos.x <= platformPos.x + platformDims.x && selfPos.x >= platformPos.x)
+			// If self right is in the object
+			if (selfPos.x + selfDims.x <= platformPos.x + platformDims.x && selfPos.x + selfDims.x >= platformPos.x)
 			{
-				// If self right is in the object
-				if (selfPos.x + selfDims.x <= platformPos.x + platformDims.x && selfPos.x + selfDims.x >= platformPos.x)
+				// If self is above the object and has some overlap with the platform object on the y-axis
+				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
 				{
-					// If self is above the object and has some overlap with the platform object on the y-axis
-					if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
-					{
-						canWalk = true;
-					}
+					canWalk = true;
 				}
 			}
 		}
+	}
 
-		canWalk = CanWalk();
+	if (canWalk)
+	{
+		GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ m_MoveSpeed * elapsedSec, 0, 0 });
+	}
 
-		if (canWalk)
+	// Get the PlayerComponent
+	if (GetGameObject()->HasComponent<PlayerComponent>())
+	{
+		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
+		// If the player is not walking or climbing, set the state to walking
+		if (dynamic_cast<WalkPlayerState*>(stateComp->GetCurrentState()) == nullptr)
 		{
-			GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ m_MoveSpeed * elapsedSec, 0, 0 });
-		}
-
-		// Get the PlayerComponent
-		if (GetGameObject()->HasComponent<PlayerComponent>())
-		{
-			auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
-			// If the player is not walking or climbing, set the state to walking
-			if (dynamic_cast<WalkPlayerState*>(stateComp->GetCurrentState()) == nullptr)
+			if (dynamic_cast<ClimbPlayerState*>(stateComp->GetCurrentState()) == nullptr)
 			{
-				if (dynamic_cast<ClimbPlayerState*>(stateComp->GetCurrentState()) == nullptr)
-				{
-					// Set texture to PeterWalk if not already
-					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PeterWalk.png"));
-					stateComp->SetState(new WalkPlayerState{ GetGameObject() });
-				}
+				// Set texture to PeterWalk if not already
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PeterWalk.png"));
+				stateComp->SetState(new WalkPlayerState{ GetGameObject() });
 			}
 		}
 	}
@@ -381,6 +333,111 @@ void dae::ClimbStartCommand::Execute(float)
 	HandleEnemy();
 }
 
+void dae::ClimbEndCommand::HandlePlayer()
+{
+	if (GetGameObject()->HasComponent<PlayerComponent>())
+	{
+		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
+		// Set texture to idle if touching platform
+		for (auto& platform : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform"))
+		{
+			auto platformPos = platform->GetTransform().GetWorldPosition();
+			auto platformDims = platform->GetTransform().GetDimensions();
+
+			auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
+			auto selfDims = GetGameObject()->GetTransform().GetDimensions();
+
+			if (selfPos.x + selfDims.x >= platformPos.x && selfPos.x <= platformPos.x + platformDims.x)
+			{
+				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
+				{
+					// Set the player texture to the Idle texture
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("Peter.png"));
+					// Set the player state to idle
+					stateComp->SetState(new IdlePlayerState{ GetGameObject() });
+				}
+			}
+		}
+	}
+}
+
+void dae::ClimbEndCommand::HandleEnemy()
+{
+	if (GetGameObject()->HasComponent<HotdogComponent>())
+	{
+		auto stateComp = GetGameObject()->GetComponent<HotdogComponent>();
+		// Set texture to idle if touching platform
+		for (auto& platform : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform"))
+		{
+			auto platformPos = platform->GetTransform().GetWorldPosition();
+			auto platformDims = platform->GetTransform().GetDimensions();
+
+			auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
+			auto selfDims = GetGameObject()->GetTransform().GetDimensions();
+
+			if (selfPos.x + selfDims.x >= platformPos.x && selfPos.x <= platformPos.x + platformDims.x)
+			{
+				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
+				{
+					// Set the player texture to the Idle texture
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("Peter.png"));
+					// Set the player state to idle
+					stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
+				}
+			}
+		}
+	}
+	// If enemy is Egg
+	else if (GetGameObject()->HasComponent<EggComponent>())
+	{
+		auto stateComp = GetGameObject()->GetComponent<EggComponent>();
+		// Set texture to idle if touching platform
+		for (auto& platform : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform"))
+		{
+			auto platformPos = platform->GetTransform().GetWorldPosition();
+			auto platformDims = platform->GetTransform().GetDimensions();
+
+			auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
+			auto selfDims = GetGameObject()->GetTransform().GetDimensions();
+
+			if (selfPos.x + selfDims.x >= platformPos.x && selfPos.x <= platformPos.x + platformDims.x)
+			{
+				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
+				{
+					// Set the player texture to the Idle texture
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("Peter.png"));
+					// Set the player state to idle
+					stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
+				}
+			}
+		}
+	}
+	else if (GetGameObject()->HasComponent<PickleComponent>())
+	{
+		auto stateComp = GetGameObject()->GetComponent<PickleComponent>();
+		// Set texture to idle if touching platform
+		for (auto& platform : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform"))
+		{
+			auto platformPos = platform->GetTransform().GetWorldPosition();
+			auto platformDims = platform->GetTransform().GetDimensions();
+
+			auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
+			auto selfDims = GetGameObject()->GetTransform().GetDimensions();
+
+			if (selfPos.x + selfDims.x >= platformPos.x && selfPos.x <= platformPos.x + platformDims.x)
+			{
+				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
+				{
+					// Set the player texture to the Idle texture
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("Peter.png"));
+					// Set the player state to idle
+					stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
+				}
+			}
+		}
+	}
+}
+
 dae::ClimbEndCommand::ClimbEndCommand(GameObject* pGameObject)
 	: Command{}
 	, m_pGameObject{ pGameObject }
@@ -389,33 +446,7 @@ dae::ClimbEndCommand::ClimbEndCommand(GameObject* pGameObject)
 
 void dae::ClimbEndCommand::Execute(float)
 {
-	if (GetGameObject()->HasComponent<PlayerComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
-		if (dynamic_cast<IdlePlayerState*>(stateComp->GetCurrentState()) == nullptr)
-		{			
-			// Set texture to idle if touching platform
-			for (auto& platform : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform"))
-			{
-				auto platformPos = platform->GetTransform().GetWorldPosition();
-				auto platformDims = platform->GetTransform().GetDimensions();
-
-				auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
-				auto selfDims = GetGameObject()->GetTransform().GetDimensions();
-
-				if (selfPos.x + selfDims.x >= platformPos.x && selfPos.x <= platformPos.x + platformDims.x)
-				{
-					if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
-					{
-						// Set the player texture to the Idle texture
-						GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("Peter.png"));
-						// Set the player state to idle
-						stateComp->SetState(new IdlePlayerState{ GetGameObject() });
-					}
-				}
-			}
-		}
-	}
+	HandlePlayer();
 
 	// Handle enemies
 	if (GetGameObject()->HasComponent<dae::HotdogComponent>())

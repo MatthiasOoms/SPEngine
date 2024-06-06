@@ -55,8 +55,6 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 		float m_MoveSpeed;
-
-		bool CanWalk() const;
 	protected:
 		GameObject* GetGameObject() const { return m_pGameObject; }
 	public:
@@ -95,9 +93,13 @@ namespace dae
 	{
 	private:
 		GameObject* m_pGameObject;
+
+		void HandlePlayer();
+		void HandleEnemy();
 	protected:
 		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
+		
 		ClimbEndCommand(GameObject* pGameObject);
 
 		virtual ~ClimbEndCommand() override = default;
