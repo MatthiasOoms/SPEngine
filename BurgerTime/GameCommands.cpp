@@ -226,8 +226,41 @@ void dae::WalkStartCommand::HandleEnemy()
 					break;
 				}
 
+				// Find closest player
+				GameObject* pClosestPlayer{ dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front() };
+				for (auto player : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player"))
+				{
+					// Calculate distance to player
+					const auto playerPos{ pClosestPlayer->GetTransform().GetWorldPosition() };
+					const auto newPlayerPos{ player->GetTransform().GetWorldPosition() };
+					const auto distanceToPlayer{ (playerPos - GetGameObject()->GetTransform().GetWorldPosition()) };
+					const auto newDistanceToPlayer{ (newPlayerPos - GetGameObject()->GetTransform().GetWorldPosition()) };
+
+					// Save closest player
+					if (glm::length(newDistanceToPlayer) < glm::length(distanceToPlayer))
+					{
+						pClosestPlayer = player;
+					}
+				}
+
+				// Move towards nearest player ( speed = 75 if right, -75 if left)
+				const auto playerPos{ pClosestPlayer->GetTransform().GetWorldPosition() };
+				const auto enemyPos{ GetGameObject()->GetTransform().GetWorldPosition() };
+				const auto direction{ playerPos - enemyPos };
+
+				// Set speed
+				float speed{};
+				if (direction.x > 0)
+				{
+					speed = 75.f;
+				}
+				else
+				{
+					speed = -75.f;
+				}
+
 				// Set the state to walking
-				stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject() });
+				stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject(), speed });
 			}
 		}		
 	}
@@ -379,8 +412,41 @@ void dae::ClimbEndCommand::HandleEnemy()
 						break;
 					}
 
+					// Find closest player
+					GameObject* pClosestPlayer{ dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front() };
+					for (auto player : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player"))
+					{
+						// Calculate distance to player
+						const auto playerPos{ pClosestPlayer->GetTransform().GetWorldPosition() };
+						const auto newPlayerPos{ player->GetTransform().GetWorldPosition() };
+						const auto distanceToPlayer{ (playerPos - GetGameObject()->GetTransform().GetWorldPosition()) };
+						const auto newDistanceToPlayer{ (newPlayerPos - GetGameObject()->GetTransform().GetWorldPosition()) };
+
+						// Save closest player
+						if (glm::length(newDistanceToPlayer) < glm::length(distanceToPlayer))
+						{
+							pClosestPlayer = player;
+						}
+					}
+
+					// Move towards nearest player ( speed = 75 if right, -75 if left)
+					const auto playerPos{ pClosestPlayer->GetTransform().GetWorldPosition() };
+					const auto enemyPos{ GetGameObject()->GetTransform().GetWorldPosition() };
+					const auto direction{ playerPos - enemyPos };
+
+					// Set speed
+					float speed{};
+					if (direction.x > 0)
+					{
+						speed = 75.f;
+					}
+					else
+					{
+						speed = -75.f;
+					}
+
 					// Set the state to walking
-					stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
+					stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject(), speed });
 				}
 			}
 		}
@@ -462,8 +528,14 @@ void dae::ClimbCommand::Execute(float elapsedSec)
 			}
 		}
 		else if (GetGameObject()->HasComponent<EnemyComponent>())
-		{
+		{			
+			// Get EnemyComponent and set the state to walking
 			auto stateComp = GetGameObject()->GetComponent<EnemyComponent>();
+
+			// Do WalkStartCommand
+			dae::WalkStartCommand walkStartCommand{ GetGameObject(), m_ClimbSpeed };
+			walkStartCommand.Execute(elapsedSec);
+
 			if (dynamic_cast<WalkingEnemyState*>(stateComp->GetCurrentState()) == nullptr)
 			{
 				// Set the player texture to the Moving texture
@@ -482,7 +554,41 @@ void dae::ClimbCommand::Execute(float elapsedSec)
 					break;
 				}
 
-				stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
+				// Find closest player
+				GameObject* pClosestPlayer{ dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front() };
+				for (auto player : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player"))
+				{
+					// Calculate distance to player
+					const auto playerPos{ pClosestPlayer->GetTransform().GetWorldPosition() };
+					const auto newPlayerPos{ player->GetTransform().GetWorldPosition() };
+					const auto distanceToPlayer{ (playerPos - GetGameObject()->GetTransform().GetWorldPosition()) };
+					const auto newDistanceToPlayer{ (newPlayerPos - GetGameObject()->GetTransform().GetWorldPosition()) };
+
+					// Save closest player
+					if (glm::length(newDistanceToPlayer) < glm::length(distanceToPlayer))
+					{
+						pClosestPlayer = player;
+					}
+				}
+
+				// Move towards nearest player ( speed = 75 if right, -75 if left)
+				const auto playerPos{ pClosestPlayer->GetTransform().GetWorldPosition() };
+				const auto enemyPos{ GetGameObject()->GetTransform().GetWorldPosition() };
+				const auto direction{ playerPos - enemyPos };
+
+				// Set speed
+				float speed{};
+				if (direction.x > 0)
+				{
+					speed = 75.f;
+				}
+				else
+				{
+					speed = -75.f;
+				}
+
+				// Set the state to walking
+				stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject(), speed });
 			}
 		}
 	}

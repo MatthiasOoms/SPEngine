@@ -9,76 +9,56 @@
 dae::WalkingEnemyState::WalkingEnemyState(GameObject* pPlayer)
 	: EnemyState(pPlayer)
 	, m_Speed{ 75 }
+	, m_AccumulatedTime{ 0 }
+	, m_TimeToClimb{ 1.f }
+{
+}
+
+dae::WalkingEnemyState::WalkingEnemyState(GameObject* pPlayer, float speed)
+	: EnemyState(pPlayer)
+	, m_Speed{ speed }
+	, m_AccumulatedTime{ 0 }
+	, m_TimeToClimb{ 1.f }
 {
 }
 
 void dae::WalkingEnemyState::Update(float elapsedSec)
 {
-	// Find closest player
-	GameObject* pClosestPlayer{ dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front() };
-	for (auto player : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player"))
-	{
-		// Calculate distance to player
-		const auto playerPos{ pClosestPlayer->GetTransform().GetWorldPosition() };
-		const auto newPlayerPos{ player->GetTransform().GetWorldPosition() };
-		const auto distanceToPlayer{ (playerPos - GetEnemy()->GetTransform().GetWorldPosition()) };
-		const auto newDistanceToPlayer{ (newPlayerPos - GetEnemy()->GetTransform().GetWorldPosition()) };
+	// Update AccumulatedTime
+	m_AccumulatedTime += elapsedSec;
 
-		// Save closest player
-		if (glm::length(newDistanceToPlayer) < glm::length(distanceToPlayer))
-		{
-			pClosestPlayer = player;
-		}
-	}
-
-	// Move towards nearest player ( speed = 75 if right, -75 if left)
-	const auto playerPos{ pClosestPlayer->GetTransform().GetWorldPosition() };
+	// Get the enemy's position
 	const auto enemyPos{ GetEnemy()->GetTransform().GetWorldPosition() };
-	const auto direction{ playerPos - enemyPos };
-
-	// Set speed
-	float speed{};
-	if (direction.x > 0)
-	{
-		speed = 75.f;
-	}
-	else
-	{
-		speed = -75.f;
-	}
-
-	// If speed changed, update speed
-	if (m_Speed != speed)
-	{
-		// Start moving
-		m_Speed = speed;
-		dae::WalkStartCommand moveStartCommand{ GetEnemy(), m_Speed };
-		moveStartCommand.Execute(elapsedSec);
-	}
-	else
-	{
-		// Continue moving
-		dae::WalkCommand moveCommand{ GetEnemy(), m_Speed };
-		moveCommand.Execute(elapsedSec);
-	}
 
 	// If I am touching a ladder, climb it
 	if (auto ladder = IsTouchingLadder())
 	{
-		// Make ClimbStartCommand
-		// If ladder is above me, speed = -75
-		if (ladder->GetTransform().GetWorldPosition().y > enemyPos.y)
+		// If timer is up, start climbing
+		if (m_AccumulatedTime >= m_TimeToClimb)
 		{
-			m_Speed = -abs(m_Speed);
-		}
-		else
-		{
-			m_Speed = abs(m_Speed);
-		}
+			// If ladder is above me, speed = -75
+			if (ladder->GetTransform().GetWorldPosition().y < enemyPos.y)
+			{
+				m_Speed = -abs(m_Speed);
+			}
+			else
+			{
+				m_Speed = abs(m_Speed);
+			}
 
-		dae::ClimbStartCommand climbStartCommand{ GetEnemy(), m_Speed };
-		climbStartCommand.Execute(elapsedSec);
+			// Start climbing
+			dae::ClimbStartCommand climbStartCommand{ GetEnemy(), m_Speed };
+			climbStartCommand.Execute(elapsedSec);
+
+			// Reset timer
+			m_AccumulatedTime = 0;
+			return;
+		}
 	}
+
+	// Continue moving
+	dae::WalkCommand moveCommand{ GetEnemy(), m_Speed };
+	moveCommand.Execute(elapsedSec);
 }
 
 void dae::WalkingEnemyState::Render(float)

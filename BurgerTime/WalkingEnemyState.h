@@ -8,6 +8,7 @@ namespace dae
 	{
 	public:
 		WalkingEnemyState(GameObject* pPlayer);
+		WalkingEnemyState(GameObject* pPlayer, float speed);
 
 		virtual void Update(float elapsedSec) override;
 		virtual void Render(float elapsedSec) override;
@@ -17,6 +18,8 @@ namespace dae
 
 	private:
 		float m_Speed;
+		float m_AccumulatedTime;
+		float m_TimeToClimb;
 
 		GameObject* IsTouchingLadder();
 	};
