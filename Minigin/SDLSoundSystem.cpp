@@ -1,15 +1,13 @@
-#pragma once
+#include "SoundServiceLocator.h"
 #include "SDLSoundSystem.h"
+#include <SDL_mixer.h> 
 #include <iostream>
 #include <thread>
 #include <string>
 #include <queue>
+#include <SDL.h>
 #include <mutex>
 #include <map>
-
-#include <SDL.h>
-#include <SDL_mixer.h> 
-#include "SoundServiceLocator.h"
 
 class dae::SDLSoundSystem::SDLSoundSystemImpl
 {

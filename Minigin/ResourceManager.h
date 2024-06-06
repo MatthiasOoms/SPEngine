@@ -1,7 +1,8 @@
-#pragma once
+#ifndef RESOURCEMANAGER_H
+#define RESOURCEMANAGER_H
+#include "Singleton.h"
 #include <string>
 #include <memory>
-#include "Singleton.h"
 
 namespace dae
 {
@@ -21,3 +22,5 @@ namespace dae
 		std::string m_dataPath;
 	};
 }
+
+#endif // ! RESOURCEMANAGER_H

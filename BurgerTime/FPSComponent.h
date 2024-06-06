@@ -1,7 +1,6 @@
-#pragma once
+#ifndef FPSCOMPONENT_H
+#define FPSCOMPONENT_H
 #include "Component.h"
-#include <string>
-#include <memory>
 
 namespace dae
 {
@@ -24,3 +23,5 @@ namespace dae
         TextComponent* m_pTextComponent;
     };
 }
+
+#endif // ! FPSCOMPONENT_H

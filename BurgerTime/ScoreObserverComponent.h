@@ -1,8 +1,9 @@
-#pragma once
-#include <string>
-#include <vector>
+#ifndef SCOREOBSERVERCOMPONENT_H
+#define SCOREOBSERVERCOMPONENT_H
 #include "Component.h"
 #include "Observer.h"
+#include <string>
+#include <vector>
 
 namespace dae
 {
@@ -28,3 +29,5 @@ namespace dae
 		std::vector<Subject*> m_pSubjects;
 	};
 }
+
+#endif // ! SCOREOBSERVERCOMPONENT_H

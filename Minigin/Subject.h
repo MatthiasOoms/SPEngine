@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SUBJECT_H
+#define SUBJECT_H
 #include <vector>
 
 namespace dae
@@ -21,3 +22,5 @@ namespace dae
 		void OnNotify(GameObject* obj, Event event);
 	};
 }
+
+#endif // ! SUBJECT_H

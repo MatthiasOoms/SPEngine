@@ -1,4 +1,3 @@
-#pragma once
 #include "TextureComponent.h"
 #include "Texture2D.h"
 #include "GameObject.h"

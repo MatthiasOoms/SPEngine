@@ -1,6 +1,6 @@
-#pragma once
+#ifndef SDLSOUNDSYSTEM_H
+#define SDLSOUNDSYSTEM_H
 #include "SoundSystem.h"
-#include <string>
 #include <thread>
 
 namespace dae
@@ -32,3 +32,5 @@ namespace dae
 		void PushOnQueue(Sound audio);
 	};
 }
+
+#endif // ! SDLSOUNDSYSTEM_H

@@ -1,4 +1,5 @@
 #include "LoggingSoundSystem.h"
+#include <iostream>
 
 void dae::LoggingSoundSystem::InternalPlay(Sound)
 {

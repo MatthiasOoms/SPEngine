@@ -1,8 +1,9 @@
-#pragma once
-#include <string>
-#include <vector>
+#ifndef LIVESOBSERVERCOMPONENT_H
+#define LIVESOBSERVERCOMPONENT_H
 #include "Component.h"
 #include "Observer.h"
+#include <vector>
+#include <string>
 
 namespace dae
 {
@@ -28,3 +29,5 @@ namespace dae
 		std::vector<Subject*> m_pSubjects;
 	};
 }
+
+#endif // ! LIVESOBSERVERCOMPONENT_H

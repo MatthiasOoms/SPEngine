@@ -1,17 +1,14 @@
+#include <algorithm>
 #include "Scene.h"
 #include "GameObject.h"
 
-#include <algorithm>
+unsigned int dae::Scene::m_IdCounter = 0;
 
-using namespace dae;
+dae::Scene::Scene(const std::string& name) : m_Name(name) {}
 
-unsigned int Scene::m_IdCounter = 0;
-
-Scene::Scene(const std::string& name) : m_Name(name) {}
-
-std::vector<GameObject*> dae::Scene::GetObjectsByTag(std::string tag) const
+std::vector<dae::GameObject*> dae::Scene::GetObjectsByTag(std::string tag) const
 {
-	std::vector<GameObject*> tempVec;
+	std::vector<dae::GameObject*> tempVec;
 	for (const auto& object : m_Objects)
 	{
 		if (object->GetTag() == tag)
@@ -22,24 +19,24 @@ std::vector<GameObject*> dae::Scene::GetObjectsByTag(std::string tag) const
 	return tempVec;
 }
 
-Scene::~Scene() = default;
+dae::Scene::~Scene() = default;
 
-void Scene::Add(std::unique_ptr<GameObject> object)
+void dae::Scene::Add(std::unique_ptr<dae::GameObject> object)
 {
 	m_Objects.emplace_back(std::move(object));
 }
 
-void Scene::Remove(std::unique_ptr<GameObject>& object)
+void dae::Scene::Remove(std::unique_ptr<dae::GameObject>& object)
 {
 	m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), object), m_Objects.end());
 }
 
-void Scene::RemoveAll()
+void dae::Scene::RemoveAll()
 {
 	m_Objects.clear();
 }
 
-void Scene::Update(const float deltaTime)
+void dae::Scene::Update(const float deltaTime)
 {
 	for(size_t i{}; i < m_Objects.size(); ++i)
 	{
@@ -75,7 +72,7 @@ void Scene::Update(const float deltaTime)
 	}
 }
 
-void Scene::Render(const float deltaTime) const
+void dae::Scene::Render(const float deltaTime) const
 {
 	for (const auto& object : m_Objects)
 	{

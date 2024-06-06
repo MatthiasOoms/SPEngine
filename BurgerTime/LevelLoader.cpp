@@ -1,20 +1,19 @@
-#include "LevelLoader.h"
-#include "GameObject.h"
+#include <memory>
+#include <fstream>
 #include <TextureComponent.h>
 #include <ResourceManager.h>
-#include "PlatformComponent.h"
-#include "SceneManager.h"
-#include "Scene.h"
-#include <fstream>
-#include "json.hpp" // nlohmann::json
-#include "PlayerComponent.h"
 #include <InputManager.h>
+#include "LevelLoader.h"
+#include "GameObject.h"
+#include <SceneManager.h>
+#include <Scene.h>
+#include "PlatformComponent.h"
+#include "PlayerComponent.h"
 #include "GameCommands.h"
-#include <memory>
 #include "HotdogComponent.h"
 #include "EggComponent.h"
 #include "PickleComponent.h"
-//#include <SpriteComponent.h>
+#include "json.hpp" // nlohmann::json
 
 void dae::LevelLoader::Init(const std::string& data)
 {

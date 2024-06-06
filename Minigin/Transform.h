@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
 #include <glm/glm.hpp>
 
 namespace dae
@@ -35,3 +36,5 @@ namespace dae
 		GameObject* m_pOwner;
 	};
 }
+
+#endif // ! TRANSFORM_H

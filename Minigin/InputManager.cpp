@@ -1,9 +1,9 @@
-#include <SDL.h>
-#include <functional>
-#include <algorithm>
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include <functional>
+#include <algorithm>
+#include <SDL.h>
 
 bool dae::InputManager::ProcessInput(float elapsedSec)
 {

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WALKINGENEMYSTATE_H
+#define WALKINGENEMYSTATE_H
 #include "EnemyState.h"
 
 namespace dae
@@ -15,3 +16,5 @@ namespace dae
 		virtual void OnExit() override;
 	};
 }
+
+#endif // ! WALKINGENEMYSTATE_H

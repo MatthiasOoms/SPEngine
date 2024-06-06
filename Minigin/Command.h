@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COMMAND_H
+#define COMMAND_H
 #include <glm/glm.hpp>
 #include <string>
 
@@ -20,4 +21,4 @@ namespace dae
 		virtual void Execute(float) = 0;
 	};
 }
-
+#endif // ! COMMAND_H

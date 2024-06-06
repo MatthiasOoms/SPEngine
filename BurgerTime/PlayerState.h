@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLAYER_STATE_H
+#define PLAYER_STATE_H
 
 namespace dae
 {
@@ -28,3 +29,5 @@ namespace dae
 		GameObject* m_pPlayer;
 	};
 }
+
+#endif // ! PLAYER_STATE_H

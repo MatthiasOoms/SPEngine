@@ -1,8 +1,9 @@
-#pragma once
+#ifndef SCENEMANAGER_H
+#define SCENEMANAGER_H
+#include "Singleton.h"
 #include <vector>
 #include <string>
 #include <memory>
-#include "Singleton.h"
 
 namespace dae
 {
@@ -27,3 +28,5 @@ namespace dae
 		std::shared_ptr<Scene> m_ActiveScene;
 	};
 }
+
+#endif // ! SCENEMANAGER_H

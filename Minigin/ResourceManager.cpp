@@ -1,10 +1,10 @@
-#include <stdexcept>
+#include "ResourceManager.h"
+#include "Texture2D.h"
+#include "Renderer.h"
+#include "Font.h"
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-#include "ResourceManager.h"
-#include "Renderer.h"
-#include "Texture2D.h"
-#include "Font.h"
+#include <stdexcept>
 
 void dae::ResourceManager::Init(const std::string& dataPath)
 {

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLATFORMCOMPONENT_H
+#define PLATFORMCOMPONENT_H
 #include "Component.h"
 #include <vector>
 #include <string>
@@ -30,3 +31,4 @@ namespace dae
 	};
 }
 
+#endif // ! PLATFORMCOMPONENT_H

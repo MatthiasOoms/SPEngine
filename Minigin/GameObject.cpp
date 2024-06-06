@@ -1,8 +1,6 @@
-#include <string>
 #include "GameObject.h"
-#include "ResourceManager.h"
-#include "Renderer.h"
 #include "Component.h"
+#include <string>
 
 dae::GameObject::GameObject(std::string tag)
 	: m_pParent{ nullptr }

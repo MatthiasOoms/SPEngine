@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IDLE_PLAYER_STATE_H
+#define IDLE_PLAYER_STATE_H
 #include "PlayerState.h"
 
 namespace dae
@@ -16,3 +17,4 @@ namespace dae
 	};
 }
 
+#endif // ! IDLE_PLAYER_STATE_H

@@ -1,7 +1,8 @@
-#pragma once
+#ifndef TEXTURECOMPONENT_H
+#define TEXTURECOMPONENT_H
+#include <glm/vec2.hpp>
 #include "Component.h"
 #include <memory>
-#include <glm/vec2.hpp>
 
 namespace dae
 {
@@ -31,3 +32,4 @@ namespace dae
 	};
 };
 
+#endif // ! TEXTURECOMPONENT_H

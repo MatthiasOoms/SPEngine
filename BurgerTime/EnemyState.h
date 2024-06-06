@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ENEMYSTATE_H
+#define ENEMYSTATE_H
 
 namespace dae
 {
@@ -28,3 +29,5 @@ namespace dae
 		GameObject* m_pEnemy;
 	};
 }
+
+#endif // ! ENEMYSTATE_H

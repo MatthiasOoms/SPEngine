@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
 #include "Transform.h"
 #include <memory>
 #include <vector>
@@ -123,3 +124,5 @@ namespace dae
 		return false;
 	}
 }
+
+#endif // ! GAMEOBJECT_H

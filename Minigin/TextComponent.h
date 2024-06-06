@@ -1,6 +1,6 @@
-#pragma once
+#ifndef TEXTCOMPONENT_H
+#define TEXTCOMPONENT_H
 #include "Component.h"
-#include <SDL_ttf.h>
 #include <memory>
 #include <string>
 
@@ -39,3 +39,4 @@ namespace dae
 	};
 }
 
+#endif // ! TEXTCOMPONENT_H

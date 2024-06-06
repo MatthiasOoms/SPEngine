@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ROTATIONCOMPONENT_H
+#define ROTATIONCOMPONENT_H
 #include "Component.h"
 
 namespace dae
@@ -27,3 +28,5 @@ namespace dae
 		float GetDistance(float x, float y, float z) const;
 	};
 }
+
+#endif // ! ROTATIONCOMPONENT_H

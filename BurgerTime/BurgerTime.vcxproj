@@ -231,15 +231,11 @@ xcopy "$(SolutionDir)Data\*" "$(OutputPath)..\Data\" /E /Y
     <ClInclude Include="PlatformComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerState.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="RotationComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
     <ClInclude Include="ScoreObserverComponent.h" />
     <ClInclude Include="WalkingEnemyState.h" />
     <ClInclude Include="WalkPlayerState.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="BurgerTime.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

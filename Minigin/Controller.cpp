@@ -1,7 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
+#include "Controller.h"
 #include <Windows.h>
 #include <Xinput.h>
-#include "Controller.h"
 
 #pragma comment(lib, "xinput.lib")
 

@@ -2,7 +2,7 @@
 #include "SoundServiceLocator.h"
 #include "LivesComponent.h"
 #include "TextComponent.h"
-#include "SoundSystem.h"
+#include <SoundSystem.h>
 #include "GameObject.h"
 #include "Subject.h"
 

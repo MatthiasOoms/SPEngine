@@ -1,7 +1,7 @@
-#pragma once
-#include <memory>
+#ifndef LOGGINGSOUNDSYSTEM_H
+#define LOGGINGSOUNDSYSTEM_H
 #include "SoundSystem.h"
-#include <iostream>
+#include <memory>
 
 namespace dae
 {
@@ -27,3 +27,5 @@ namespace dae
 		void PushOnQueue(Sound audio) override;
 	};
 }
+
+#endif // ! LOGGINGSOUNDSYSTEM_H

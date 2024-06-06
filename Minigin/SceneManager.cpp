@@ -1,6 +1,6 @@
+#include <stdexcept>
 #include "SceneManager.h"
 #include "Scene.h"
-#include <stdexcept>
 
 void dae::SceneManager::Update(const float deltaTime)
 {

@@ -1,16 +1,14 @@
-#pragma once
-
-// TODO : Use Include guards instead of #pragma once
-
-#include "Singleton.h"
-#include "Controller.h"
-#include "Command.h"
-#include "SceneManager.h"
+#ifndef INPUTMANAGER_H
+#define INPUTMANAGER_H
+#include <SDL_scancode.h>
+#include <string>
 #include <vector>
 #include <memory>
 #include <map>
-#include <SDL_scancode.h>
-#include <string>
+#include "SceneManager.h"
+#include "Controller.h"
+#include "Singleton.h"
+#include "Command.h"
 
 namespace dae
 {
@@ -64,5 +62,6 @@ namespace dae
 		void RemoveGlobalCommand(int controllerIdx, Controller::ControllerButton button, keyState state);
 		void RemoveGlobalCommand(SDL_Scancode key, keyState state);
 	};
-
 }
+
+#endif // !INPUTMANAGER_H

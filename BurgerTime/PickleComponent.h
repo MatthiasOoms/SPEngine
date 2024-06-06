@@ -1,6 +1,6 @@
-#pragma once
+#ifndef PICKLECOMPONENT_H
+#define PICKLECOMPONENT_H
 #include <Component.h>
-#include <TextureComponent.h>
 
 namespace dae
 {
@@ -28,3 +28,4 @@ namespace dae
     };
 }
 
+#endif // ! PICKLECOMPONENT_H

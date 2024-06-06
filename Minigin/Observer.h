@@ -1,5 +1,5 @@
-#pragma once
-#include <vector>
+#ifndef OBSERVER_H
+#define OBSERVER_H
 
 namespace dae
 {
@@ -20,3 +20,5 @@ namespace dae
 		virtual void OnSubjectRemoved(GameObject* obj) = 0;
 	};
 }
+
+#endif // ! OBSERVER_H

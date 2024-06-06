@@ -1,25 +1,33 @@
 #include "GameCommands.h"
-#include "GameObject.h"
-#include "ScoreComponent.h"
-#include "LivesComponent.h"
-#include "SceneManager.h"
-#include "Scene.h"
-#include "PlayerComponent.h"
-#include "WalkPlayerState.h"
-#include "IdlePlayerState.h"
-#include "ClimbPlayerState.h"
-#include "PlatformComponent.h"
-#include <SoundServiceLocator.h>
-#include <ResourceManager.h>
-#include <NullSoundSystem.h>
-#include <SDLSoundSystem.h>
-#include <SoundSystem.h>
 
+// Enemy
 #include "HotdogComponent.h"
 #include "WalkingEnemyState.h"
 #include "ClimbEnemyState.h"
 #include "EggComponent.h"
 #include "PickleComponent.h"
+
+// Engine
+#include "GameObject.h"
+#include <SoundSystem.h>
+#include <SoundServiceLocator.h>
+#include <ResourceManager.h>
+#include <SceneManager.h>
+#include <Scene.h>
+
+// Player
+#include "PlayerComponent.h"
+#include "WalkPlayerState.h"
+#include "ClimbPlayerState.h"
+#include "IdlePlayerState.h"
+
+// Components
+#include "TextureComponent.h"
+#include "LivesComponent.h"
+#include "ScoreComponent.h"
+
+// Platform
+#include "PlatformComponent.h"
 
 dae::WalkCommand::WalkCommand(GameObject* pGameObject, float speed)
 	: Command{}
@@ -282,8 +290,24 @@ void dae::ClimbStartCommand::HandlePlayer()
 		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
 		if (dynamic_cast<ClimbPlayerState*>(stateComp->GetCurrentState()) == nullptr)
 		{
-			stateComp->SetState(new ClimbPlayerState{ GetGameObject() });
-			GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PeterClimb.png"));
+			// If the player is touching a ladder, set the state to climbing
+			for (auto& ladder : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ladder"))
+			{
+				auto ladderPos = ladder->GetTransform().GetWorldPosition();
+				auto ladderDims = ladder->GetTransform().GetDimensions();
+
+				auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
+				auto selfDims = GetGameObject()->GetTransform().GetDimensions();
+
+				if (selfPos.x + selfDims.x >= ladderPos.x && selfPos.x <= ladderPos.x + ladderDims.x)
+				{
+					if (selfPos.y + selfDims.y >= ladderPos.y && selfPos.y <= ladderPos.y + ladderDims.y)
+					{
+						stateComp->SetState(new ClimbPlayerState{ GetGameObject() });
+						GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PeterClimb.png"));
+					}
+				}
+			}
 		}
 	}
 }

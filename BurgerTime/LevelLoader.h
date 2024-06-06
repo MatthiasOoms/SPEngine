@@ -1,8 +1,7 @@
-#pragma once
+#ifndef LEVELLOADER_H
+#define LEVELLOADER_H
 #include "Singleton.h"
-#include <vector>
 #include <string>
-#include <memory>
 
 namespace dae
 {
@@ -20,3 +19,5 @@ namespace dae
 		std::string m_dataPath;
 	};
 }
+
+#endif // ! LEVELLOADER_H

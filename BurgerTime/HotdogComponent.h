@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HOTDOGCOMPONENT_H
+#define HOTDOGCOMPONENT_H
 #include <Component.h>
 #include <TextureComponent.h>
 
@@ -28,3 +29,4 @@ namespace dae
     };
 }
 
+#endif // ! HOTDOGCOMPONENT_H

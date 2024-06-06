@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CLIMBENEMYSTATE_H
+#define CLIMBENEMYSTATE_H
 #include "EnemyState.h"
 
 namespace dae
@@ -15,3 +16,5 @@ namespace dae
 		virtual void OnExit() override;
 	};
 }
+
+#endif // ! CLIMBENEMYSTATE_H

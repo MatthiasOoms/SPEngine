@@ -1,4 +1,8 @@
-#pragma once
+#ifndef SCENE_H
+#define SCENE_H
+#include <string>
+#include <vector>
+#include <memory>
 #include "GameObject.h"
 #include "SceneManager.h"
 
@@ -32,5 +36,6 @@ namespace dae
 
 		static unsigned int m_IdCounter;
 	};
-
 }
+
+#endif // ! SCENE_H

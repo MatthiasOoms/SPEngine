@@ -1,5 +1,7 @@
-#pragma once
+#ifndef SCORECOMPONENT_H
+#define SCORECOMPONENT_H
 #include "Component.h"
+
 namespace dae
 {
 	class Subject;
@@ -30,3 +32,5 @@ namespace dae
 		Subject* m_pSubject;
 	};
 }
+
+#endif // ! SCORECOMPONENT_H

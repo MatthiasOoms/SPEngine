@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAMECOMMANDS_H
+#define GAMECOMMANDS_H
 #include "Command.h"
 
 namespace dae
@@ -209,4 +210,4 @@ namespace dae
 	};
 }
 
-
+#endif // ! GAMECOMMANDS_H

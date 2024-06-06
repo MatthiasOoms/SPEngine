@@ -1,6 +1,6 @@
-#pragma once
-#include <Component.h>
-#include <TextureComponent.h>
+#ifndef EGGCOMPONENT_H
+#define EGGCOMPONENT_H
+#include "Component.h"
 
 namespace dae
 {
@@ -28,3 +28,4 @@ namespace dae
     };
 }
 
+#endif // ! EGGCOMPONENT_H

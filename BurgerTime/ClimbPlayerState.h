@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CLIMBPLAYERSTATE_H
+#define CLIMBPLAYERSTATE_H
 #include "PlayerState.h"
 
 namespace dae
@@ -15,3 +16,5 @@ namespace dae
 		virtual void OnExit() override;
 	};
 }
+
+#endif // ! CLIMBPLAYERSTATE_H

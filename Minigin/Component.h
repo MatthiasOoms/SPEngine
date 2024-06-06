@@ -1,5 +1,5 @@
-#pragma once
-// Multiple classes in 1 file to only include 1 file
+#ifndef COMPONENT_H
+#define COMPONENT_H
 #include <memory>
 
 namespace dae
@@ -57,3 +57,5 @@ namespace dae
 		virtual void Render(float elapsedSec) const override = 0;
 	};
 };
+
+#endif // ! COMPONENT_H

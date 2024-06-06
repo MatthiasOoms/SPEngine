@@ -1,16 +1,16 @@
-#include <stdexcept>
 #define WIN32_LEAN_AND_MEAN 
-#include <windows.h>
-#include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-#include "Minigin.h"
+#include <stdexcept>
+#include <windows.h>
+#include <chrono>
+#include <thread>
+#include <SDL.h>
+#include "ResourceManager.h"
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
-#include "ResourceManager.h"
-#include <chrono>
-#include <thread>
+#include "Minigin.h"
 
 SDL_Window* g_window{};
 

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SOUND_SYSTEM_H
+#define SOUND_SYSTEM_H
 #include <string>
 
 namespace dae
@@ -34,3 +35,5 @@ namespace dae
 		virtual void SetMusicVolume(float volume) = 0;
 	};
 }
+
+#endif // ! SOUND_SYSTEM_H

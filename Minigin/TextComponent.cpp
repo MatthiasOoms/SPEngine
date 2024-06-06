@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <SDL_ttf.h>
 #include "TextComponent.h"
 #include "GameObject.h"
 #include "Texture2D.h"

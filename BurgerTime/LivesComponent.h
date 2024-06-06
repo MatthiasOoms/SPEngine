@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LIVESCOMPONENT_H
+#define LIVESCOMPONENT_H
 #include "Component.h"
 
 namespace dae
@@ -32,3 +33,5 @@ namespace dae
 		Subject* m_pSubject;
 	};
 }
+
+#endif // ! LIVESCOMPONENT_H

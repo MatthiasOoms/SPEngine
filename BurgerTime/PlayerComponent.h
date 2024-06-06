@@ -1,6 +1,6 @@
-#pragma once
+#ifndef PLAYERCOMPONENT_H
+#define PLAYERCOMPONENT_H
 #include <Component.h>
-#include <TextureComponent.h>
 
 namespace dae
 {
@@ -28,3 +28,4 @@ namespace dae
     };
 }
 
+#endif // ! PLAYERCOMPONENT_H

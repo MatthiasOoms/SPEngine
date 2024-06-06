@@ -1,8 +1,6 @@
-#pragma once
+#ifndef NULLSOUNDSYSTEM_H
+#define NULLSOUNDSYSTEM_H
 #include "SoundSystem.h"
-#include <string>
-#include "SoundServiceLocator.h"
-#include <queue>
 
 namespace dae
 {
@@ -27,3 +25,5 @@ namespace dae
 		void SetMusicVolume(float) override {};
 	};
 }
+
+#endif // ! NULLSOUNDSYSTEM_H

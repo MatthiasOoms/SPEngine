@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
+
 namespace dae
 {
 	class Controller final
@@ -49,4 +51,4 @@ namespace dae
 	};
 }
 
-
+#endif // !CONTROLLER_H

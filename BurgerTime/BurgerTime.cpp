@@ -8,33 +8,34 @@
 
 #include <Minigin.h>
 #include <SDL.h>
+#include <SDL_mixer.h>
 
-#include "Scene.h"
-#include "SceneManager.h"
-#include "ResourceManager.h"
+#include <SoundServiceLocator.h>
+#include <LoggingSoundSystem.h>
+#include <NullSoundSystem.h>
+#include <ResourceManager.h>
+#include <SDLSoundSystem.h>
+#include <SceneManager.h>
+#include <InputManager.h>
+#include <Scene.h>
 #include "LevelLoader.h"
-#include "GameObject.h"
+
 // Components
 #include "TextureComponent.h"
 #include "TextComponent.h"
 #include "FPSComponent.h"
 #include "RotationComponent.h"
-#include "Controller.h"
-#include "Command.h"
-#include "InputManager.h"
 #include "LivesObserverComponent.h"
 #include "LivesComponent.h"
 #include "ScoreObserverComponent.h"
 #include "ScoreComponent.h"
-
-#include <SDL_mixer.h>
-#include "SoundServiceLocator.h"
-#include "LoggingSoundSystem.h"
-#include "SDLSoundSystem.h"
-#include "NullSoundSystem.h"
-#include "GameCommands.h"
 #include "PlayerComponent.h"
 #include "PlatformComponent.h"
+
+#include "GameObject.h"
+#include "Controller.h"
+#include "Command.h"
+#include "GameCommands.h"
 
 void load()
 {
