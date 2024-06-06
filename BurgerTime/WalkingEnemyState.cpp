@@ -3,9 +3,6 @@
 #include "GameObject.h"
 #include <SceneManager.h>
 #include <Scene.h>
-#include "HotdogComponent.h"
-#include "EggComponent.h"
-#include "PickleComponent.h"
 #include "ClimbEnemyState.h"
 #include <stdexcept>
 

@@ -10,9 +10,7 @@
 #include "PlatformComponent.h"
 #include "PlayerComponent.h"
 #include "GameCommands.h"
-#include "HotdogComponent.h"
-#include "EggComponent.h"
-#include "PickleComponent.h"
+#include "EnemyComponent.h"
 #include "json.hpp" // nlohmann::json
 #include <TextComponent.h>
 #include "FPSComponent.h"
@@ -211,42 +209,28 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	// Process each EnemyType
 	for (const auto& enemy : j["Enemies"])
 	{
-		// Process Hotdogs
+		// Create a new GameObject
+		auto enemyObj = std::make_unique<dae::GameObject>("Enemy");
+		enemyObj->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
+
 		if (enemy["Type"] == "Hotdog")
 		{
-			auto hotdog = std::make_unique<dae::GameObject>("Enemy");
-			//hotdog->AddComponent<dae::SpriteComponent>("HotdogWalk.png");
-			hotdog->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
-			hotdog->AddComponent<dae::HotdogComponent>();
-			hotdog->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
-
-			gameObjects.push_back(std::move(hotdog));
+			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Hotdog);
+			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
+			gameObjects.push_back(std::move(enemyObj));
 		}
-
-		// Process Eggs
 		else if (enemy["Type"] == "Egg")
 		{
-			auto egg = std::make_unique<dae::GameObject>("Enemy");
-			//egg->AddComponent<dae::SpriteComponent>("EggWalk.png");
-			egg->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("EggWalk.png"));
-			egg->AddComponent<dae::EggComponent>();
-			egg->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
-
-			gameObjects.push_back(std::move(egg));
+			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Egg);
+			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("EggWalk.png"));
+			gameObjects.push_back(std::move(enemyObj));
 		}
-
-		// Process Pickles
 		else if (enemy["Type"] == "Pickle")
 		{
-			auto pickle = std::make_unique<dae::GameObject>("Enemy");
-			//pickle->AddComponent<dae::SpriteComponent>("PickleWalk.png");
-			pickle->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("PickleWalk.png"));
-			pickle->AddComponent<dae::PickleComponent>();
-			pickle->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
-
-			gameObjects.push_back(std::move(pickle));
+			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Pickle);
+			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("PickleWalk.png"));
+			gameObjects.push_back(std::move(enemyObj));
 		}
-
 		else
 		{
 			throw std::runtime_error("Unknown enemy type");

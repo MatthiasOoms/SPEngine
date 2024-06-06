@@ -4,10 +4,8 @@
 #include "Scene.h"
 #include "PlayerComponent.h"
 #include "ClimbPlayerState.h"
-#include "HotdogComponent.h"
+#include "EnemyComponent.h"
 #include "ClimbEnemyState.h"
-#include "EggComponent.h"
-#include "PickleComponent.h"
 
 dae::PlatformComponent::PlatformComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
@@ -33,39 +31,17 @@ void dae::PlatformComponent::Update(float)
 		HandleCollision(pPlayer);
 	}
 
-	// Check if any player is on the platform
+	// Check if any enemy is on the platform
 	for (auto pEnemy : m_pEnemies)
 	{
-		if (pEnemy->HasComponent<dae::HotdogComponent>())
+		if (pEnemy->HasComponent<dae::EnemyComponent>())
 		{
-			// If the player is climbing, they cannot collide with the platform
-			auto enemyComp = pEnemy->GetComponent<dae::HotdogComponent>();
+			// If the enemy is climbing, they cannot collide with the platform
+			auto enemyComp = pEnemy->GetComponent<dae::EnemyComponent>();
 			if (dynamic_cast<ClimbEnemyState*>(enemyComp->GetCurrentState()))
 			{
 				continue;
 			}
-		}
-		else if (pEnemy->HasComponent<dae::EggComponent>())
-		{
-			// If the player is climbing, they cannot collide with the platform
-			auto enemyComp = pEnemy->GetComponent<dae::EggComponent>();
-			if (dynamic_cast<ClimbEnemyState*>(enemyComp->GetCurrentState()))
-			{
-				continue;
-			}
-		}
-		else if (pEnemy->HasComponent<dae::PickleComponent>())
-		{
-			// If the player is climbing, they cannot collide with the platform
-			auto enemyComp = pEnemy->GetComponent<dae::PickleComponent>();
-			if (dynamic_cast<ClimbEnemyState*>(enemyComp->GetCurrentState()))
-			{
-				continue;
-			}
-		}
-		else
-		{
-			throw std::exception("Enemy type not found");
 		}
 
 		HandleCollision(pEnemy);

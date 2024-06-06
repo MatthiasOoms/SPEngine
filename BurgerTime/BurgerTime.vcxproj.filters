@@ -60,9 +60,6 @@
     <ClCompile Include="LevelLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HotdogComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,10 +69,7 @@
     <ClCompile Include="ClimbEnemyState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EggComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PickleComponent.cpp">
+    <ClCompile Include="EnemyComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,9 +116,6 @@
     <ClInclude Include="LevelLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HotdogComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -134,10 +125,7 @@
     <ClInclude Include="ClimbEnemyState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EggComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PickleComponent.h">
+    <ClInclude Include="EnemyComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,32 +1,33 @@
-#include "PickleComponent.h"
+#include "EnemyComponent.h"
 #include "WalkingEnemyState.h"
 #include "EnemyState.h"
 #include "GameObject.h"
 
-dae::PickleComponent::PickleComponent(GameObject* pOwner)
+dae::EnemyComponent::EnemyComponent(GameObject* pOwner)
 	: Component(pOwner)
 	, m_pCurrentState{ new WalkingEnemyState{ pOwner } }
+	, m_Type{ EnemyType::Hotdog }
 {
 }
 
-dae::PickleComponent::~PickleComponent()
+dae::EnemyComponent::~EnemyComponent()
 {
 	delete m_pCurrentState;
 	m_pCurrentState = nullptr;
 }
 
-void dae::PickleComponent::Update(float elapsedSec)
+void dae::EnemyComponent::Update(float elapsedSec)
 {
 	// Update the current state
 	m_pCurrentState->Update(elapsedSec);
 }
 
-void dae::PickleComponent::Render(float elapsedSec) const
+void dae::EnemyComponent::Render(float elapsedSec) const
 {
 	m_pCurrentState->Render(elapsedSec);
 }
 
-void dae::PickleComponent::SetState(EnemyState* pState)
+void dae::EnemyComponent::SetState(EnemyState* pState)
 {
 	if (pState != nullptr)
 	{
@@ -38,4 +39,9 @@ void dae::PickleComponent::SetState(EnemyState* pState)
 		m_pCurrentState = pState;
 		m_pCurrentState->OnEnter();
 	}
+}
+
+void dae::EnemyComponent::SetType(EnemyType type)
+{
+	m_Type = type;
 }

@@ -1,11 +1,9 @@
 #include "GameCommands.h"
 
 // Enemy
-#include "HotdogComponent.h"
+#include "EnemyComponent.h"
 #include "WalkingEnemyState.h"
 #include "ClimbEnemyState.h"
-#include "EggComponent.h"
-#include "PickleComponent.h"
 
 // Engine
 #include "GameObject.h"
@@ -194,53 +192,44 @@ void dae::WalkStartCommand::HandlePlayer()
 
 void dae::WalkStartCommand::HandleEnemy()
 {
-	// Get enemy TextureComponent
-	auto pTextureComp = GetGameObject()->GetComponent<TextureComponent>();
-	if (m_MoveSpeed > 0)
+	if (GetGameObject()->GetComponent<dae::EnemyComponent>())
 	{
-		pTextureComp->SetScale(abs(pTextureComp->GetScale()));
-	}
-	else
-	{
-		pTextureComp->SetScale(-abs(pTextureComp->GetScale()));
-	}
+		// Get enemy TextureComponent
+		auto pTextureComp = GetGameObject()->GetComponent<TextureComponent>();
+		if (m_MoveSpeed > 0)
+		{
+			pTextureComp->SetScale(abs(pTextureComp->GetScale()));
+		}
+		else
+		{
+			pTextureComp->SetScale(-abs(pTextureComp->GetScale()));
+		}
 
-	if (GetGameObject()->GetComponent<dae::HotdogComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<dae::HotdogComponent>();
+		auto stateComp = GetGameObject()->GetComponent<dae::EnemyComponent>();
 		if (dynamic_cast<dae::ClimbEnemyState*>(stateComp->GetCurrentState()) == nullptr)
 		{
 			if (dynamic_cast<dae::WalkingEnemyState*>(stateComp->GetCurrentState()) == nullptr)
 			{
-				// Set texture to HotdogWalk.png
-				pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("HotdogWalk.png"));
+				// Set the texture to the Moving texture
+				switch (stateComp->GetType())
+				{
+				case dae::EnemyType::Hotdog:
+					pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("HotdogWalk.png"));
+					break;
+				case dae::EnemyType::Egg:
+					pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("EggWalk.png"));
+					break;
+				case dae::EnemyType::Pickle:
+					pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PickleWalk.png"));
+					break;
+				default:
+					break;
+				}
+
+				// Set the state to walking
 				stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject() });
 			}
 		}		
-	}
-	else if (GetGameObject()->GetComponent<dae::EggComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<dae::EggComponent>();
-		if (dynamic_cast<dae::ClimbEnemyState*>(stateComp->GetCurrentState()) == nullptr)
-		{
-			if (dynamic_cast<dae::WalkingEnemyState*>(stateComp->GetCurrentState()) == nullptr)
-			{
-				pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("EggWalk.png"));
-				stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject() });
-			}
-		}
-	}
-	else if (GetGameObject()->GetComponent<dae::PickleComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<dae::PickleComponent>();
-		if (dynamic_cast<dae::ClimbEnemyState*>(stateComp->GetCurrentState()) == nullptr)
-		{
-			if (dynamic_cast<dae::WalkingEnemyState*>(stateComp->GetCurrentState()) == nullptr)
-			{
-				pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PickleWalk.png"));
-				stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject() });
-			}
-		}
 	}
 }
 
@@ -295,28 +284,25 @@ void dae::ClimbStartCommand::HandleEnemy()
 	// Get enemy TextureComponent
 	auto pTextureComp = GetGameObject()->GetComponent<TextureComponent>();
 
-	if (GetGameObject()->GetComponent<dae::HotdogComponent>())
+	if (GetGameObject()->GetComponent<dae::EnemyComponent>())
 	{
-		auto stateComp = GetGameObject()->GetComponent<dae::HotdogComponent>();
+		auto stateComp = GetGameObject()->GetComponent<dae::EnemyComponent>();
 		stateComp->SetState(new dae::ClimbEnemyState{ GetGameObject(), m_MoveSpeed });
 
-		pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("HotdogClimb.png"));
-	}
-	else if (GetGameObject()->GetComponent<dae::EggComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<dae::EggComponent>();
-		stateComp->SetState(new dae::ClimbEnemyState{ GetGameObject(), m_MoveSpeed });
-
-		// Set the player texture to the Moving texture
-		pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("EggClimb.png"));
-	}
-	else if (GetGameObject()->GetComponent<dae::PickleComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<dae::PickleComponent>();
-		stateComp->SetState(new dae::ClimbEnemyState{ GetGameObject(), m_MoveSpeed });
-
-		// Set the player texture to the Moving texture
-		pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PickleClimb.png"));
+		switch (stateComp->GetType())
+		{
+		case dae::EnemyType::Hotdog:
+			pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("HotdogClimb.png"));
+			break;
+		case dae::EnemyType::Egg:
+			pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("EggClimb.png"));
+			break;
+		case dae::EnemyType::Pickle:
+			pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PickleClimb.png"));
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -363,10 +349,10 @@ void dae::ClimbEndCommand::HandlePlayer()
 
 void dae::ClimbEndCommand::HandleEnemy()
 {
-	if (GetGameObject()->HasComponent<HotdogComponent>())
+	if (GetGameObject()->HasComponent<EnemyComponent>())
 	{
-		auto stateComp = GetGameObject()->GetComponent<HotdogComponent>();
-		// Set texture to idle if touching platform
+		auto stateComp = GetGameObject()->GetComponent<EnemyComponent>();
+		// Set texture to walk if touching platform
 		for (auto& platform : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform"))
 		{
 			auto platformPos = platform->GetTransform().GetWorldPosition();
@@ -379,58 +365,21 @@ void dae::ClimbEndCommand::HandleEnemy()
 			{
 				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
 				{
-					// Set the player texture to the Idle texture
-					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("Peter.png"));
-					// Set the player state to idle
-					stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
-				}
-			}
-		}
-	}
-	// If enemy is Egg
-	else if (GetGameObject()->HasComponent<EggComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<EggComponent>();
-		// Set texture to idle if touching platform
-		for (auto& platform : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform"))
-		{
-			auto platformPos = platform->GetTransform().GetWorldPosition();
-			auto platformDims = platform->GetTransform().GetDimensions();
+					// Set the texture to the Walk texture
+					switch (stateComp->GetType())
+					{
+					case dae::EnemyType::Hotdog:
+						GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("HotdogWalk.png"));
+						break;
+					case dae::EnemyType::Egg:
+						GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("EggWalk.png"));
+						break;
+					case dae::EnemyType::Pickle:
+						GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PickleWalk.png"));
+						break;
+					}
 
-			auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
-			auto selfDims = GetGameObject()->GetTransform().GetDimensions();
-
-			if (selfPos.x + selfDims.x >= platformPos.x && selfPos.x <= platformPos.x + platformDims.x)
-			{
-				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
-				{
-					// Set the player texture to the Idle texture
-					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("Peter.png"));
-					// Set the player state to idle
-					stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
-				}
-			}
-		}
-	}
-	else if (GetGameObject()->HasComponent<PickleComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<PickleComponent>();
-		// Set texture to idle if touching platform
-		for (auto& platform : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform"))
-		{
-			auto platformPos = platform->GetTransform().GetWorldPosition();
-			auto platformDims = platform->GetTransform().GetDimensions();
-
-			auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
-			auto selfDims = GetGameObject()->GetTransform().GetDimensions();
-
-			if (selfPos.x + selfDims.x >= platformPos.x && selfPos.x <= platformPos.x + platformDims.x)
-			{
-				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
-				{
-					// Set the player texture to the Idle texture
-					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("Peter.png"));
-					// Set the player state to idle
+					// Set the state to walking
 					stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
 				}
 			}
@@ -448,22 +397,7 @@ void dae::ClimbEndCommand::Execute(float)
 {
 	HandlePlayer();
 
-	// Handle enemies
-	if (GetGameObject()->HasComponent<dae::HotdogComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<HotdogComponent>();
-		stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
-	}
-	else if (GetGameObject()->HasComponent<dae::EggComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<EggComponent>();
-		stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
-	}
-	else if (GetGameObject()->HasComponent<dae::PickleComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<PickleComponent>();
-		stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
-	}
+	HandleEnemy();
 }
 
 dae::ClimbCommand::ClimbCommand(GameObject* pGameObject, float speed)
@@ -527,33 +461,27 @@ void dae::ClimbCommand::Execute(float elapsedSec)
 				}
 			}
 		}
-		else if (GetGameObject()->HasComponent<HotdogComponent>())
+		else if (GetGameObject()->HasComponent<EnemyComponent>())
 		{
-			auto stateComp = GetGameObject()->GetComponent<HotdogComponent>();
+			auto stateComp = GetGameObject()->GetComponent<EnemyComponent>();
 			if (dynamic_cast<WalkingEnemyState*>(stateComp->GetCurrentState()) == nullptr)
 			{
 				// Set the player texture to the Moving texture
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("HotdogWalk.png"));
-				stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
-			}
-		}
-		else if (GetGameObject()->HasComponent<EggComponent>())
-		{
-			auto stateComp = GetGameObject()->GetComponent<EggComponent>();
-			if (dynamic_cast<WalkingEnemyState*>(stateComp->GetCurrentState()) == nullptr)
-			{
-				// Set the player texture to the Moving texture
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("EggWalk.png"));
-				stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
-			}
-		}
-		else if (GetGameObject()->HasComponent<PickleComponent>())
-		{
-			auto stateComp = GetGameObject()->GetComponent<PickleComponent>();
-			if (dynamic_cast<WalkingEnemyState*>(stateComp->GetCurrentState()) == nullptr)
-			{
-				// Set the player texture to the Moving texture
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PickleWalk.png"));
+				switch (stateComp->GetType())
+				{
+				case dae::EnemyType::Hotdog:
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("HotdogWalk.png"));
+					break;
+				case dae::EnemyType::Egg:
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("EggWalk.png"));
+					break;
+				case dae::EnemyType::Pickle:
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PickleWalk.png"));
+					break;
+				default:
+					break;
+				}
+
 				stateComp->SetState(new WalkingEnemyState{ GetGameObject() });
 			}
 		}
