@@ -22,15 +22,13 @@ namespace dae
 
 	void TextureComponent::SetScale(int scale)
 	{
-		if (scale >= 0)
-		{
-			m_Scale = scale;
-			GetOwner()->GetTransform().SetDimensions(GetDimensions());
-		}
-		else
-		{
-			throw std::exception("TextureComponent::SetScale() > Scale must be greater than or equal to 0");
-		}
+		m_Scale = scale;
+		GetOwner()->GetTransform().SetDimensions(GetDimensions());
+	}
+
+	int TextureComponent::GetScale() const
+	{
+		return m_Scale;
 	}
 
 	glm::ivec2 TextureComponent::GetDimensions()
@@ -38,7 +36,7 @@ namespace dae
 		// If a texture is set, return its dimensions
 		if (m_pTexture != nullptr)
 		{
-			return (glm::vec2(m_pTexture->GetSize() * m_Scale));
+			return (glm::vec2(m_pTexture->GetSize() * abs(m_Scale)));
 		}
 
 		// If no texture is set, throw an exception

@@ -15,7 +15,7 @@ namespace dae
 		void HandlePlayer();
 		void HandleEnemies();
 	protected:
-		GameObject* GetGameObject() { return m_pGameObject; }
+		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
 		WalkStartCommand(GameObject* pGameObject, float moveSpeed);
 
@@ -37,7 +37,7 @@ namespace dae
 		void HandlePlayer();
 		void HandleEnemies();
 	protected:
-		GameObject* GetGameObject() { return m_pGameObject; }
+		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
 		ClimbStartCommand(GameObject* pGameObject, float moveSpeed);
 
@@ -55,8 +55,10 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 		float m_MoveSpeed;
+
+		bool CanWalk() const;
 	protected:
-		GameObject* GetGameObject() { return m_pGameObject; }
+		GameObject* GetGameObject() const { return m_pGameObject; }
 	public:
 		WalkCommand(GameObject* pGameObject, float speed);
 
@@ -76,7 +78,7 @@ namespace dae
 		float m_ClimbSpeed;
 		//float m_Acceleration; // Not present in my game
 	protected:
-		GameObject* GetGameObject() { return m_pGameObject; }
+		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
 		ClimbCommand(GameObject* pGameObject, float speed);
 
@@ -94,7 +96,7 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 	protected:
-		GameObject* GetGameObject() { return m_pGameObject; }
+		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
 		ClimbEndCommand(GameObject* pGameObject);
 
@@ -112,7 +114,7 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 	protected:
-		GameObject* GetGameObject() { return m_pGameObject; }
+		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
 		WalkEndCommand(GameObject* pGameObject);
 
@@ -130,7 +132,7 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 	protected:
-		GameObject* GetGameObject() { return m_pGameObject; }
+		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
 		KillCommand(GameObject* pGameObject);
 
@@ -148,7 +150,7 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 	protected:
-		GameObject* GetGameObject() { return m_pGameObject; }
+		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
 		HotdogKilledCommand(GameObject* pGameObject);
 

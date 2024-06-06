@@ -7,8 +7,8 @@
 #endif
 
 #include <Minigin.h>
-#include <SDL.h>
 #include <SDL_mixer.h>
+#include <SDL.h>
 
 #include <SoundServiceLocator.h>
 #include <LoggingSoundSystem.h>

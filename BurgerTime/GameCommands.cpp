@@ -29,6 +29,48 @@
 // Platform
 #include "PlatformComponent.h"
 
+bool dae::WalkCommand::CanWalk() const
+{
+	if (GetGameObject()->HasComponent<PlayerComponent>())
+	{
+		// If the player is climbing, they can't walk
+		if (dynamic_cast<ClimbPlayerState*>(GetGameObject()->GetComponent<PlayerComponent>()->GetCurrentState()))
+		{
+			return false;
+		}
+	}
+	else if (GetGameObject()->HasComponent<HotdogComponent>())
+	{
+		// If the enemy is climbing, they can't walk
+		if (dynamic_cast<ClimbEnemyState*>(GetGameObject()->GetComponent<HotdogComponent>()->GetCurrentState()))
+		{
+			return false;
+		}
+	}
+	else if (GetGameObject()->HasComponent<EggComponent>())
+	{
+		// If the enemy is climbing, they can't walk
+		if (dynamic_cast<ClimbEnemyState*>(GetGameObject()->GetComponent<EggComponent>()->GetCurrentState()))
+		{
+			return false;
+		}
+	}
+	else if (GetGameObject()->HasComponent<PickleComponent>())
+	{
+		// If the enemy is climbing, they can't walk
+		if (dynamic_cast<ClimbEnemyState*>(GetGameObject()->GetComponent<PickleComponent>()->GetCurrentState()))
+		{
+			return false;
+		}
+	}
+	else
+	{
+		throw std::exception("Object is not a player or enemy");
+	}
+
+	return true;
+}
+
 dae::WalkCommand::WalkCommand(GameObject* pGameObject, float speed)
 	: Command{}
 	, m_pGameObject{ pGameObject }
@@ -38,67 +80,54 @@ dae::WalkCommand::WalkCommand(GameObject* pGameObject, float speed)
 
 void dae::WalkCommand::Execute(float elapsedSec)
 {
-	// Move on the x-axis
-	bool canWalk = false;
-
-	auto selfPos = m_pGameObject->GetTransform().GetWorldPosition();
-	auto selfDims = m_pGameObject->GetTransform().GetDimensions();
-
-	auto pPlatforms = SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform");
-	for (auto pPlatform : pPlatforms)
+	auto temp = GetGameObject();
+	if (temp)
 	{
-		// Get the player's position and dimensions
-		auto platformPos = pPlatform->GetTransform().GetWorldPosition();
-		auto platformDims = pPlatform->GetTransform().GetDimensions();
+		// Move on the x-axis
+		bool canWalk = false;
 
-		// If self left is in the object
-		if (selfPos.x <= platformPos.x + platformDims.x && selfPos.x >= platformPos.x)
+		auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
+		auto selfDims = GetGameObject()->GetTransform().GetDimensions();
+
+		auto pPlatforms = SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform");
+		for (auto pPlatform : pPlatforms)
 		{
-			// If self right is in the object
-			if (selfPos.x + selfDims.x <= platformPos.x + platformDims.x && selfPos.x + selfDims.x >= platformPos.x)
+			// Get the player's position and dimensions
+			auto platformPos = pPlatform->GetTransform().GetWorldPosition();
+			auto platformDims = pPlatform->GetTransform().GetDimensions();
+
+			// If self left is in the object
+			if (selfPos.x <= platformPos.x + platformDims.x && selfPos.x >= platformPos.x)
 			{
-				// If self is above the object and has some overlap with the platform object on the y-axis
-				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
+				// If self right is in the object
+				if (selfPos.x + selfDims.x <= platformPos.x + platformDims.x && selfPos.x + selfDims.x >= platformPos.x)
 				{
-					canWalk = true;
+					// If self is above the object and has some overlap with the platform object on the y-axis
+					if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
+					{
+						canWalk = true;
+					}
 				}
 			}
-		}		
-	}
+		}
 
-	// If the player is climbing, they can't walk
-	if (dynamic_cast<ClimbPlayerState*>(GetGameObject()->GetComponent<PlayerComponent>()->GetCurrentState()))
-	{
-		canWalk = false;
-	}
+		canWalk = CanWalk();
 
-	if (canWalk)
-	{
-		GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ m_MoveSpeed * elapsedSec, 0, 0 });
-	}
-
-	// Get the PlayerComponent
-	if (GetGameObject()->HasComponent<PlayerComponent>())
-	{
-		auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
-		// If the player is not walking or climbing, set the state to walking
-		if (dynamic_cast<WalkPlayerState*>(stateComp->GetCurrentState()) == nullptr)
+		if (canWalk)
 		{
-			if (dynamic_cast<ClimbPlayerState*>(stateComp->GetCurrentState()) == nullptr)
+			GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ m_MoveSpeed * elapsedSec, 0, 0 });
+		}
+
+		// Get the PlayerComponent
+		if (GetGameObject()->HasComponent<PlayerComponent>())
+		{
+			auto stateComp = GetGameObject()->GetComponent<PlayerComponent>();
+			// If the player is not walking or climbing, set the state to walking
+			if (dynamic_cast<WalkPlayerState*>(stateComp->GetCurrentState()) == nullptr)
 			{
-				stateComp->SetState(new WalkPlayerState{ GetGameObject() });
-
-				// Get player TextureComponent
-				auto pTextureComp = GetGameObject()->GetComponent<TextureComponent>();
-
-				// Set the player texture to the Moving texture
-				if (m_MoveSpeed > 0)
+				if (dynamic_cast<ClimbPlayerState*>(stateComp->GetCurrentState()) == nullptr)
 				{
-					pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PeterWalk.png"));
-				}
-				else
-				{
-					pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PeterWalkFlip.png"));
+					stateComp->SetState(new WalkPlayerState{ GetGameObject() });
 				}
 			}
 		}
@@ -192,13 +221,15 @@ void dae::WalkStartCommand::HandlePlayer()
 				auto pTextureComp = GetGameObject()->GetComponent<TextureComponent>();
 
 				// Set the player texture to the Moving texture
+				pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PeterWalk.png"));
+
 				if (m_MoveSpeed > 0)
 				{
-					pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PeterWalk.png"));
+					pTextureComp->SetScale(abs(pTextureComp->GetScale()));
 				}
 				else
 				{
-					pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PeterWalkFlip.png"));
+					pTextureComp->SetScale(-abs(pTextureComp->GetScale()));
 				}
 			}
 		}
@@ -209,41 +240,35 @@ void dae::WalkStartCommand::HandleEnemies()
 {
 	// Get enemy TextureComponent
 	auto pTextureComp = GetGameObject()->GetComponent<TextureComponent>();
+	if (m_MoveSpeed > 0)
+	{
+		pTextureComp->SetScale(abs(pTextureComp->GetScale()));
+	}
+	else
+	{
+		pTextureComp->SetScale(-abs(pTextureComp->GetScale()));
+	}
 
 	if (GetGameObject()->GetComponent<dae::HotdogComponent>())
 	{
 		auto stateComp = GetGameObject()->GetComponent<dae::HotdogComponent>();
 		if (dynamic_cast<dae::ClimbEnemyState*>(stateComp->GetCurrentState()) == nullptr)
 		{
-			stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject() });
-		}
-
-		// Set the player texture to the Moving texture
-		if (m_MoveSpeed > 0)
-		{
-			pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("HotdogWalk.png"));
-		}
-		else
-		{
-			pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("HotdogWalkFlip.png"));
-		}
+			if (dynamic_cast<dae::WalkingEnemyState*>(stateComp->GetCurrentState()) == nullptr)
+			{
+				stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject() });
+			}
+		}		
 	}
 	else if (GetGameObject()->GetComponent<dae::EggComponent>())
 	{
 		auto stateComp = GetGameObject()->GetComponent<dae::EggComponent>();
 		if (dynamic_cast<dae::ClimbEnemyState*>(stateComp->GetCurrentState()) == nullptr)
 		{
-			stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject() });
-		}
-
-		// Set the player texture to the Moving texture
-		if (m_MoveSpeed > 0)
-		{
-			pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("EggWalk.png"));
-		}
-		else
-		{
-			pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("EggWalkFlip.png"));
+			if (dynamic_cast<dae::WalkingEnemyState*>(stateComp->GetCurrentState()) == nullptr)
+			{
+				stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject() });
+			}
 		}
 	}
 	else if (GetGameObject()->GetComponent<dae::PickleComponent>())
@@ -251,17 +276,10 @@ void dae::WalkStartCommand::HandleEnemies()
 		auto stateComp = GetGameObject()->GetComponent<dae::PickleComponent>();
 		if (dynamic_cast<dae::ClimbEnemyState*>(stateComp->GetCurrentState()) == nullptr)
 		{
-			stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject() });
-		}
-
-		// Set the player texture to the Moving texture
-		if (m_MoveSpeed > 0)
-		{
-			pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PickleWalk.png"));
-		}
-		else
-		{
-			pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PickleWalkFlip.png"));
+			if (dynamic_cast<dae::WalkingEnemyState*>(stateComp->GetCurrentState()) == nullptr)
+			{
+				stateComp->SetState(new dae::WalkingEnemyState{ GetGameObject() });
+			}
 		}
 	}
 }

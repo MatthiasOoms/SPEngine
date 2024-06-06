@@ -22,6 +22,7 @@ namespace dae
 
 		void SetTexture(const std::shared_ptr<Texture2D>& texture);
 		void SetScale(int scale);
+		int GetScale() const;
 		glm::ivec2 GetDimensions();
 
 		virtual void Render(float elapsedSec) const override;
