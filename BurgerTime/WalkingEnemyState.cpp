@@ -66,11 +66,21 @@ void dae::WalkingEnemyState::Update(float elapsedSec)
 	}
 
 	// If I am touching a ladder, climb it
-	if (IsTouchingLadder())
+	if (auto ladder = IsTouchingLadder())
 	{
 		// Make ClimbStartCommand
-		//dae::ClimbStartCommand climbStartCommand{ GetEnemy(), m_Speed };
-		//climbStartCommand.Execute(elapsedSec);
+		// If ladder is above me, speed = -75
+		if (ladder->GetTransform().GetWorldPosition().y > enemyPos.y)
+		{
+			m_Speed = -abs(m_Speed);
+		}
+		else
+		{
+			m_Speed = abs(m_Speed);
+		}
+
+		dae::ClimbStartCommand climbStartCommand{ GetEnemy(), m_Speed };
+		climbStartCommand.Execute(elapsedSec);
 	}
 }
 
