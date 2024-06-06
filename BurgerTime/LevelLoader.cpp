@@ -14,6 +14,8 @@
 #include "EggComponent.h"
 #include "PickleComponent.h"
 #include "json.hpp" // nlohmann::json
+#include <TextComponent.h>
+#include "FPSComponent.h"
 
 void dae::LevelLoader::Init(const std::string& data)
 {
@@ -26,7 +28,6 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	std::vector<std::unique_ptr<dae::GameObject>> gameObjects{};
 	auto& resources = dae::ResourceManager::GetInstance();
 	auto& sceneManager = dae::SceneManager::GetInstance();
-
 
 	// See if file ends in.json, if not add it
 	std::string filePath;
@@ -336,4 +337,12 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	{
 		platform->GetComponent<dae::PlatformComponent>()->RegisterObjects();
 	}
+
+	// FPS
+	auto font = resources.LoadFont("Lingua.otf", 36);
+	auto go = std::make_unique<dae::GameObject>("Background");
+	go->AddComponent<dae::TextureComponent>();
+	go->AddComponent<dae::TextComponent>()->SetFont(font);
+	go->AddComponent<dae::FPSComponent>();
+	scene.Add(std::move(go));
 }

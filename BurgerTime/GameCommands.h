@@ -13,7 +13,7 @@ namespace dae
 		float m_MoveSpeed;
 
 		void HandlePlayer();
-		void HandleEnemies();
+		void HandleEnemy();
 	protected:
 		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
@@ -35,7 +35,7 @@ namespace dae
 		float m_MoveSpeed;
 
 		void HandlePlayer();
-		void HandleEnemies();
+		void HandleEnemy();
 	protected:
 		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:

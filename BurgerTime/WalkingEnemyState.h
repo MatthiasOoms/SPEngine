@@ -17,6 +17,8 @@ namespace dae
 
 	private:
 		float m_Speed;
+
+		GameObject* IsTouchingLadder();
 	};
 }
 

@@ -358,12 +358,12 @@
       }
     },
     {
-        "Type": "Egg",
-        "Position": {
-          "x": 100,
-          "y": 132
-        }
-      },
+      "Type": "Egg",
+      "Position": {
+        "x": 100,
+        "y": 132
+      }
+    },
     {
       "Type": "Pickle",
       "Position": {
