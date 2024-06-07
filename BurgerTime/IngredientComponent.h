@@ -21,11 +21,12 @@ namespace dae
 		void SetId(int id) { m_Id = id; }
 		int GetId() const { return m_Id; }
 
-		void Reset();
 		bool GetPressed() const { return m_IsPressed; }
+		void SetPressed(bool pressed) { m_IsPressed = pressed; }
 
-		void SetFalling(bool falling) { m_IsFalling = falling; }
-		bool GetFalling() const { return m_IsFalling; }
+		void FallingLayersDecrement() { --m_LayersToFall; };
+		void FallingLayersIncrement() { ++m_LayersToFall; }
+		int GetFallingLayers() const { return m_LayersToFall; }
 
 
 	private:
@@ -33,7 +34,7 @@ namespace dae
 		int m_Id;
 
 		bool m_IsPressed;
-		bool m_IsFalling;
+		int m_LayersToFall;
 
 		void HandlePress();
 		void HandleFall(float elapsedSec);

@@ -9,13 +9,13 @@ dae::IngredientComponent::IngredientComponent(GameObject* pOwner)
 	, m_Type("")
 	, m_Id(0)
 	, m_IsPressed(false)
-	, m_IsFalling(false)
+	, m_LayersToFall(false)
 {
 }
 
 void dae::IngredientComponent::Update(float elapsedSec)
 {
-	if (!m_IsPressed && !m_IsFalling)
+	if (!m_IsPressed && !m_LayersToFall)
 	{
 		HandlePress();
 		
@@ -44,15 +44,55 @@ void dae::IngredientComponent::Update(float elapsedSec)
 			}
 		}
 
+		// If all segments are pressed, fall
 		if (fall)
 		{
+			int enemiesOverlapping{};
+
+			// For every enemy
+			for (auto enemy : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Enemy"))
+			{
+				// For every segment
+				for (auto ingredientSegment : fullIngredient)
+				{
+					// If the enemy touches any of the segments, it will fall an extra layer
+					// It will not check the other segments
+					auto enemyPos = enemy->GetTransform().GetWorldPosition();
+					auto enemyDims = enemy->GetTransform().GetDimensions();
+
+					auto ingredientPos = ingredientSegment->GetTransform().GetWorldPosition();
+					auto ingredientDims = ingredientSegment->GetTransform().GetDimensions();
+
+					// If left side of enemy is between left and right side of ingredient
+					// or right side of enemy is between left and right side of ingredient
+					if (enemyPos.x >= ingredientPos.x && enemyPos.x <= ingredientPos.x + ingredientDims.x ||
+						enemyPos.x + enemyDims.x >= ingredientPos.x && enemyPos.x + enemyDims.x <= ingredientPos.x + ingredientDims.x)
+					{
+						// If top side of enemy is between top and bottom side of ingredient
+						// or bottom side of enemy is between top and bottom side of ingredient
+						if (enemyPos.y >= ingredientPos.y && enemyPos.y <= ingredientPos.y + ingredientDims.y ||
+							enemyPos.y + enemyDims.y >= ingredientPos.y && enemyPos.y + enemyDims.y <= ingredientPos.y + ingredientDims.y)
+						{
+							// Fall
+							++enemiesOverlapping;
+							break;
+						}
+					}
+				}
+			}
+			// For every segment
 			for (auto ingredientSegment : fullIngredient)
 			{
-				ingredientSegment->GetComponent<IngredientComponent>()->SetFalling(true);
+				// For the amount of enemies touching the full ingredient, fall an extra layer
+				for (int i{}; i <= enemiesOverlapping; ++i)
+				{
+					ingredientSegment->GetComponent<IngredientComponent>()->FallingLayersIncrement();
+				}
 			}
+			
 		}
 	}
-	else if (m_IsFalling)
+	else if (m_LayersToFall > 0)
 	{
 		HandleFall(elapsedSec);
 	}
@@ -75,12 +115,6 @@ void dae::IngredientComponent::Update(float elapsedSec)
 			HandleIngredient(ingredient);
 		}
 	}
-}
-
-void dae::IngredientComponent::Reset()
-{
-	m_IsPressed = false;
-	m_IsFalling = false;
 }
 
 void dae::IngredientComponent::HandlePress()
@@ -143,7 +177,7 @@ void dae::IngredientComponent::HandleIngredient(GameObject* pOther)
 			selfPos.y + selfDims.y >= ingredientPos.y && selfPos.y + selfDims.y <= ingredientPos.y + ingredientDims.y)
 		{
 			pOther->GetComponent<IngredientComponent>()->HandlePress();
-			pOther->GetComponent<IngredientComponent>()->SetFalling(true);
+			pOther->GetComponent<IngredientComponent>()->FallingLayersIncrement();
 		}
 	}
 }

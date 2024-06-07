@@ -325,7 +325,7 @@
       "Id": 1,
       "Position": {
         "x": 64,
-        "y": 60
+        "y": 56
       }
     },
     {
@@ -334,25 +334,7 @@
       "Id": 1,
       "Position": {
         "x": 64,
-        "y": 124
-      }
-    },
-    {
-      "Type": "Ingredient",
-      "Option": "3",
-      "Id": 1,
-      "Position": {
-        "x": 64,
-        "y": 188
-      }
-    },
-    {
-      "Type": "Ingredient",
-      "Option": "6",
-      "Id": 1,
-      "Position": {
-        "x": 64,
-        "y": 284
+        "y": 120
       }
     }
   ],

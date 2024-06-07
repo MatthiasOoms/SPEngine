@@ -100,7 +100,7 @@ void dae::PlatformComponent::HandleCollision(GameObject* pCollider)
 	if (pCollider->HasComponent<IngredientComponent>())
 	{
 		auto stateComp = pCollider->GetComponent<IngredientComponent>();
-		if (stateComp->GetFalling())
+		if (stateComp->GetFallingLayers())
 		{
 			HandleIngredientCollision(pCollider);
 		}
@@ -161,7 +161,11 @@ void dae::PlatformComponent::HandleIngredientCollision(GameObject* pCollider)
 			pCollider->SetLocalPosition(glm::vec3{ colliderPos.x, objPos.y - colliderHeight, colliderPos.z });
 			
 			auto ingredientComp = pCollider->GetComponent<IngredientComponent>();
-			ingredientComp->Reset();
+			ingredientComp->FallingLayersDecrement();
+			if (ingredientComp->GetFallingLayers() <=0)
+			{
+				ingredientComp->SetPressed(false);
+			}
 		}
 	}
 }
