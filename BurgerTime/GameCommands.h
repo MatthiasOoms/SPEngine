@@ -108,20 +108,18 @@ namespace dae
 	{
 	private:
 		GameObject* m_pGameObject;
-		float m_MoveSpeed;
 		std::shared_ptr<Texture2D> m_PeterIdleTexture;
 		std::shared_ptr<Texture2D> m_HotdogWalkTexture;
 		std::shared_ptr<Texture2D> m_EggWalkTexture;
 		std::shared_ptr<Texture2D> m_PickleWalkTexture;
 
 		void HandlePlayer();
-		void HandleEnemy(float elapsedSec);
-
+		void HandleEnemy();
 	protected:
 		GameObject* GetGameObject() const{ return m_pGameObject; }
-
 	public:
-		ClimbEndCommand(GameObject* pGameObject, float moveSpeed);
+		
+		ClimbEndCommand(GameObject* pGameObject);
 
 		virtual ~ClimbEndCommand() override = default;
 		ClimbEndCommand(const ClimbEndCommand& other) = delete;

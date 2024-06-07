@@ -4,11 +4,6 @@
 #include <SceneManager.h>
 #include <Scene.h>
 
-dae::ClimbEnemyState::ClimbEnemyState(GameObject* pPlayer)
-	: EnemyState(pPlayer)
-	, m_Speed{ 75.f }
-{
-}
 
 dae::ClimbEnemyState::ClimbEnemyState(GameObject* pPlayer, float speed)
 	: EnemyState(pPlayer)
