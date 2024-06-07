@@ -155,10 +155,10 @@ void dae::PlatformComponent::HandleIngredientCollision(GameObject* pCollider)
 		(colliderPos.x + colliderWidth <= objPos.x + objWidth && colliderPos.x + colliderWidth >= objPos.x))
 	{
 		// If player bottom is in the object
-		if (colliderPos.y + colliderHeight <= objPos.y + 1 && colliderPos.y + colliderHeight >= objPos.y)
+		if (colliderPos.y + colliderHeight <= objPos.y + objDims.y && colliderPos.y + colliderHeight >= objPos.y)
 		{
 			// Move up
-			pCollider->SetLocalPosition(glm::vec3{ colliderPos.x, objPos.y - colliderHeight, colliderPos.z });
+			pCollider->SetLocalPosition(glm::vec3{ colliderPos.x, objPos.y - colliderHeight + objDims.y, colliderPos.z });
 			
 			auto ingredientComp = pCollider->GetComponent<IngredientComponent>();
 			ingredientComp->Reset();
