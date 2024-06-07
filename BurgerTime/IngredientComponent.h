@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INGREDIENTCOMPONENT_H
+#define INGREDIENTCOMPONENT_H
 #include <vector>
 #include <string>
 #include "Component.h"
@@ -26,6 +27,7 @@ namespace dae
 
 		void IncrementFloorsToFall() { ++m_FloorsToFall; }
 		void DecrementFloorsToFall() { if(m_FloorsToFall > 0) --m_FloorsToFall; }
+		void SetFloorsToFall(int floors) { m_FloorsToFall = floors; }
 		int GetFalling() const { return m_FloorsToFall; }
 
 
@@ -43,3 +45,4 @@ namespace dae
 	};
 }
 
+#endif // ! INGREDIENTCOMPONENT_H

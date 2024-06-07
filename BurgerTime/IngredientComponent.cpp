@@ -15,12 +15,12 @@ dae::IngredientComponent::IngredientComponent(GameObject* pOwner)
 
 void dae::IngredientComponent::Update(float elapsedSec)
 {
-	if (!m_IsPressed && !m_FloorsToFall)
+	if (!m_IsPressed && m_FloorsToFall == 0)
 	{
 		HandlePress();
 		HandleFall();
 	}
-	else if (m_FloorsToFall)
+	else if (m_FloorsToFall > 0)
 	{
 		ExecuteFall(elapsedSec);
 	}
@@ -143,10 +143,21 @@ void dae::IngredientComponent::HandleIngredient(GameObject* pOther)
 		{
 			// Two ingredients are colliding
 			// If this ingredient is falling, and the other one is not falling
-			if (m_FloorsToFall && !pOther->GetComponent<IngredientComponent>()->GetFalling())
+			if (m_FloorsToFall > 0 && pOther->GetComponent<IngredientComponent>()->GetFalling() <= 0)
 			{
-				// Move the other ingredient down
-				pOther->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
+				// If other has -1 floors to fall, it is on a plate, so set own floors to fall to -1 and stack on top
+				if (pOther->GetComponent<IngredientComponent>()->GetFalling() == -1)
+				{
+					m_FloorsToFall = -1;
+
+					// Stack self on top of other
+					GetOwner()->GetTransform().SetLocalPosition(selfPos.x, ingredientPos.y - selfDims.y, selfPos.z);
+				}
+				else
+				{
+					// Move the other ingredient down
+					pOther->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
+				}
 			}
 		}
 	}
