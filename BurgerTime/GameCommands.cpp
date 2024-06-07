@@ -44,6 +44,9 @@ void dae::WalkCommand::Execute(float elapsedSec)
 	auto selfDims = GetGameObject()->GetTransform().GetDimensions();
 
 	auto pPlatforms = SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Platform");
+
+	float newY{};
+
 	for (auto pPlatform : pPlatforms)
 	{
 		// Get the player's position and dimensions
@@ -57,9 +60,11 @@ void dae::WalkCommand::Execute(float elapsedSec)
 			if (selfPos.x + selfDims.x <= platformPos.x + platformDims.x && selfPos.x + selfDims.x >= platformPos.x)
 			{
 				// If self is above the object and has some overlap with the platform object on the y-axis
-				if (selfPos.y + selfDims.y >= platformPos.y - 1 && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
+				if (selfPos.y + selfDims.y >= platformPos.y - 3 && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
 				{
 					canWalk = true;
+					newY = platformPos.y - selfDims.y;
+					break;
 				}
 			}
 		}
@@ -67,7 +72,9 @@ void dae::WalkCommand::Execute(float elapsedSec)
 
 	if (canWalk)
 	{
-		GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ m_MoveSpeed * elapsedSec, 0, 0 });
+		glm::vec3 temp{ GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{m_MoveSpeed* elapsedSec, 0, 0 } };
+		temp.y = newY;
+		GetGameObject()->SetLocalPosition(temp);
 	}
 
 	// Get the PlayerComponent
@@ -420,7 +427,7 @@ void dae::ClimbEndCommand::HandleEnemy()
 
 			if (selfPos.x + selfDims.x >= platformPos.x && selfPos.x <= platformPos.x + platformDims.x)
 			{
-				if (selfPos.y + selfDims.y >= platformPos.y - 1 && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
+				if (selfPos.y + selfDims.y >= platformPos.y - 3 && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
 				{
 					// Set the texture to the Walk texture
 					switch (stateComp->GetType())
