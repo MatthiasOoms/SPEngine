@@ -9,52 +9,20 @@ dae::IngredientComponent::IngredientComponent(GameObject* pOwner)
 	, m_Type("")
 	, m_Id(0)
 	, m_IsPressed(false)
-	, m_IsFalling(false)
+	, m_FloorsToFall(false)
 {
 }
 
 void dae::IngredientComponent::Update(float elapsedSec)
 {
-	if (!m_IsPressed && !m_IsFalling)
+	if (!m_IsPressed && !m_FloorsToFall)
 	{
 		HandlePress();
-		
-		bool fall = true;
-		std::vector<GameObject*> fullIngredient;
-
-		// Get all ingredients
-		for (auto ingredient : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient"))
-		{
-			// If type is the same
-			auto ingredientComp = ingredient->GetComponent<IngredientComponent>();
-			if (ingredientComp->GetType() == GetType())
-			{
-				// If ID is the same
-				if (ingredientComp->GetId() == GetId())
-				{
-					// Add to list
-					fullIngredient.push_back(ingredient);
-
-					// We belong to the same Ingredient whole
-					if (!ingredientComp->GetPressed())
-					{
-						fall = false;
-					}
-				}
-			}
-		}
-
-		if (fall)
-		{
-			for (auto ingredientSegment : fullIngredient)
-			{
-				ingredientSegment->GetComponent<IngredientComponent>()->SetFalling(true);
-			}
-		}
+		HandleFall();
 	}
-	else if (m_IsFalling)
+	else if (m_FloorsToFall)
 	{
-		HandleFall(elapsedSec);
+		ExecuteFall(elapsedSec);
 	}
 
 	// Go over all ingredients
@@ -77,10 +45,41 @@ void dae::IngredientComponent::Update(float elapsedSec)
 	}
 }
 
-void dae::IngredientComponent::Reset()
+void dae::IngredientComponent::HandleFall()
 {
-	m_IsPressed = false;
-	m_IsFalling = false;
+	bool fall = true;
+	std::vector<GameObject*> fullIngredient;
+
+	// Get all ingredients
+	for (auto ingredient : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient"))
+	{
+		// If type is the same
+		auto ingredientComp = ingredient->GetComponent<IngredientComponent>();
+		if (ingredientComp->GetType() == GetType())
+		{
+			// If ID is the same
+			if (ingredientComp->GetId() == GetId())
+			{
+				// Add to list
+				fullIngredient.push_back(ingredient);
+
+				// If not all segments are pressed, do not fall
+				if (!ingredientComp->GetPressed())
+				{
+					fall = false;
+				}
+			}
+		}
+	}
+
+	// If all segments are pressed, fall
+	if (fall)
+	{
+		for (auto ingredientSegment : fullIngredient)
+		{
+			ingredientSegment->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
+		}
+	}
 }
 
 void dae::IngredientComponent::HandlePress()
@@ -116,7 +115,7 @@ void dae::IngredientComponent::HandlePress()
 	}
 }
 
-void dae::IngredientComponent::HandleFall(float elapsedSec)
+void dae::IngredientComponent::ExecuteFall(float elapsedSec)
 {
 	// Move command down
 	dae::FallCommand command{ GetOwner(), 75 };
@@ -142,8 +141,13 @@ void dae::IngredientComponent::HandleIngredient(GameObject* pOther)
 		if (selfPos.y >= ingredientPos.y && selfPos.y <= ingredientPos.y + ingredientDims.y ||
 			selfPos.y + selfDims.y >= ingredientPos.y && selfPos.y + selfDims.y <= ingredientPos.y + ingredientDims.y)
 		{
-			pOther->GetComponent<IngredientComponent>()->HandlePress();
-			pOther->GetComponent<IngredientComponent>()->SetFalling(true);
+			// Two ingredients are colliding
+			// If this ingredient is falling, and the other one is not falling
+			if (m_FloorsToFall && !pOther->GetComponent<IngredientComponent>()->GetFalling())
+			{
+				// Move the other ingredient down
+				pOther->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
+			}
 		}
 	}
 }

@@ -161,7 +161,8 @@ void dae::PlatformComponent::HandleIngredientCollision(GameObject* pCollider)
 			pCollider->SetLocalPosition(glm::vec3{ colliderPos.x, objPos.y - colliderHeight + objDims.y, colliderPos.z });
 			
 			auto ingredientComp = pCollider->GetComponent<IngredientComponent>();
-			ingredientComp->Reset();
+			ingredientComp->SetPressed(false);
+			ingredientComp->DecrementFloorsToFall();
 		}
 	}
 }

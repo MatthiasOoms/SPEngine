@@ -21,11 +21,12 @@ namespace dae
 		void SetId(int id) { m_Id = id; }
 		int GetId() const { return m_Id; }
 
-		void Reset();
+		void SetPressed(bool pressed) { m_IsPressed = pressed; }
 		bool GetPressed() const { return m_IsPressed; }
 
-		void SetFalling(bool falling) { m_IsFalling = falling; }
-		bool GetFalling() const { return m_IsFalling; }
+		void IncrementFloorsToFall() { ++m_FloorsToFall; }
+		void DecrementFloorsToFall() { if(m_FloorsToFall > 0) --m_FloorsToFall; }
+		int GetFalling() const { return m_FloorsToFall; }
 
 
 	private:
@@ -33,10 +34,11 @@ namespace dae
 		int m_Id;
 
 		bool m_IsPressed;
-		bool m_IsFalling;
+		int m_FloorsToFall;
 
+		void HandleFall();
 		void HandlePress();
-		void HandleFall(float elapsedSec);
+		void ExecuteFall(float elapsedSec);
 		void HandleIngredient(GameObject* pOther);
 	};
 }
