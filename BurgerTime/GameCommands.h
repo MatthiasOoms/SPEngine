@@ -38,6 +38,7 @@ namespace dae
 	{
 	private:
 		GameObject* m_pGameObject;
+		GameObject* m_pLadder;
 		float m_MoveSpeed;
 		std::shared_ptr<Texture2D> m_PeterClimbTexture;
 		std::shared_ptr<Texture2D> m_HotdogClimbTexture;
@@ -50,6 +51,7 @@ namespace dae
 		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
 		ClimbStartCommand(GameObject* pGameObject, float moveSpeed);
+		ClimbStartCommand(GameObject* pGameObject, GameObject* pLadder, float moveSpeed);
 
 		virtual ~ClimbStartCommand() override = default;
 		ClimbStartCommand(const ClimbStartCommand& other) = delete;

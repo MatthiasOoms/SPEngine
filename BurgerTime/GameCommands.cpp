@@ -57,7 +57,7 @@ void dae::WalkCommand::Execute(float elapsedSec)
 			if (selfPos.x + selfDims.x <= platformPos.x + platformDims.x && selfPos.x + selfDims.x >= platformPos.x)
 			{
 				// If self is above the object and has some overlap with the platform object on the y-axis
-				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
+				if (selfPos.y + selfDims.y >= platformPos.y - 1 && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
 				{
 					canWalk = true;
 				}
@@ -326,7 +326,7 @@ void dae::ClimbStartCommand::HandleEnemy()
 	if (GetGameObject()->GetComponent<dae::EnemyComponent>())
 	{
 		auto stateComp = GetGameObject()->GetComponent<dae::EnemyComponent>();
-		stateComp->SetState(new dae::ClimbEnemyState{ GetGameObject(), m_MoveSpeed });
+		stateComp->SetState(new dae::ClimbEnemyState{ GetGameObject(), m_pLadder, m_MoveSpeed });
 
 		switch (stateComp->GetType())
 		{
@@ -348,6 +348,19 @@ void dae::ClimbStartCommand::HandleEnemy()
 dae::ClimbStartCommand::ClimbStartCommand(GameObject* pGameObject, float moveSpeed)
 	: Command{}
 	, m_pGameObject{ pGameObject }
+	, m_pLadder{ nullptr }
+	, m_MoveSpeed{ moveSpeed }
+{
+	m_PeterClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("PeterClimb.png");
+	m_HotdogClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("HotdogClimb.png");
+	m_EggClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("EggClimb.png");
+	m_PickleClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("PickleClimb.png");
+}
+
+dae::ClimbStartCommand::ClimbStartCommand(GameObject* pGameObject, GameObject* pLadder, float moveSpeed)
+	: Command{}
+	, m_pGameObject{ pGameObject }
+	, m_pLadder{ pLadder }
 	, m_MoveSpeed{ moveSpeed }
 {
 	m_PeterClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("PeterClimb.png");
@@ -406,7 +419,7 @@ void dae::ClimbEndCommand::HandleEnemy()
 
 			if (selfPos.x + selfDims.x >= platformPos.x && selfPos.x <= platformPos.x + platformDims.x)
 			{
-				if (selfPos.y + selfDims.y >= platformPos.y && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
+				if (selfPos.y + selfDims.y >= platformPos.y - 1 && selfPos.y + selfDims.y <= platformPos.y + platformDims.y)
 				{
 					// Set the texture to the Walk texture
 					switch (stateComp->GetType())

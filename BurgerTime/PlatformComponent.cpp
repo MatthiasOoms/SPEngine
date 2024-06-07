@@ -34,16 +34,6 @@ void dae::PlatformComponent::Update(float)
 	// Check if any enemy is on the platform
 	for (auto pEnemy : m_pEnemies)
 	{
-		if (pEnemy->HasComponent<dae::EnemyComponent>())
-		{
-			// If the enemy is climbing, they cannot collide with the platform
-			auto enemyComp = pEnemy->GetComponent<dae::EnemyComponent>();
-			if (dynamic_cast<ClimbEnemyState*>(enemyComp->GetCurrentState()))
-			{
-				continue;
-			}
-		}
-
 		HandleCollision(pEnemy);
 	}
 }
@@ -87,9 +77,22 @@ void dae::PlatformComponent::HandleCollision(GameObject* pCollider)
 	int colliderWidth = colliderDims.x;
 	int colliderHeight = colliderDims.y;
 
+	// If enemy is climbing down, do not collide
+	if (pCollider->HasComponent<EnemyComponent>())
+	{
+		auto stateComp = pCollider->GetComponent<EnemyComponent>();
+		if (auto climbState = dynamic_cast<ClimbEnemyState*>(stateComp->GetCurrentState()))
+		{
+			if (climbState->GetSpeed() > 0)
+			{
+				return;
+			}
+		}
+	}
+
 	// If player left and right is in the object
-	if ((colliderPos.x < objPos.x + objWidth && colliderPos.x > objPos.x)
-		&& (colliderPos.x + colliderWidth < objPos.x + objWidth && colliderPos.x + colliderWidth > objPos.x))
+	if ((colliderPos.x <= objPos.x + objWidth && colliderPos.x >= objPos.x)
+		&& (colliderPos.x + colliderWidth <= objPos.x + objWidth && colliderPos.x + colliderWidth >= objPos.x))
 	{
 		// If player bottom is in the object
 		if (colliderPos.y + colliderHeight <= objPos.y + objHeight && colliderPos.y + colliderHeight >= objPos.y)

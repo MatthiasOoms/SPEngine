@@ -36,6 +36,9 @@ void dae::WalkingEnemyState::Update(float elapsedSec)
 		// If timer is up, start climbing
 		if (m_AccumulatedTime >= m_TimeToClimb)
 		{
+			// Reset timer
+			m_AccumulatedTime = 0;
+
 			// If ladder is above me, speed = -75
 			if (ladder->GetTransform().GetWorldPosition().y < enemyPos.y)
 			{
@@ -47,11 +50,9 @@ void dae::WalkingEnemyState::Update(float elapsedSec)
 			}
 
 			// Start climbing
-			dae::ClimbStartCommand climbStartCommand{ GetEnemy(), m_Speed };
+			dae::ClimbStartCommand climbStartCommand{ GetEnemy(), ladder, m_Speed };
 			climbStartCommand.Execute(elapsedSec);
 
-			// Reset timer
-			m_AccumulatedTime = 0;
 			return;
 		}
 	}
