@@ -15,6 +15,10 @@ dae::IngredientComponent::IngredientComponent(GameObject* pOwner)
 
 void dae::IngredientComponent::Update(float elapsedSec)
 {
+	if (m_FloorsToFall == -1)
+	{
+		return;
+	}
 	if (!m_IsPressed && m_FloorsToFall == 0)
 	{
 		HandlePress();
@@ -23,25 +27,6 @@ void dae::IngredientComponent::Update(float elapsedSec)
 	else if (m_FloorsToFall > 0)
 	{
 		ExecuteFall(elapsedSec);
-	}
-
-	// Go over all ingredients
-	for (auto ingredient : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient"))
-	{
-		// If type is the same
-		auto ingredientComp = ingredient->GetComponent<IngredientComponent>();
-		if (ingredientComp->GetType() == GetType())
-		{
-			// If ID is not the same
-			if (ingredientComp->GetId() != GetId())
-			{
-				HandleIngredient(ingredient);
-			}
-		}
-		else
-		{
-			HandleIngredient(ingredient);
-		}
 	}
 }
 
@@ -69,6 +54,14 @@ void dae::IngredientComponent::HandleFall()
 					fall = false;
 				}
 			}
+			else
+			{
+				HandleIngredient(ingredient);
+			}
+		}
+		else
+		{
+			HandleIngredient(ingredient);
 		}
 	}
 

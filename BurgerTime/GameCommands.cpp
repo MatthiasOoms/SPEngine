@@ -229,8 +229,9 @@ void dae::WalkStartCommand::HandleEnemy()
 				}
 
 				// Find closest player
-				GameObject* pClosestPlayer{ dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front() };
-				for (auto player : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player"))
+				auto players = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player");
+				GameObject* pClosestPlayer{ players.front() };
+				for (auto player : players)
 				{
 					// Calculate distance to player
 					const auto playerPos{ pClosestPlayer->GetTransform().GetWorldPosition() };
@@ -436,7 +437,8 @@ void dae::ClimbEndCommand::HandleEnemy()
 					}
 
 					// Find closest player
-					GameObject* pClosestPlayer{ dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front() };
+					auto players = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player");
+					GameObject* pClosestPlayer{ players.front() };
 					for (auto player : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player"))
 					{
 						// Calculate distance to player
@@ -513,8 +515,7 @@ void dae::ClimbCommand::Execute(float elapsedSec)
 	auto selfPos = GetGameObject()->GetTransform().GetWorldPosition();
 	auto selfDims = GetGameObject()->GetTransform().GetDimensions();
 
-	auto pLadders = SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ladder");
-	for (auto pLadder : pLadders)
+	for (auto pLadder : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ladder"))
 	{
 		// Get the player's position and dimensions
 		auto ladderPos = pLadder->GetTransform().GetWorldPosition();
