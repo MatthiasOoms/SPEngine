@@ -264,8 +264,8 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	}
 	{
 		// End Move
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
+		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get(), -playerSpeed));
+		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get(), playerSpeed));
 		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
 		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
 	}
@@ -287,8 +287,8 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	}
 	{
 		// End Move
-		input.AddCommand(sceneName, SDL_SCANCODE_W, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
-		input.AddCommand(sceneName, SDL_SCANCODE_S, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
+		input.AddCommand(sceneName, SDL_SCANCODE_W, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get(), -playerSpeed));
+		input.AddCommand(sceneName, SDL_SCANCODE_S, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get(), playerSpeed));
 		input.AddCommand(sceneName, SDL_SCANCODE_A, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
 		input.AddCommand(sceneName, SDL_SCANCODE_D, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
 	}

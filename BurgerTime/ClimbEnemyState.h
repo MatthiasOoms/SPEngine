@@ -7,6 +7,7 @@ namespace dae
 	class ClimbEnemyState final : public EnemyState
 	{
 	public:
+		ClimbEnemyState(GameObject* pPlayer);
 		ClimbEnemyState(GameObject* pPlayer, float speed);
 
 		virtual void Update(float elapsedSec) override;
