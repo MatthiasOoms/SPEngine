@@ -95,11 +95,34 @@ dae::GameObject* dae::WalkingEnemyState::IsTouchingLadder()
 			if (enemyPos.y + enemySize.y <= ladderPos.y + ladderSize.y &&
 				enemyPos.y + enemySize.y >= ladderPos.y)
 			{
-				return ladder;
+				// Get nearest player on y-axis
+				auto nearestPlayer{ dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front() };
+
+				for (auto player : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player"))
+				{
+					// If player is closer the current nearest player
+					if (abs(player->GetTransform().GetWorldPosition().y - enemyPos.y) <
+						abs(nearestPlayer->GetTransform().GetWorldPosition().y - enemyPos.y))
+					{
+						nearestPlayer = player;
+					}
+				}
+
+				// If nearest player is above me, and ladder is above me, return ladder
+				// If nearest player is below me, and ladder is below me, return ladder
+				// If ladder is on same level as player, return ladder
+				if (nearestPlayer->GetTransform().GetWorldPosition().y <= enemyPos.y && ladderPos.y <= enemyPos.y)
+				{
+					return ladder;
+				}
+				else if (nearestPlayer->GetTransform().GetWorldPosition().y >= enemyPos.y && ladderPos.y >= enemyPos.y)
+				{
+					return ladder;
+				}
 			}
-			
 		}
 	}
+
 	// If no ladder is touching enemy, return 0
 	return nullptr;
 }
