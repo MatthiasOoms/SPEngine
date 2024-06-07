@@ -15,6 +15,7 @@
 #include <TextComponent.h>
 #include "FPSComponent.h"
 #include "IngredientComponent.h"
+#include "PlateComponent.h"
 
 void dae::LevelLoader::Init(const std::string& data)
 {
@@ -208,7 +209,28 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 				throw std::runtime_error("Unknown ingredient option");
 			}
 		}
+		else if (layout["Type"] == "Plate")
+		{
+			// Create a new GameObject
+			auto plate = std::make_unique<dae::GameObject>("Plate");
 
+			// Add a TextureComponent to the GameObject
+			auto texture = plate->AddComponent<dae::TextureComponent>();
+
+			// Add a PlateComponent to the GameObject
+			plate->AddComponent<dae::PlateComponent>();
+
+			// Set the texture of the TextureComponent
+			texture->SetTexture(resources.LoadTexture("Plate.png"));
+
+			// Set the position of the GameObject
+			plate->SetLocalPosition({ layout["Position"]["x"], layout["Position"]["y"], 0 });
+
+			// Set the dimensions of the TransformComponent
+			plate->GetTransform().SetDimensions(texture->GetDimensions());
+
+			gameObjects.push_back(std::move(plate));
+		}
 		else
 		{
 			throw std::runtime_error("Unknown layout type");

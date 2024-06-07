@@ -8,6 +8,34 @@
   },
   "Layout": [
     {
+      "Type": "Plate",
+      "Position": {
+        "x": 58,
+        "y": 448
+      }
+    },
+    {
+      "Type": "Plate",
+      "Position": {
+        "x": 154,
+        "y": 448
+      }
+    },
+    {
+      "Type": "Plate",
+      "Position": {
+        "x": 250,
+        "y": 448
+      }
+    },
+    {
+      "Type": "Plate",
+      "Position": {
+        "x": 346,
+        "y": 448
+      }
+    },
+    {
       "Type": "Ladder",
       "Length": "2",
       "Position": {
