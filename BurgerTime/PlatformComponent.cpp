@@ -102,7 +102,7 @@ void dae::PlatformComponent::HandleCollision(GameObject* pCollider)
 		auto stateComp = pCollider->GetComponent<IngredientComponent>();
 		if (stateComp->GetFalling())
 		{
-			HandlePlatformCollision(pCollider);
+			HandleIngredientCollision(pCollider);
 		}
 		return;
 	}
@@ -137,13 +137,12 @@ void dae::PlatformComponent::HandleCollision(GameObject* pCollider)
 	}
 }
 
-void dae::PlatformComponent::HandlePlatformCollision(GameObject* pCollider)
+void dae::PlatformComponent::HandleIngredientCollision(GameObject* pCollider)
 {
 	// Get the object's position and dimensions
 	auto objPos = GetOwner()->GetTransform().GetWorldPosition();
 	auto objDims = GetOwner()->GetTransform().GetDimensions();
 	int objWidth = objDims.x;
-	//int objHeight = objDims.y;
 
 	// Get the player's position and dimensions
 	auto colliderPos = pCollider->GetTransform().GetWorldPosition();
@@ -156,7 +155,7 @@ void dae::PlatformComponent::HandlePlatformCollision(GameObject* pCollider)
 		(colliderPos.x + colliderWidth <= objPos.x + objWidth && colliderPos.x + colliderWidth >= objPos.x))
 	{
 		// If player bottom is in the object
-		if (colliderPos.y + colliderHeight <= objPos.y + 2 && colliderPos.y + colliderHeight >= objPos.y)
+		if (colliderPos.y + colliderHeight <= objPos.y + 1 && colliderPos.y + colliderHeight >= objPos.y)
 		{
 			// Move up
 			pCollider->SetLocalPosition(glm::vec3{ colliderPos.x, objPos.y - colliderHeight, colliderPos.z });

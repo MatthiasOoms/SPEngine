@@ -37,6 +37,7 @@ namespace dae
 
 		void HandlePress();
 		void HandleFall(float elapsedSec);
+		void HandleIngredient(GameObject* pOther);
 	};
 }
 

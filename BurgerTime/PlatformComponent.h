@@ -24,7 +24,7 @@ namespace dae
 		void RegisterObjects(std::string scene);
 	private:
 		void HandleCollision(GameObject* pCollider);
-		void HandlePlatformCollision(GameObject* pCollider);
+		void HandleIngredientCollision(GameObject* pCollider);
 
 		std::vector<GameObject*> m_pPlayers;
 		std::vector<GameObject*> m_pEnemies;

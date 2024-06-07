@@ -56,6 +56,25 @@ void dae::IngredientComponent::Update(float elapsedSec)
 	{
 		HandleFall(elapsedSec);
 	}
+
+	// Go over all ingredients
+	for (auto ingredient : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient"))
+	{
+		// If type is the same
+		auto ingredientComp = ingredient->GetComponent<IngredientComponent>();
+		if (ingredientComp->GetType() == GetType())
+		{
+			// If ID is not the same
+			if (ingredientComp->GetId() != GetId())
+			{
+				HandleIngredient(ingredient);
+			}
+		}
+		else
+		{
+			HandleIngredient(ingredient);
+		}
+	}
 }
 
 void dae::IngredientComponent::Reset()
@@ -102,4 +121,29 @@ void dae::IngredientComponent::HandleFall(float elapsedSec)
 	// Move command down
 	dae::FallCommand command{ GetOwner(), 75 };
 	command.Execute(elapsedSec);
+}
+
+void dae::IngredientComponent::HandleIngredient(GameObject* pOther)
+{
+	// This is a fully different Ingredient
+	auto selfPos = GetOwner()->GetTransform().GetWorldPosition();
+	auto selfDims = GetOwner()->GetTransform().GetDimensions();
+
+	auto ingredientPos = pOther->GetTransform().GetWorldPosition();
+	auto ingredientDims = pOther->GetTransform().GetDimensions();
+
+	// If left side of self is between left and right side of ingredient
+	// or right side of self is between left and right side of ingredient
+	if (selfPos.x >= ingredientPos.x && selfPos.x <= ingredientPos.x + ingredientDims.x ||
+		selfPos.x + selfDims.x >= ingredientPos.x && selfPos.x + selfDims.x <= ingredientPos.x + ingredientDims.x)
+	{
+		// If top side of self is between top and bottom side of ingredient
+		// or bottom side of self is between top and bottom side of ingredient
+		if (selfPos.y >= ingredientPos.y && selfPos.y <= ingredientPos.y + ingredientDims.y ||
+			selfPos.y + selfDims.y >= ingredientPos.y && selfPos.y + selfDims.y <= ingredientPos.y + ingredientDims.y)
+		{
+			pOther->GetComponent<IngredientComponent>()->HandlePress();
+			pOther->GetComponent<IngredientComponent>()->SetFalling(true);
+		}
+	}
 }
