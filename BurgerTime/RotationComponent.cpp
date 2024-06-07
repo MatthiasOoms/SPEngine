@@ -8,7 +8,7 @@ dae::RotationComponent::RotationComponent(GameObject* pOwner)
 	, m_RotAngle{}
 	, m_RotSpeed{ 180 }
 {
-	float distance{ GetDistance(GetOwner()->GetTransform().GetLocalPosition().x, GetOwner()->GetTransform().GetLocalPosition().y, GetOwner()->GetTransform().GetLocalPosition().z) };
+	float distance{ GetDistance(GetOwner()->GetTransform().GetWorldPosition().x, GetOwner()->GetTransform().GetWorldPosition().y, GetOwner()->GetTransform().GetWorldPosition().z) };
 	m_Distance = distance;
 }
 

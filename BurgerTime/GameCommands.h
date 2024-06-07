@@ -82,6 +82,25 @@ namespace dae
 		void Execute(float elapsedSec) override;
 	};
 
+	class FallCommand final : public Command
+	{
+	private:
+		GameObject* m_pGameObject;
+		float m_MoveSpeed;
+	protected:
+		GameObject* GetGameObject() const { return m_pGameObject; }
+	public:
+		FallCommand(GameObject* pGameObject, float speed);
+
+		virtual ~FallCommand() override = default;
+		FallCommand(const FallCommand& other) = delete;
+		FallCommand(FallCommand&& other) = delete;
+		FallCommand& operator=(const FallCommand& other) = delete;
+		FallCommand& operator=(FallCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
+
 	class ClimbCommand final : public Command
 	{
 	private:

@@ -322,9 +322,10 @@
     {
       "Type": "Ingredient",
       "Option": "1",
+      "Id": 1,
       "Position": {
-        "x": 90,
-        "y": 110
+        "x": 64,
+        "y": 60
       }
     }
   ],

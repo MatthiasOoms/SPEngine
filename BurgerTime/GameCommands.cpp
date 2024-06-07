@@ -572,3 +572,15 @@ void dae::ToggleSoundCommand::Execute(float)
 	auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
 	soundSystem.ToggleMute();
 }
+
+dae::FallCommand::FallCommand(GameObject* pGameObject, float speed)
+	: Command{}
+	, m_pGameObject{ pGameObject }
+	, m_MoveSpeed{ speed }
+{
+}
+
+void dae::FallCommand::Execute(float elapsedSec)
+{
+	GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ 0, m_MoveSpeed * elapsedSec, 0 });
+}

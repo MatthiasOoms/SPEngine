@@ -6,6 +6,7 @@
 #include "ClimbPlayerState.h"
 #include "EnemyComponent.h"
 #include "ClimbEnemyState.h"
+#include "IngredientComponent.h"
 
 dae::PlatformComponent::PlatformComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
@@ -35,6 +36,12 @@ void dae::PlatformComponent::Update(float)
 	for (auto pEnemy : m_pEnemies)
 	{
 		HandleCollision(pEnemy);
+	}
+
+	// Check if any ingredient is on the platform
+	for (auto pIngredient : m_pIngredients)
+	{
+		HandleCollision(pIngredient);
 	}
 }
 
@@ -90,6 +97,16 @@ void dae::PlatformComponent::HandleCollision(GameObject* pCollider)
 		}
 	}
 
+	if (pCollider->HasComponent<IngredientComponent>())
+	{
+		auto stateComp = pCollider->GetComponent<IngredientComponent>();
+		if (stateComp->GetFalling())
+		{
+			HandlePlatformCollision(pCollider);
+		}
+		return;
+	}
+
 	// If player left and right is in the object
 	if ((colliderPos.x <= objPos.x + objWidth && colliderPos.x >= objPos.x)
 		&& (colliderPos.x + colliderWidth <= objPos.x + objWidth && colliderPos.x + colliderWidth >= objPos.x))
@@ -116,6 +133,36 @@ void dae::PlatformComponent::HandleCollision(GameObject* pCollider)
 			{
 				pCollider->SetLocalPosition(glm::vec3{ objPos.x + objWidth - colliderWidth, colliderPos.y, colliderPos.z });
 			}
+		}
+	}
+}
+
+void dae::PlatformComponent::HandlePlatformCollision(GameObject* pCollider)
+{
+	// Get the object's position and dimensions
+	auto objPos = GetOwner()->GetTransform().GetWorldPosition();
+	auto objDims = GetOwner()->GetTransform().GetDimensions();
+	int objWidth = objDims.x;
+	//int objHeight = objDims.y;
+
+	// Get the player's position and dimensions
+	auto colliderPos = pCollider->GetTransform().GetWorldPosition();
+	auto colliderDims = pCollider->GetTransform().GetDimensions();
+	int colliderWidth = colliderDims.x;
+	int colliderHeight = colliderDims.y;
+
+	// If player left and right is in the object
+	if ((colliderPos.x <= objPos.x + objWidth && colliderPos.x >= objPos.x) &&
+		(colliderPos.x + colliderWidth <= objPos.x + objWidth && colliderPos.x + colliderWidth >= objPos.x))
+	{
+		// If player bottom is in the object
+		if (colliderPos.y + colliderHeight <= objPos.y + 2 && colliderPos.y + colliderHeight >= objPos.y)
+		{
+			// Move up
+			pCollider->SetLocalPosition(glm::vec3{ colliderPos.x, objPos.y - colliderHeight, colliderPos.z });
+			
+			auto ingredientComp = pCollider->GetComponent<IngredientComponent>();
+			ingredientComp->Reset();
 		}
 	}
 }

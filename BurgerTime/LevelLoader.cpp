@@ -14,6 +14,7 @@
 #include "json.hpp" // nlohmann::json
 #include <TextComponent.h>
 #include "FPSComponent.h"
+#include "IngredientComponent.h"
 
 void dae::LevelLoader::Init(const std::string& data)
 {
@@ -153,51 +154,59 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		// Process ingredients
 		else if (layout["Type"] == "Ingredient")
 		{
-			// Create a new GameObject
-			auto ingredient = std::make_unique<dae::GameObject>("Ingredient");
-
-			// Add a TextureComponent to the GameObject
-			auto texture = ingredient->AddComponent<dae::TextureComponent>();
-
 			// Set the texture of the TextureComponent
 			if (layout["Option"] == "1")
 			{
-				texture->SetTexture(resources.LoadTexture("Ingredient1.png"));
+				auto temp = CreateIngredient("BunTop", layout["Position"]["x"], layout["Position"]["y"], layout["Id"]);
+				for (auto& ingredientPart : temp)
+				{
+					gameObjects.push_back(std::move(ingredientPart));
+				}
 			}
 			else if (layout["Option"] == "2")
 			{
-				texture->SetTexture(resources.LoadTexture("Ingredient2.png"));
+				auto temp = CreateIngredient("Patty", layout["Position"]["x"], layout["Position"]["y"], layout["Id"]);
+				for (auto& ingredientPart : temp)
+				{
+					gameObjects.push_back(std::move(ingredientPart));
+				}
 			}
 			else if (layout["Option"] == "3")
 			{
-				texture->SetTexture(resources.LoadTexture("Ingredient3.png"));
+				auto temp = CreateIngredient("Cheese", layout["Position"]["x"], layout["Position"]["y"], layout["Id"]);
+				for (auto& ingredientPart : temp)
+				{
+					gameObjects.push_back(std::move(ingredientPart));
+				}
 			}
 			else if (layout["Option"] == "4")
 			{
-				texture->SetTexture(resources.LoadTexture("Ingredient4.png"));
+				auto temp = CreateIngredient("Lettuce", layout["Position"]["x"], layout["Position"]["y"], layout["Id"]);
+				for (auto& ingredientPart : temp)
+				{
+					gameObjects.push_back(std::move(ingredientPart));
+				}
 			}
 			else if (layout["Option"] == "5")
 			{
-				texture->SetTexture(resources.LoadTexture("Ingredient5.png"));
+				auto temp = CreateIngredient("Tomato", layout["Position"]["x"], layout["Position"]["y"], layout["Id"]);
+				for (auto& ingredientPart : temp)
+				{
+					gameObjects.push_back(std::move(ingredientPart));
+				}
 			}
 			else if (layout["Option"] == "6")
 			{
-				texture->SetTexture(resources.LoadTexture("Ingredient6.png"));
+				auto temp = CreateIngredient("BunBottom", layout["Position"]["x"], layout["Position"]["y"], layout["Id"]);
+				for (auto& ingredientPart : temp)
+				{
+					gameObjects.push_back(std::move(ingredientPart));
+				}
 			}
 			else
 			{
 				throw std::runtime_error("Unknown ingredient option");
 			}
-
-			// Set the position of the GameObject
-			ingredient->SetLocalPosition({ layout["Position"]["x"], layout["Position"]["y"], 0 });
-
-			// Set the scale of the TextureComponent
-			auto ingredientTexture = ingredient->GetComponent<dae::TextureComponent>();
-			// Set the dimensions of the TransformComponent
-			ingredient->GetTransform().SetDimensions(ingredientTexture->GetDimensions());
-
-			gameObjects.push_back(std::move(ingredient));
 		}
 
 		else
@@ -301,7 +310,12 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		// Scale if obj has a TextureComponent
 		if (obj->HasComponent<dae::TextureComponent>())
 		{
-			obj->GetComponent<dae::TextureComponent>()->SetScale(2);
+			// Scale if not scaled yet
+			auto textureComp = obj->GetComponent<dae::TextureComponent>();
+			if (textureComp->GetScale() == 1)
+			{
+				textureComp->SetScale(2);
+			}
 		}
 		scene.Add(std::move(obj));
 	}
@@ -329,4 +343,69 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	go->AddComponent<dae::TextComponent>()->SetFont(font);
 	go->AddComponent<dae::FPSComponent>();
 	scene.Add(std::move(go));
+}
+
+std::vector<std::unique_ptr<dae::GameObject>> dae::LevelLoader::CreateIngredient(std::string type, float x, float y, int id)
+{
+	std::vector<std::unique_ptr<dae::GameObject>> gameObjects{};
+
+	// Create bun left side
+	auto& resources = dae::ResourceManager::GetInstance();
+	auto sideTexture = resources.LoadTexture(type + "Side.png");
+	auto middleTexture = resources.LoadTexture(type + "Middle.png");
+
+	auto ingredient = std::make_unique<dae::GameObject>("Ingredient");
+	auto texture = ingredient->AddComponent<dae::TextureComponent>();
+	texture->SetTexture(sideTexture);
+	texture->SetScale(2);
+	ingredient->SetLocalPosition({ x, y, 0 });
+	ingredient->GetTransform().SetDimensions(texture->GetDimensions());
+	auto ingredientComp = ingredient->AddComponent<dae::IngredientComponent>();
+	ingredientComp->SetType(type);
+	ingredientComp->SetId(id);
+	gameObjects.push_back(std::move(ingredient));
+
+	x += texture->GetDimensions().x;
+
+	// Create bun left middle
+	ingredient = std::make_unique<dae::GameObject>("Ingredient");
+	texture = ingredient->AddComponent<dae::TextureComponent>();
+	texture->SetTexture(middleTexture);
+	texture->SetScale(2);
+	ingredient->SetLocalPosition({ x, y, 0 });
+	ingredient->GetTransform().SetDimensions(texture->GetDimensions());
+	ingredientComp = ingredient->AddComponent<dae::IngredientComponent>();
+	ingredientComp->SetType(type);
+	ingredientComp->SetId(id);
+	gameObjects.push_back(std::move(ingredient));
+
+	x += texture->GetDimensions().x;
+
+	// Create bun right middle
+	ingredient = std::make_unique<dae::GameObject>("Ingredient");
+	texture = ingredient->AddComponent<dae::TextureComponent>();
+	texture->SetTexture(middleTexture);
+	texture->SetScale(-2);
+	ingredient->SetLocalPosition({ x, y, 0 });
+	ingredient->GetTransform().SetDimensions(texture->GetDimensions());
+	ingredientComp = ingredient->AddComponent<dae::IngredientComponent>();
+	ingredientComp->SetType(type);
+	ingredientComp->SetId(id);
+	gameObjects.push_back(std::move(ingredient));
+
+	x += texture->GetDimensions().x;
+
+	// Create bun right side
+	ingredient = std::make_unique<dae::GameObject>("Ingredient");
+	texture = ingredient->AddComponent<dae::TextureComponent>();
+	texture->SetTexture(sideTexture);
+	texture->SetScale(-2);
+	ingredient->SetLocalPosition({ x, y, 0 });
+	ingredient->GetTransform().SetDimensions(texture->GetDimensions());
+	ingredientComp = ingredient->AddComponent<dae::IngredientComponent>();
+	ingredientComp->SetType(type);
+	ingredientComp->SetId(id);
+	gameObjects.push_back(std::move(ingredient));
+
+	return gameObjects;
 }
