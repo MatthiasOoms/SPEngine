@@ -1,6 +1,8 @@
 #ifndef GAMECOMMANDS_H
 #define GAMECOMMANDS_H
+#include <memory>
 #include "Command.h"
+#include "Texture2D.h"
 
 namespace dae
 {
@@ -11,6 +13,10 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 		float m_MoveSpeed;
+		std::shared_ptr<Texture2D> m_PeterWalkTexture;
+		std::shared_ptr<Texture2D> m_HotdogWalkTexture;
+		std::shared_ptr<Texture2D> m_EggWalkTexture;
+		std::shared_ptr<Texture2D> m_PickleWalkTexture;
 
 		void HandlePlayer();
 		void HandleEnemy();
@@ -33,6 +39,10 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 		float m_MoveSpeed;
+		std::shared_ptr<Texture2D> m_PeterClimbTexture;
+		std::shared_ptr<Texture2D> m_HotdogClimbTexture;
+		std::shared_ptr<Texture2D> m_EggClimbTexture;
+		std::shared_ptr<Texture2D> m_PickleClimbTexture;
 
 		void HandlePlayer();
 		void HandleEnemy();
@@ -55,6 +65,7 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 		float m_MoveSpeed;
+		std::shared_ptr<Texture2D> m_PeterWalkTexture;
 	protected:
 		GameObject* GetGameObject() const { return m_pGameObject; }
 	public:
@@ -74,7 +85,11 @@ namespace dae
 	private:
 		GameObject* m_pGameObject;
 		float m_ClimbSpeed;
-		//float m_Acceleration; // Not present in my game
+		std::shared_ptr<Texture2D> m_PeterIdleTexture;
+		std::shared_ptr<Texture2D> m_HotdogWalkTexture;
+		std::shared_ptr<Texture2D> m_EggWalkTexture;
+		std::shared_ptr<Texture2D> m_PickleWalkTexture;
+
 	protected:
 		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
@@ -93,6 +108,10 @@ namespace dae
 	{
 	private:
 		GameObject* m_pGameObject;
+		std::shared_ptr<Texture2D> m_PeterIdleTexture;
+		std::shared_ptr<Texture2D> m_HotdogWalkTexture;
+		std::shared_ptr<Texture2D> m_EggWalkTexture;
+		std::shared_ptr<Texture2D> m_PickleWalkTexture;
 
 		void HandlePlayer();
 		void HandleEnemy();
@@ -115,6 +134,7 @@ namespace dae
 	{
 	private:
 		GameObject* m_pGameObject;
+		std::shared_ptr<Texture2D> m_PeterIdleTexture;
 	protected:
 		GameObject* GetGameObject() const{ return m_pGameObject; }
 	public:
