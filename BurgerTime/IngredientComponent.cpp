@@ -70,6 +70,19 @@ void dae::IngredientComponent::Update(float elapsedSec)
 	}
 }
 
+void dae::IngredientComponent::DecrementFloorsToFall()
+{
+	if (m_FloorsToFall > 0)
+	{
+		--m_FloorsToFall;
+	}
+
+	if (m_FloorsToFall <= 0)
+	{
+		m_IsPressed = false;
+	}
+}
+
 void dae::IngredientComponent::HandleFall()
 {
 	bool fall = true;
@@ -176,6 +189,13 @@ void dae::IngredientComponent::ExecuteFall(float elapsedSec)
 		auto ingredientPos = GetOwner()->GetTransform().GetWorldPosition();
 		auto ingredientDims = GetOwner()->GetTransform().GetDimensions();
 
+		// If enemy is below screen, respawn
+		if (enemyPos.y > 480)
+		{
+			enemy->GetComponent<EnemyComponent>()->Respawn();
+			continue;
+		}
+
 		// If left side of enemy is between left and right side of ingredient
 		// or right side of enemy is between left and right side of ingredient
 		if (enemyPos.x >= ingredientPos.x && enemyPos.x <= ingredientPos.x + ingredientDims.x ||
@@ -186,7 +206,7 @@ void dae::IngredientComponent::ExecuteFall(float elapsedSec)
 			if (enemyPos.y >= ingredientPos.y + (ingredientDims.y / 2) && enemyPos.y <= ingredientPos.y + ingredientDims.y ||
 				enemyPos.y + enemyDims.y >= ingredientPos.y + (ingredientDims.y / 2) && enemyPos.y + enemyDims.y <= ingredientPos.y + ingredientDims.y)
 			{
-				enemy->GetComponent<EnemyComponent>()->Respawn();;
+				enemy->GetComponent<EnemyComponent>()->Respawn();
 				continue;
 			}
 		}

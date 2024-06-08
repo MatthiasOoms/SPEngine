@@ -127,10 +127,10 @@ void dae::EnemyComponent::Respawn()
 
 	if (pos.x < 240)
 	{
-		GetOwner()->GetTransform().SetWorldPosition(480, pos.y, pos.z );
+		GetOwner()->GetTransform().SetWorldPosition(480, 32, pos.z );
 	}
 	else
 	{
-		GetOwner()->GetTransform().SetWorldPosition( -static_cast<float>(dims.x), pos.y, pos.z );
+		GetOwner()->GetTransform().SetWorldPosition( -static_cast<float>(dims.x), 32, pos.z );
 	}
 }

@@ -240,35 +240,35 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
     }
 
 	// Process each EnemyType
-	//for (const auto& enemy : j["Enemies"])
-	//{
-	//	// Create a new GameObject
-	//	auto enemyObj = std::make_unique<dae::GameObject>("Enemy");
-	//	enemyObj->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
+	for (const auto& enemy : j["Enemies"])
+	{
+		// Create a new GameObject
+		auto enemyObj = std::make_unique<dae::GameObject>("Enemy");
+		enemyObj->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
 
-	//	if (enemy["Type"] == "Hotdog")
-	//	{
-	//		enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Hotdog);
-	//		enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
-	//		gameObjects.push_back(std::move(enemyObj));
-	//	}
-	//	else if (enemy["Type"] == "Egg")
-	//	{
-	//		enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Egg);
-	//		enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("EggWalk.png"));
-	//		gameObjects.push_back(std::move(enemyObj));
-	//	}
-	//	else if (enemy["Type"] == "Pickle")
-	//	{
-	//		enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Pickle);
-	//		enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("PickleWalk.png"));
-	//		gameObjects.push_back(std::move(enemyObj));
-	//	}
-	//	else
-	//	{
-	//		throw std::runtime_error("Unknown enemy type");
-	//	}
-	//}
+		if (enemy["Type"] == "Hotdog")
+		{
+			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Hotdog);
+			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
+			gameObjects.push_back(std::move(enemyObj));
+		}
+		else if (enemy["Type"] == "Egg")
+		{
+			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Egg);
+			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("EggWalk.png"));
+			gameObjects.push_back(std::move(enemyObj));
+		}
+		else if (enemy["Type"] == "Pickle")
+		{
+			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Pickle);
+			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("PickleWalk.png"));
+			gameObjects.push_back(std::move(enemyObj));
+		}
+		else
+		{
+			throw std::runtime_error("Unknown enemy type");
+		}
+	}
 
 	// If the scene does not exist, create it
 	if (!sceneManager.HasScene(sceneName))
@@ -282,34 +282,6 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	// Add Player commands
 	auto& input = dae::InputManager::GetInstance();
 	float playerSpeed = 100.f;
-
-	// Always
-	// Keyboard
-	{
-		// Start Move
-		input.AddCommand(sceneName, SDL_SCANCODE_W, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get(), -playerSpeed));
-		input.AddCommand(sceneName, SDL_SCANCODE_S, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get(), playerSpeed));
-		input.AddCommand(sceneName, SDL_SCANCODE_A, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get(), -playerSpeed));
-		input.AddCommand(sceneName, SDL_SCANCODE_D, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get(), playerSpeed));
-	}
-	{
-		// Move
-		input.AddCommand(sceneName, SDL_SCANCODE_W, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), -playerSpeed));
-		input.AddCommand(sceneName, SDL_SCANCODE_S, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), playerSpeed));
-		input.AddCommand(sceneName, SDL_SCANCODE_A, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), -playerSpeed));
-		input.AddCommand(sceneName, SDL_SCANCODE_D, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), playerSpeed));
-	}
-	{
-		// End Move
-		input.AddCommand(sceneName, SDL_SCANCODE_W, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
-		input.AddCommand(sceneName, SDL_SCANCODE_S, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
-		input.AddCommand(sceneName, SDL_SCANCODE_A, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
-		input.AddCommand(sceneName, SDL_SCANCODE_D, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
-	}
-	{
-		// Throw Pepper
-		input.AddCommand(sceneName, SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::ThrowPepperCommand>(player.get()));
-	}
 
 	// Singleplayer
 	if (sceneName != "Multiplayer" && sceneName != "Versus")
@@ -418,6 +390,33 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 			// Throw Pepper
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::ButtonA, dae::keyState::isUp, std::make_unique<dae::ThrowPepperCommand>(player.get()));
 		}
+	}
+	// Always
+	// Keyboard
+	{
+		// Start Move
+		input.AddCommand(sceneName, SDL_SCANCODE_W, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get(), -playerSpeed));
+		input.AddCommand(sceneName, SDL_SCANCODE_S, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get(), playerSpeed));
+		input.AddCommand(sceneName, SDL_SCANCODE_A, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get(), -playerSpeed));
+		input.AddCommand(sceneName, SDL_SCANCODE_D, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get(), playerSpeed));
+	}
+	{
+		// Move
+		input.AddCommand(sceneName, SDL_SCANCODE_W, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), -playerSpeed));
+		input.AddCommand(sceneName, SDL_SCANCODE_S, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), playerSpeed));
+		input.AddCommand(sceneName, SDL_SCANCODE_A, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), -playerSpeed));
+		input.AddCommand(sceneName, SDL_SCANCODE_D, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), playerSpeed));
+	}
+	{
+		// End Move
+		input.AddCommand(sceneName, SDL_SCANCODE_W, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
+		input.AddCommand(sceneName, SDL_SCANCODE_S, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
+		input.AddCommand(sceneName, SDL_SCANCODE_A, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
+		input.AddCommand(sceneName, SDL_SCANCODE_D, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
+	}
+	{
+		// Throw Pepper
+		input.AddCommand(sceneName, SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::ThrowPepperCommand>(player.get()));
 	}
 
 	for (auto& obj : gameObjects)

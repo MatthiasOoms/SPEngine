@@ -27,7 +27,7 @@ namespace dae
 		bool GetPressed() const { return m_IsPressed; }
 
 		void IncrementFloorsToFall() { ++m_FloorsToFall; }
-		void DecrementFloorsToFall() { if(m_FloorsToFall > 0) --m_FloorsToFall; }
+		void DecrementFloorsToFall();
 		void SetFloorsToFall(int floors) { m_FloorsToFall = floors; }
 		int GetFalling() const { return m_FloorsToFall; }
 
