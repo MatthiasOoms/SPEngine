@@ -237,7 +237,7 @@ void dae::WalkStartCommand::HandleEnemy()
 					break;
 				}
 
-				if (stateComp->GetCurrentState() != nullptr || stateComp->GetIsControlled() == false)
+				if (stateComp->GetIsControlled() == false)
 				{
 					// Find closest player
 					auto players = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player");
@@ -341,7 +341,7 @@ void dae::ClimbStartCommand::HandleEnemy()
 		auto stateComp = GetGameObject()->GetComponent<dae::EnemyComponent>();
 
 		// If not controlled by player
-		if (stateComp->GetCurrentState() != nullptr || stateComp->GetIsControlled() == false)
+		if (stateComp->GetIsControlled() == false)
 		{
 			// Change state
 			stateComp->SetState(new dae::ClimbEnemyState{ GetGameObject(), m_pLadder, m_MoveSpeed });
@@ -455,7 +455,7 @@ void dae::ClimbEndCommand::HandleEnemy()
 					}
 
 					// If not controlled by player
-					if (stateComp->GetCurrentState() != nullptr || stateComp->GetIsControlled() == false)
+					if (stateComp->GetIsControlled() == false)
 					{
 						// Find closest player
 						auto players = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player");

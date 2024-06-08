@@ -345,14 +345,15 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	else
 	{
 		// Make second player object
-		player2 = std::make_unique<dae::GameObject>("Enemy");
 		if (sceneName == "Multiplayer")
 		{
+			player2 = std::make_unique<dae::GameObject>("Player");
 			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Peter.png"));
 			player2->AddComponent<dae::PlayerComponent>();
 		}
 		else if (sceneName == "Versus")
 		{
+			player2 = std::make_unique<dae::GameObject>("Enemy");
 			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
 			auto enemyComp = player2->AddComponent<dae::EnemyComponent>();
 			enemyComp->SetControlled(true);
