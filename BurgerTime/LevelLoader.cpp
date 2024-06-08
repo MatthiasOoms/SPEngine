@@ -57,6 +57,7 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 
 	// Process player
 	auto player = std::make_unique<dae::GameObject>("Player");
+	//player->AddComponent<dae::SpriteComponent>("Player.png");
 	player->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Peter.png"));
 	player->AddComponent<dae::PlayerComponent>();
 	player->SetLocalPosition({ j["Player"]["Position"]["x"], j["Player"]["Position"]["y"], 0 });

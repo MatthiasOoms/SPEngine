@@ -15,7 +15,7 @@ void dae::PlateComponent::Update(float)
 	auto selfDims = GetOwner()->GetTransform().GetDimensions();
 
 	// Get all ingredients
-	for (auto ingredient : SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient"))
+	for (auto ingredient : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient"))
 	{
 		auto ingredientPos = ingredient->GetTransform().GetLocalPosition();
 		auto ingredientDims = ingredient->GetTransform().GetDimensions();
