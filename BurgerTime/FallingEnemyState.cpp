@@ -44,6 +44,11 @@ void dae::FallingEnemyState::SetFloorsToFall(int floors)
 	if (m_FloorsToFall <= 0)
 	{
 		// Go back to WalkingState
-		GetEnemy()->GetComponent<EnemyComponent>()->SetState(new WalkingEnemyState{ GetEnemy() });
+		auto enemyComp = GetEnemy()->GetComponent<EnemyComponent>();
+		if (enemyComp->GetIsControlled())
+		{
+			enemyComp->SetState(nullptr);
+		}
+		enemyComp->SetState(new WalkingEnemyState{ GetEnemy() });
 	}
 }

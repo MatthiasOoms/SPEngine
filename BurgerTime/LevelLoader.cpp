@@ -355,7 +355,9 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		else if (sceneName == "Versus")
 		{
 			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
-			player2->AddComponent<dae::EnemyComponent>()->SetState(nullptr);
+			auto enemyComp = player2->AddComponent<dae::EnemyComponent>();
+			enemyComp->SetState(nullptr);
+			enemyComp->SetControlled(true);
 		}
 		player2->SetLocalPosition({ j["Player2"]["Position"]["x"], j["Player2"]["Position"]["y"], 0 });
 		auto player2Texture = player2->GetComponent<dae::TextureComponent>();

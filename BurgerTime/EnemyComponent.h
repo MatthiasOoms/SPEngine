@@ -39,6 +39,9 @@ namespace dae
 
         void Respawn();
 
+        void SetControlled(bool isControlled) { m_IsControlled = isControlled; }
+        bool GetIsControlled() { return m_IsControlled; }
+
     private:
         EnemyState* m_pCurrentState;
         EnemyType m_Type;
@@ -50,6 +53,8 @@ namespace dae
 		bool m_IsStunned;
 		float m_StunDuration;
 		float m_AccumulatedTime;
+
+        bool m_IsControlled;
 
 		std::shared_ptr<Texture2D> m_pPreStunTexture;
     };
