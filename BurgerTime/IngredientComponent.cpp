@@ -1,15 +1,28 @@
+#include "EnemyComponent.h"
 #include "IngredientComponent.h"
 #include "SceneManager.h"
 #include "GameObject.h"
 #include "Scene.h"
 #include "GameCommands.h"
+#include "FallingEnemyState.h"
+
+dae::IngredientComponent::IngredientComponent(GameObject* pOwner, float speed)
+	: UpdateComponent(pOwner)
+	, m_Type{ "" }
+	, m_Id{ 0 }
+	, m_IsPressed{ false }
+	, m_FloorsToFall{ false }
+	, m_FallSpeed{ speed }
+{
+}
 
 dae::IngredientComponent::IngredientComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
-	, m_Type("")
-	, m_Id(0)
-	, m_IsPressed(false)
-	, m_FloorsToFall(false)
+	, m_Type{ "" }
+	, m_Id{ 0 }
+	, m_IsPressed{ false }
+	, m_FloorsToFall{ false }
+	, m_FallSpeed{ 75.f }
 {
 }
 
@@ -116,6 +129,10 @@ void dae::IngredientComponent::HandleFall()
 						{
 							ingredientSegment->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
 						}
+
+						auto enemyComp = enemy->GetComponent<EnemyComponent>();
+						enemyComp->SetState(new FallingEnemyState{ enemy, m_FallSpeed });
+						dynamic_cast<FallingEnemyState*>(enemyComp->GetCurrentState())->SetFloorsToFall(m_FloorsToFall);
 						continue;
 					}
 				}
@@ -160,7 +177,7 @@ void dae::IngredientComponent::HandlePress()
 void dae::IngredientComponent::ExecuteFall(float elapsedSec)
 {
 	// Move command down
-	dae::FallCommand command{ GetOwner(), 75 };
+	dae::FallCommand command{ GetOwner(), m_FallSpeed };
 	command.Execute(elapsedSec);
 }
 

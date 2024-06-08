@@ -17,7 +17,7 @@ namespace dae
 		EnemyState& operator=(EnemyState&& other) = delete;
 
 		virtual void Update(float elapsedSec) = 0;
-		virtual void Render(float elapsedSec) = 0;
+		virtual void Render(float elapsedSec) const = 0;
 
 		virtual void OnEnter() = 0;
 		virtual void OnExit() = 0;

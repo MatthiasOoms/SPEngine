@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include <TextureComponent.h>
 #include <ResourceManager.h>
+#include "FallingEnemyState.h"
 
 dae::EnemyComponent::EnemyComponent(GameObject* pOwner)
 	: Component(pOwner)
@@ -24,7 +25,8 @@ dae::EnemyComponent::~EnemyComponent()
 
 void dae::EnemyComponent::Update(float elapsedSec)
 {
-	if (!m_IsStunned)
+	// If falling or not stunned
+	if (!m_IsStunned || dynamic_cast<FallingEnemyState*>(m_pCurrentState))
 	{
 		// Update the current state
 		m_pCurrentState->Update(elapsedSec);

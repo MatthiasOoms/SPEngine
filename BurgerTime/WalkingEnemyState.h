@@ -11,7 +11,7 @@ namespace dae
 		WalkingEnemyState(GameObject* pPlayer, float speed);
 
 		virtual void Update(float elapsedSec) override;
-		virtual void Render(float elapsedSec) override;
+		virtual void Render(float elapsedSec) const override;
 
 		virtual void OnEnter() override;
 		virtual void OnExit() override;

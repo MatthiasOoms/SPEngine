@@ -10,7 +10,7 @@ namespace dae
 		ClimbEnemyState(GameObject* pPlayer, GameObject* pLadder, float speed);
 
 		virtual void Update(float elapsedSec) override;
-		virtual void Render(float elapsedSec) override;
+		virtual void Render(float elapsedSec) const override;
 
 		float GetSpeed() const { return m_Speed; }
 

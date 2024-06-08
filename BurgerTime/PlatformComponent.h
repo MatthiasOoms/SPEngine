@@ -24,11 +24,14 @@ namespace dae
 		void RegisterObjects(std::string scene);
 	private:
 		void HandleCollision(GameObject* pCollider);
+		void HandleFallCollision(GameObject* pCollider);
 		void HandleIngredientCollision(GameObject* pCollider);
 
 		std::vector<GameObject*> m_pPlayers;
 		std::vector<GameObject*> m_pEnemies;
 		std::vector<GameObject*> m_pIngredients;
+
+		bool m_EnemyPassedThrough;
 	};
 }
 

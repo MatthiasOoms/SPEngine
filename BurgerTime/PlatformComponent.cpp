@@ -1,3 +1,4 @@
+#include "FallingEnemyState.h"
 #include "PlatformComponent.h"
 #include "SceneManager.h"
 #include "GameObject.h"
@@ -10,6 +11,7 @@
 
 dae::PlatformComponent::PlatformComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
+	, m_EnemyPassedThrough{ false }
 {
 	RegisterObjects();
 }
@@ -35,7 +37,16 @@ void dae::PlatformComponent::Update(float)
 	// Check if any enemy is on the platform
 	for (auto pEnemy : m_pEnemies)
 	{
-		HandleCollision(pEnemy);
+		auto enemyFall = dynamic_cast<FallingEnemyState*>(pEnemy->GetComponent<EnemyComponent>()->GetCurrentState());
+		// Only check if the enemy is not falling
+		if (!enemyFall)
+		{
+			HandleCollision(pEnemy);
+		}
+		else
+		{
+			HandleFallCollision(pEnemy);
+		}
 	}
 
 	// Check if any ingredient is on the platform
@@ -134,6 +145,47 @@ void dae::PlatformComponent::HandleCollision(GameObject* pCollider)
 				pCollider->SetLocalPosition(glm::vec3{ objPos.x + objWidth - colliderWidth, colliderPos.y, colliderPos.z });
 			}
 		}
+	}
+}
+
+void dae::PlatformComponent::HandleFallCollision(GameObject* pCollider)
+{
+	// Get the object's position and dimensions
+	auto objPos = GetOwner()->GetTransform().GetWorldPosition();
+	auto objDims = GetOwner()->GetTransform().GetDimensions();
+	int objWidth = objDims.x;
+
+	// Get the player's position and dimensions
+	auto colliderPos = pCollider->GetTransform().GetWorldPosition();
+	auto colliderDims = pCollider->GetTransform().GetDimensions();
+	int colliderWidth = colliderDims.x;
+	int colliderHeight = colliderDims.y;
+
+	// If player left and right is in the object
+	if ((colliderPos.x <= objPos.x + objWidth && colliderPos.x >= objPos.x) &&
+		(colliderPos.x + colliderWidth <= objPos.x + objWidth && colliderPos.x + colliderWidth >= objPos.x))
+	{
+		// If player bottom is in the object
+		if (colliderPos.y + colliderHeight <= objPos.y + objDims.y && colliderPos.y + colliderHeight >= objPos.y)
+		{
+			if (m_EnemyPassedThrough)
+			{
+				return;
+			}
+
+			auto enemyComp = pCollider->GetComponent<EnemyComponent>();
+			auto enemyFall = dynamic_cast<FallingEnemyState*>(enemyComp->GetCurrentState());
+			enemyFall->SetFloorsToFall(enemyFall->GetFloorsToFall() - 1);
+			m_EnemyPassedThrough = true;
+		}
+		else
+		{
+			m_EnemyPassedThrough = false;
+		}
+	}
+	else
+	{
+		m_EnemyPassedThrough = false;
 	}
 }
 

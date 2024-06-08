@@ -62,7 +62,7 @@ void dae::WalkingEnemyState::Update(float elapsedSec)
 	moveCommand.Execute(elapsedSec);
 }
 
-void dae::WalkingEnemyState::Render(float)
+void dae::WalkingEnemyState::Render(float) const
 {
 }
 

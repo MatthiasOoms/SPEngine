@@ -11,6 +11,7 @@ namespace dae
 	class IngredientComponent : public UpdateComponent
 	{
 	public:
+		IngredientComponent(GameObject* pOwner, float speed);
 		IngredientComponent(GameObject* pOwner);
 		virtual ~IngredientComponent() = default;
 
@@ -37,6 +38,7 @@ namespace dae
 
 		bool m_IsPressed;
 		int m_FloorsToFall;
+		float m_FallSpeed;
 
 		void HandleFall();
 		void HandlePress();

@@ -50,7 +50,7 @@ void dae::ClimbEnemyState::Update(float elapsedSec)
 	}
 }
 
-void dae::ClimbEnemyState::Render(float)
+void dae::ClimbEnemyState::Render(float) const
 {
 }
 
