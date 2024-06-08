@@ -318,17 +318,17 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		// Controller
 		{
 			// Start Move
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player.get(), playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get(), playerSpeed));
 		}
 		{
 			// Move
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player.get(), playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), playerSpeed));
 		}
 		{
 			// End Move
@@ -365,17 +365,17 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		// Controller 1 controls Player 2
 		{
 			// Start Move
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player2.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player2.get(), playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player2.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player2.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player2.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player2.get(), playerSpeed));
 		}
 		{
 			// Move
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player2.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player2.get(), playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player2.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player2.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player2.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player2.get(), playerSpeed));
 		}
 		{
 			// End Move
@@ -394,17 +394,17 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		// Controller
 		{
 			// Start Move
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player.get(), playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player.get(), playerSpeed));
 		}
 		{
 			// Move
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player.get(), playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player.get(), -playerSpeed));
-			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player.get(), playerSpeed));
 		}
 		{
 			// End Move
