@@ -373,9 +373,9 @@ void load()
 		auto& scene = sceneManager.CreateScene("Level1");
 		scene.GetSceneName();
 		// Load the level
+		dae::LevelLoader::GetInstance().LoadLevel("Level1.json", "Level1");
 		dae::LevelLoader::GetInstance().LoadLevel("Level1.json", "Versus");
 		dae::LevelLoader::GetInstance().LoadLevel("Level1.json", "Multiplayer");
-		dae::LevelLoader::GetInstance().LoadLevel("Level1.json", "Level1");
 		//dae::LevelLoader::GetInstance().LoadLevel("Level2.json", "Level2");
 		//dae::LevelLoader::GetInstance().LoadLevel("Level3.json", "Level3");
 		//dae::LevelLoader::GetInstance().LoadLevel("Level2.json", "Multiplayer");

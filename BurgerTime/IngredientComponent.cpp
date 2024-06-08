@@ -147,6 +147,8 @@ void dae::IngredientComponent::HandleFall()
 
 void dae::IngredientComponent::HandlePress()
 {
+	// This function checks if the current ingredient segment is pressed
+
 	auto selfPos = GetOwner()->GetTransform().GetWorldPosition();
 	auto selfDims = GetOwner()->GetTransform().GetDimensions();
 

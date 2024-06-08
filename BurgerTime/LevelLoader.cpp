@@ -313,7 +313,7 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::ButtonA, dae::keyState::isUp, std::make_unique<dae::ThrowPepperCommand>(player.get()));
 		}
 	}
-	// Multiplayer
+	// Multiplayer or Versus
 	else
 	{
 		// Make second player object
@@ -342,6 +342,11 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player2.get(), playerSpeed));
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player2.get(), -playerSpeed));
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player2.get(), playerSpeed));
+			// Do the same but for keyboard
+			/*input.AddCommand(sceneName, SDL_SCANCODE_UP, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, SDL_SCANCODE_DOWN, dae::keyState::isDown, std::make_unique<dae::ClimbStartCommand>(player2.get(), playerSpeed));
+			input.AddCommand(sceneName, SDL_SCANCODE_LEFT, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, SDL_SCANCODE_RIGHT, dae::keyState::isDown, std::make_unique<dae::WalkStartCommand>(player2.get(), playerSpeed));*/
 		}
 		{
 			// Move
@@ -349,6 +354,11 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player2.get(), playerSpeed));
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player2.get(), -playerSpeed));
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player2.get(), playerSpeed));
+			// Do the same but for keyboard
+			/*input.AddCommand(sceneName, SDL_SCANCODE_UP, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, SDL_SCANCODE_DOWN, dae::keyState::isHeld, std::make_unique<dae::ClimbCommand>(player2.get(), playerSpeed));
+			input.AddCommand(sceneName, SDL_SCANCODE_LEFT, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, SDL_SCANCODE_RIGHT, dae::keyState::isHeld, std::make_unique<dae::WalkCommand>(player2.get(), playerSpeed));*/
 		}
 		{
 			// End Move
@@ -356,6 +366,11 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player2.get()));
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player2.get()));
 			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player2.get()));
+			// Do the same but for keyboard
+			/*input.AddCommand(sceneName, SDL_SCANCODE_UP, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player2.get()));
+			input.AddCommand(sceneName, SDL_SCANCODE_DOWN, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player2.get()));
+			input.AddCommand(sceneName, SDL_SCANCODE_LEFT, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player2.get()));
+			input.AddCommand(sceneName, SDL_SCANCODE_RIGHT, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player2.get()));*/
 		}
 		if (sceneName == "Multiplayer")
 		{
@@ -475,58 +490,41 @@ std::vector<std::unique_ptr<dae::GameObject>> dae::LevelLoader::CreateIngredient
 	auto sideTexture = resources.LoadTexture(type + "Side.png");
 	auto middleTexture = resources.LoadTexture(type + "Middle.png");
 
-	auto ingredient = std::make_unique<dae::GameObject>("Ingredient");
-	auto texture = ingredient->AddComponent<dae::TextureComponent>();
+	// Create 4 parts of the ingredient
+	for (int i{}; i < 4; ++i)
+	{
+		// Create a new GameObject on position x, y
+		auto ingredient = std::make_unique<dae::GameObject>("Ingredient");
+		ingredient->SetLocalPosition({ x, y, 0 });
+		// Give temporary texture and scale for maths
+		auto texture = ingredient->AddComponent<dae::TextureComponent>();
+		ingredient->GetComponent<dae::TextureComponent>()->SetTexture(sideTexture);
+		texture->SetScale(2);
+		// Set up the ingredient component
+		auto ingredientComp = ingredient->AddComponent<dae::IngredientComponent>();
+		ingredientComp->SetType(type);
+		ingredientComp->SetId(id);
+		// Put it in the vector
+		gameObjects.push_back(std::move(ingredient));
+
+		// Move x to the right
+		x += texture->GetDimensions().x;
+	}
+
+	// Set correct textures (and scale) for each part
+	auto texture = gameObjects[0]->GetComponent<dae::TextureComponent>();
 	texture->SetTexture(sideTexture);
-	texture->SetScale(2);
-	ingredient->SetLocalPosition({ x, y, 0 });
-	ingredient->GetTransform().SetDimensions(texture->GetDimensions());
-	auto ingredientComp = ingredient->AddComponent<dae::IngredientComponent>();
-	ingredientComp->SetType(type);
-	ingredientComp->SetId(id);
-	gameObjects.push_back(std::move(ingredient));
 
-	x += texture->GetDimensions().x;
-
-	// Create bun left middle
-	ingredient = std::make_unique<dae::GameObject>("Ingredient");
-	texture = ingredient->AddComponent<dae::TextureComponent>();
+	texture = gameObjects[1]->GetComponent<dae::TextureComponent>();
 	texture->SetTexture(middleTexture);
-	texture->SetScale(2);
-	ingredient->SetLocalPosition({ x, y, 0 });
-	ingredient->GetTransform().SetDimensions(texture->GetDimensions());
-	ingredientComp = ingredient->AddComponent<dae::IngredientComponent>();
-	ingredientComp->SetType(type);
-	ingredientComp->SetId(id);
-	gameObjects.push_back(std::move(ingredient));
 
-	x += texture->GetDimensions().x;
-
-	// Create bun right middle
-	ingredient = std::make_unique<dae::GameObject>("Ingredient");
-	texture = ingredient->AddComponent<dae::TextureComponent>();
+	texture = gameObjects[2]->GetComponent<dae::TextureComponent>();
 	texture->SetTexture(middleTexture);
 	texture->SetScale(-2);
-	ingredient->SetLocalPosition({ x, y, 0 });
-	ingredient->GetTransform().SetDimensions(texture->GetDimensions());
-	ingredientComp = ingredient->AddComponent<dae::IngredientComponent>();
-	ingredientComp->SetType(type);
-	ingredientComp->SetId(id);
-	gameObjects.push_back(std::move(ingredient));
 
-	x += texture->GetDimensions().x;
-
-	// Create bun right side
-	ingredient = std::make_unique<dae::GameObject>("Ingredient");
-	texture = ingredient->AddComponent<dae::TextureComponent>();
+	texture = gameObjects[3]->GetComponent<dae::TextureComponent>();
 	texture->SetTexture(sideTexture);
 	texture->SetScale(-2);
-	ingredient->SetLocalPosition({ x, y, 0 });
-	ingredient->GetTransform().SetDimensions(texture->GetDimensions());
-	ingredientComp = ingredient->AddComponent<dae::IngredientComponent>();
-	ingredientComp->SetType(type);
-	ingredientComp->SetId(id);
-	gameObjects.push_back(std::move(ingredient));
 
 	return gameObjects;
 }
