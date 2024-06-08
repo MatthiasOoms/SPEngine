@@ -20,6 +20,11 @@ namespace dae
 		m_pTexture = texture;
 	}
 
+	std::shared_ptr<Texture2D> TextureComponent::GetTexture()
+	{
+		return m_pTexture;
+	}
+
 	void TextureComponent::SetScale(int scale)
 	{
 		m_Scale = scale;

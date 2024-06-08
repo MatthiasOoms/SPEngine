@@ -21,6 +21,7 @@ namespace dae
 		TextureComponent& operator=(TextureComponent&& other) = delete;
 
 		void SetTexture(const std::shared_ptr<Texture2D>& texture);
+		std::shared_ptr<Texture2D> GetTexture();
 		void SetScale(int scale);
 		int GetScale() const;
 		glm::ivec2 GetDimensions();

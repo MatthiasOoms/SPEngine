@@ -1,3 +1,4 @@
+#include "PepperComponent.h"
 #include <memory>
 #include <fstream>
 #include <TextureComponent.h>
@@ -57,7 +58,6 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 
 	// Process player
 	auto player = std::make_unique<dae::GameObject>("Player");
-	//player->AddComponent<dae::SpriteComponent>("Player.png");
 	player->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Peter.png"));
 	player->AddComponent<dae::PlayerComponent>();
 	player->SetLocalPosition({ j["Player"]["Position"]["x"], j["Player"]["Position"]["y"], 0 });
@@ -300,6 +300,10 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
 		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
 	}
+	{
+		// Throw Pepper
+		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::ButtonA, dae::keyState::isUp, std::make_unique<dae::ThrowPepperCommand>(player.get()));
+	}
 	
 	// Keyboard
 	{
@@ -322,6 +326,10 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		input.AddCommand(sceneName, SDL_SCANCODE_S, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
 		input.AddCommand(sceneName, SDL_SCANCODE_A, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
 		input.AddCommand(sceneName, SDL_SCANCODE_D, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
+	}
+	{
+		// Throw Pepper
+		input.AddCommand(sceneName, SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::ThrowPepperCommand>(player.get()));
 	}
 
 	// Add the GameObjects to the scene

@@ -84,9 +84,42 @@ void dae::IngredientComponent::HandleFall()
 	// If all segments are pressed, fall
 	if (fall)
 	{
-		for (auto ingredientSegment : fullIngredient)
+		// Set full ingredient to falling
+		for (auto ingredient : fullIngredient)
 		{
-			ingredientSegment->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
+			ingredient->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
+		}
+		
+		// If an enemy is touching any segment, make all segments fall an extra floor
+		for (auto enemy : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Enemy"))
+		{
+			auto enemyPos = enemy->GetTransform().GetWorldPosition();
+			auto enemyDims = enemy->GetTransform().GetDimensions();
+
+			for (auto ingredient : fullIngredient)
+			{
+				auto ingredientPos = ingredient->GetTransform().GetWorldPosition();
+				auto ingredientDims = ingredient->GetTransform().GetDimensions();
+
+				// If left side of enemy is between left and right side of ingredient
+				// or right side of enemy is between left and right side of ingredient
+				if (enemyPos.x >= ingredientPos.x && enemyPos.x <= ingredientPos.x + ingredientDims.x ||
+					enemyPos.x + enemyDims.x >= ingredientPos.x && enemyPos.x + enemyDims.x <= ingredientPos.x + ingredientDims.x)
+				{
+					// If top side of enemy is between top and bottom side of ingredient
+					// or bottom side of enemy is between top and bottom side of ingredient
+					if (enemyPos.y >= ingredientPos.y && enemyPos.y <= ingredientPos.y + ingredientDims.y ||
+						enemyPos.y + enemyDims.y >= ingredientPos.y && enemyPos.y + enemyDims.y <= ingredientPos.y + ingredientDims.y)
+					{
+						// Increment floors to fall
+						for (auto ingredientSegment : fullIngredient)
+						{
+							ingredientSegment->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
+						}
+						continue;
+					}
+				}
+			}
 		}
 	}
 }

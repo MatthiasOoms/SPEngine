@@ -23,8 +23,13 @@ namespace dae
 		void SetState(PlayerState* pState);
         PlayerState* GetCurrentState() const { return m_pCurrentState; }
 
+		void ThrowPepper();
     private:
         PlayerState* m_pCurrentState;
+
+		int m_PepperCount;
+		float m_PepperCooldown;
+		float m_AccumulatedTime;
     };
 }
 

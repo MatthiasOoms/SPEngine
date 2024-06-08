@@ -1,3 +1,4 @@
+#include "PepperComponent.h"
 #include "GameCommands.h"
 
 // Enemy
@@ -559,6 +560,7 @@ void dae::ClimbCommand::Execute(float elapsedSec)
 }
 
 dae::SceneNextCommand::SceneNextCommand()
+	: Command{}
 {
 }
 
@@ -572,6 +574,7 @@ void dae::SceneNextCommand::Execute(float)
 }
 
 dae::ToggleSoundCommand::ToggleSoundCommand()
+	: Command{}
 {
 }
 
@@ -591,4 +594,19 @@ dae::FallCommand::FallCommand(GameObject* pGameObject, float speed)
 void dae::FallCommand::Execute(float elapsedSec)
 {
 	GetGameObject()->SetLocalPosition(GetGameObject()->GetTransform().GetLocalPosition() + glm::vec3{ 0, m_MoveSpeed * elapsedSec, 0 });
+}
+
+dae::ThrowPepperCommand::ThrowPepperCommand(GameObject* pOwner)
+	: Command{}
+	, m_pGameObject{ pOwner }
+{
+}
+
+void dae::ThrowPepperCommand::Execute(float)
+{
+	if (GetGameObject()->HasComponent<PlayerComponent>())
+	{
+		auto pepperComp = GetGameObject()->GetComponent<PlayerComponent>();
+		pepperComp->ThrowPepper();
+	}
 }

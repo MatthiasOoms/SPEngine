@@ -253,6 +253,26 @@ namespace dae
 
 		void Execute(float elapsedSec) override;
 	};
+
+	class ThrowPepperCommand final : public Command
+	{
+	private:
+		GameObject* m_pGameObject;
+
+	protected:
+		GameObject* GetGameObject() const { return m_pGameObject; }
+
+	public:
+		ThrowPepperCommand(GameObject* pOwner);
+
+		virtual ~ThrowPepperCommand() override = default;
+		ThrowPepperCommand(const ThrowPepperCommand& other) = delete;
+		ThrowPepperCommand(ThrowPepperCommand&& other) = delete;
+		ThrowPepperCommand& operator=(const ThrowPepperCommand& other) = delete;
+		ThrowPepperCommand& operator=(ThrowPepperCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
 }
 
 #endif // ! GAMECOMMANDS_H
