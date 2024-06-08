@@ -57,12 +57,26 @@ void dae::SceneManager::SetActiveScene(std::string name)
 
 void dae::SceneManager::SetActiveMultiplayerScene()
 {
-	m_ActiveScene = m_MultiplayerScene;
+	if (m_MultiplayerScene.get())
+	{
+		m_ActiveScene = m_MultiplayerScene;
+	}
+	else
+	{
+		throw std::exception("Multiplayer scene not found");
+	}
 }
 
 void dae::SceneManager::SetActiveVersusScene()
 {
-	m_ActiveScene = m_VersusScene;
+	if (m_VersusScene.get())
+	{
+		m_ActiveScene = m_VersusScene;
+	}
+	else
+	{
+		throw std::exception("Versus scene not found");
+	}
 }
 
 dae::Scene& dae::SceneManager::GetNextScene(std::string scene) const

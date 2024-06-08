@@ -59,6 +59,7 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 
 	// Process player
 	auto player = std::make_unique<dae::GameObject>("Player");
+	std::unique_ptr<GameObject> player2 = nullptr;
 	player->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Peter.png"));
 	player->AddComponent<dae::PlayerComponent>();
 	player->SetLocalPosition({ j["Player"]["Position"]["x"], j["Player"]["Position"]["y"], 0 });
@@ -239,35 +240,35 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
     }
 
 	// Process each EnemyType
-	for (const auto& enemy : j["Enemies"])
-	{
-		// Create a new GameObject
-		auto enemyObj = std::make_unique<dae::GameObject>("Enemy");
-		enemyObj->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
+	//for (const auto& enemy : j["Enemies"])
+	//{
+	//	// Create a new GameObject
+	//	auto enemyObj = std::make_unique<dae::GameObject>("Enemy");
+	//	enemyObj->SetLocalPosition({ enemy["Position"]["x"], enemy["Position"]["y"], 0 });
 
-		if (enemy["Type"] == "Hotdog")
-		{
-			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Hotdog);
-			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
-			gameObjects.push_back(std::move(enemyObj));
-		}
-		else if (enemy["Type"] == "Egg")
-		{
-			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Egg);
-			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("EggWalk.png"));
-			gameObjects.push_back(std::move(enemyObj));
-		}
-		else if (enemy["Type"] == "Pickle")
-		{
-			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Pickle);
-			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("PickleWalk.png"));
-			gameObjects.push_back(std::move(enemyObj));
-		}
-		else
-		{
-			throw std::runtime_error("Unknown enemy type");
-		}
-	}
+	//	if (enemy["Type"] == "Hotdog")
+	//	{
+	//		enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Hotdog);
+	//		enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
+	//		gameObjects.push_back(std::move(enemyObj));
+	//	}
+	//	else if (enemy["Type"] == "Egg")
+	//	{
+	//		enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Egg);
+	//		enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("EggWalk.png"));
+	//		gameObjects.push_back(std::move(enemyObj));
+	//	}
+	//	else if (enemy["Type"] == "Pickle")
+	//	{
+	//		enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Pickle);
+	//		enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("PickleWalk.png"));
+	//		gameObjects.push_back(std::move(enemyObj));
+	//	}
+	//	else
+	//	{
+	//		throw std::runtime_error("Unknown enemy type");
+	//	}
+	//}
 
 	// If the scene does not exist, create it
 	if (!sceneManager.HasScene(sceneName))
@@ -275,37 +276,14 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		sceneManager.CreateScene(sceneName);
 	}
 
+	// Get scene
+	auto& scene = sceneManager.GetScene(sceneName);
+
 	// Add Player commands
 	auto& input = dae::InputManager::GetInstance();
 	float playerSpeed = 100.f;
 
-	// Controller
-	{
-		// Start Move
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player.get(), -playerSpeed));
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player.get(), playerSpeed));
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player.get(), -playerSpeed));
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player.get(), playerSpeed));
-	}
-	{
-		// Move
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player.get(), -playerSpeed));
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player.get(), playerSpeed));
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player.get(), -playerSpeed));
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player.get(), playerSpeed));
-	}
-	{
-		// End Move
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
-	}
-	{
-		// Throw Pepper
-		input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::ButtonA, dae::keyState::isUp, std::make_unique<dae::ThrowPepperCommand>(player.get()));
-	}
-	
+	// Always
 	// Keyboard
 	{
 		// Start Move
@@ -332,9 +310,114 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		// Throw Pepper
 		input.AddCommand(sceneName, SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::ThrowPepperCommand>(player.get()));
 	}
+	input.AddController();
 
-	// Add the GameObjects to the scene
-	auto& scene = sceneManager.GetScene(sceneName);
+	// Singleplayer
+	if (sceneName != "Multiplayer" && sceneName != "Versus")
+	{
+		// Controller
+		{
+			// Start Move
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player.get(), playerSpeed));
+		}
+		{
+			// Move
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player.get(), playerSpeed));
+		}
+		{
+			// End Move
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
+		}
+		{
+			// Throw Pepper
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::ButtonA, dae::keyState::isUp, std::make_unique<dae::ThrowPepperCommand>(player.get()));
+		}
+	}
+	// Multiplayer
+	else
+	{
+		// Make second player object
+		player2 = std::make_unique<dae::GameObject>("Player");
+		if (sceneName == "Multiplayer")
+		{
+			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Peter.png"));
+			player2->AddComponent<dae::PlayerComponent>();
+		}
+		else if (sceneName == "Versus")
+		{
+			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
+			player2->AddComponent<dae::EnemyComponent>()->SetState(nullptr);
+		}
+		player2->SetLocalPosition({ j["Player2"]["Position"]["x"], j["Player2"]["Position"]["y"], 0 });
+		auto player2Texture = player2->GetComponent<dae::TextureComponent>();
+		player2->GetTransform().SetDimensions(player2Texture->GetDimensions());
+
+		// Controllers
+		// Controller 1 controls Player 2
+		{
+			// Start Move
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player2.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player2.get(), playerSpeed));
+		}
+		{
+			// Move
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player2.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player2.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player2.get(), playerSpeed));
+		}
+		{
+			// End Move
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player2.get()));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player2.get()));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player2.get()));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player2.get()));
+		}
+		if (sceneName == "Multiplayer")
+		{
+			// Throw Pepper
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::First), dae::Controller::ControllerButton::ButtonA, dae::keyState::isUp, std::make_unique<dae::ThrowPepperCommand>(player2.get()));
+		}
+
+		// Controller 2 controls Player 1
+		// Controller
+		{
+			// Start Move
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbStartCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkStartCommand>(player.get(), playerSpeed));
+		}
+		{
+			// Move
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbCommand>(player.get(), playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player.get(), -playerSpeed));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkCommand>(player.get(), playerSpeed));
+		}
+		{
+			// End Move
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadUp, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadDown, dae::keyState::isUp, std::make_unique<dae::ClimbEndCommand>(player.get()));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadLeft, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::DPadRight, dae::keyState::isUp, std::make_unique<dae::WalkEndCommand>(player.get()));
+		}
+		{
+			// Throw Pepper
+			input.AddCommand(sceneName, static_cast<int>(dae::Controller::ControllerIdx::Second), dae::Controller::ControllerButton::ButtonA, dae::keyState::isUp, std::make_unique<dae::ThrowPepperCommand>(player.get()));
+		}
+	}
 
 	for (auto& obj : gameObjects)
 	{
@@ -356,6 +439,17 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	{
 		player->GetComponent<dae::TextureComponent>()->SetScale(2);
 	}
+
+	if (player2)
+	{
+		// Scale if player has a TextureComponent
+		if (player2->HasComponent<dae::TextureComponent>())
+		{
+			player2->GetComponent<dae::TextureComponent>()->SetScale(2);
+		}
+		scene.Add(std::move(player2));
+	}
+
 	// Add Player last for correct rendering
 	scene.Add(std::move(player));
 

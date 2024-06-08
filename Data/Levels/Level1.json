@@ -6,6 +6,13 @@
       "y": 324
     }
   },
+  "Player2": {
+    "Type": "Player",
+    "Position": {
+      "x": 224,
+      "y": 260
+    }
+  },
   "Layout": [
     {
       "Type": "Plate",

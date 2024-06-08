@@ -22,38 +22,47 @@ dae::EnemyComponent::EnemyComponent(GameObject* pOwner)
 
 dae::EnemyComponent::~EnemyComponent()
 {
-	delete m_pCurrentState;
-	m_pCurrentState = nullptr;
+	if (m_pCurrentState)
+	{
+		delete m_pCurrentState;
+		m_pCurrentState = nullptr;
+	}
 }
 
 void dae::EnemyComponent::Update(float elapsedSec)
 {
-	// If falling or not stunned
-	if (!m_IsStunned || dynamic_cast<FallingEnemyState*>(m_pCurrentState))
+	if (m_pCurrentState)
 	{
-		// Update the current state
-		m_pCurrentState->Update(elapsedSec);
-	}
-	else
-	{
-		m_AccumulatedTime += elapsedSec;
-		if (m_AccumulatedTime >= m_StunDuration)
+		// If falling or not stunned
+		if (!m_IsStunned || dynamic_cast<FallingEnemyState*>(m_pCurrentState))
 		{
-			m_IsStunned = false;
-			m_AccumulatedTime = 0.0f;
+			// Update the current state
+			m_pCurrentState->Update(elapsedSec);
+		}
+		else
+		{
+			m_AccumulatedTime += elapsedSec;
+			if (m_AccumulatedTime >= m_StunDuration)
+			{
+				m_IsStunned = false;
+				m_AccumulatedTime = 0.0f;
 
-			// Set Texture back to normal
-			GetOwner()->GetComponent<TextureComponent>()->SetTexture(m_pPreStunTexture);
+				// Set Texture back to normal
+				GetOwner()->GetComponent<TextureComponent>()->SetTexture(m_pPreStunTexture);
 
+			}
 		}
 	}
 }
 
 void dae::EnemyComponent::Render(float elapsedSec) const
 {
-	if (!m_IsStunned)
+	if (m_pCurrentState)
 	{
-		m_pCurrentState->Render(elapsedSec);
+		if (!m_IsStunned)
+		{
+			m_pCurrentState->Render(elapsedSec);
+		}
 	}
 }
 
@@ -68,6 +77,15 @@ void dae::EnemyComponent::SetState(EnemyState* pState)
 		}
 		m_pCurrentState = pState;
 		m_pCurrentState->OnEnter();
+	}
+	else
+	{
+		if (m_pCurrentState)
+		{
+			m_pCurrentState->OnExit();
+			delete m_pCurrentState;
+		}
+		m_pCurrentState = pState;
 	}
 }
 
