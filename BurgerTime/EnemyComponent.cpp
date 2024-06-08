@@ -97,3 +97,19 @@ void dae::EnemyComponent::Stun()
 		break;
 	}
 }
+
+void dae::EnemyComponent::Respawn()
+{
+	// Move to left or right of screen depending on distance from center
+	auto pos = GetOwner()->GetTransform().GetWorldPosition();
+	auto dims = GetOwner()->GetTransform().GetDimensions();
+
+	if (pos.x < 240)
+	{
+		GetOwner()->GetTransform().SetWorldPosition(480, pos.y, pos.z );
+	}
+	else
+	{
+		GetOwner()->GetTransform().SetWorldPosition( -static_cast<float>(dims.x), pos.y, pos.z );
+	}
+}

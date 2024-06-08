@@ -37,6 +37,8 @@ namespace dae
 		bool IsStunned() const { return m_IsStunned; }
         void Stun();
 
+        void Respawn();
+
     private:
         EnemyState* m_pCurrentState;
         EnemyType m_Type;

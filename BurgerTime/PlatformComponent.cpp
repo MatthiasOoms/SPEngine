@@ -13,7 +13,6 @@ dae::PlatformComponent::PlatformComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
 	, m_EnemyPassedThrough{ false }
 {
-	RegisterObjects();
 }
 
 void dae::PlatformComponent::Update(float)

@@ -1,3 +1,4 @@
+#include "PlatformComponent.h"
 #include "EnemyComponent.h"
 #include "IngredientComponent.h"
 #include "SceneManager.h"
@@ -176,6 +177,31 @@ void dae::IngredientComponent::HandlePress()
 
 void dae::IngredientComponent::ExecuteFall(float elapsedSec)
 {
+	// If an enemy is touching any segment, make all segments fall an extra floor
+	for (auto enemy : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Enemy"))
+	{
+		auto enemyPos = enemy->GetTransform().GetWorldPosition();
+		auto enemyDims = enemy->GetTransform().GetDimensions();
+
+		auto ingredientPos = GetOwner()->GetTransform().GetWorldPosition();
+		auto ingredientDims = GetOwner()->GetTransform().GetDimensions();
+
+		// If left side of enemy is between left and right side of ingredient
+		// or right side of enemy is between left and right side of ingredient
+		if (enemyPos.x >= ingredientPos.x && enemyPos.x <= ingredientPos.x + ingredientDims.x ||
+			enemyPos.x + enemyDims.x >= ingredientPos.x && enemyPos.x + enemyDims.x <= ingredientPos.x + ingredientDims.x)
+		{
+			// If top side of enemy is between top and bottom side of ingredient
+			// or bottom side of enemy is between top and bottom side of ingredient
+			if (enemyPos.y >= ingredientPos.y + (ingredientDims.y / 2) && enemyPos.y <= ingredientPos.y + ingredientDims.y ||
+				enemyPos.y + enemyDims.y >= ingredientPos.y + (ingredientDims.y / 2) && enemyPos.y + enemyDims.y <= ingredientPos.y + ingredientDims.y)
+			{
+				enemy->GetComponent<EnemyComponent>()->Respawn();;
+				continue;
+			}
+		}
+	}
+
 	// Move command down
 	dae::FallCommand command{ GetOwner(), m_FallSpeed };
 	command.Execute(elapsedSec);

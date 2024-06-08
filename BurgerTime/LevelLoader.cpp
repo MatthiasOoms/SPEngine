@@ -1,5 +1,6 @@
 #include "PepperComponent.h"
 #include <memory>
+#include <string>
 #include <fstream>
 #include <TextureComponent.h>
 #include <ResourceManager.h>
@@ -363,7 +364,7 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	// Register all objects to PlatformComponent
 	for (auto& platform : platforms)
 	{
-		platform->GetComponent<dae::PlatformComponent>()->RegisterObjects();
+		platform->GetComponent<dae::PlatformComponent>()->RegisterObjects(sceneName);
 	}
 
 	// FPS
