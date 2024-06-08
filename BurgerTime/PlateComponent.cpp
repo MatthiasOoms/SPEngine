@@ -30,7 +30,7 @@ void dae::PlateComponent::Update(float)
 			if (ingredientPos.y >= selfPos.y && ingredientPos.y <= selfPos.y + selfDims.y ||
 				ingredientPos.y + ingredientDims.y >= selfPos.y && ingredientPos.y + ingredientDims.y <= selfPos.y + selfDims.y)
 			{
-				ingredient->GetTransform().SetLocalPosition(ingredientPos.x, selfPos.y + selfDims.y - 2 - ingredientDims.y, ingredientPos.z);
+				ingredient->GetTransform().SetLocalPosition(ingredientPos.x, selfPos.y + selfDims.y - 4 - ingredientDims.y, ingredientPos.z);
 				ingredient->GetComponent<IngredientComponent>()->SetFloorsToFall(-1);
 			}
 		}

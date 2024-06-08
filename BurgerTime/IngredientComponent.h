@@ -41,7 +41,7 @@ namespace dae
 		void HandleFall();
 		void HandlePress();
 		void ExecuteFall(float elapsedSec);
-		void HandleIngredient(GameObject* pOther);
+		void HandleIngredient(GameObject* pIngredient);
 	};
 }
 

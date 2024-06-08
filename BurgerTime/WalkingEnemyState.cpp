@@ -123,6 +123,6 @@ dae::GameObject* dae::WalkingEnemyState::IsTouchingLadder()
 		}
 	}
 
-	// If no ladder is touching enemy, return 0
+	// If no ladder is touching enemy, return nullptr
 	return nullptr;
 }
