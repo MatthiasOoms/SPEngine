@@ -359,29 +359,9 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	// Add Player last for correct rendering
 	scene.Add(std::move(player));
 
-	// Get all Platform Objects
-	auto platforms = scene.GetObjectsByTag("Platform");
-	// Register all objects to PlatformComponent
-	for (auto& platform : platforms)
-	{
-		platform->GetComponent<dae::PlatformComponent>()->RegisterObjects(sceneName);
-	}
-
-	// Get all Ingredient Objects
-	auto ingredients = scene.GetObjectsByTag("Ingredient");
-	// Register all objects to IngredientComponent
-	for (auto& ingredient : ingredients)
-	{
-		ingredient->GetComponent<dae::IngredientComponent>()->RegisterObjects(sceneName);
-	}
-
-	// Get all Plate Objects
-	auto plates = scene.GetObjectsByTag("Plate");
-	// Register all objects to PlateComponent
-	for (auto& plate : plates)
-	{
-		plate->GetComponent<dae::PlateComponent>()->RegisterObjects(sceneName);
-	}
+	RegisterObjects<PlateComponent>("Plate", sceneName);
+	RegisterObjects<PlatformComponent>("Platform", sceneName);
+	RegisterObjects<IngredientComponent>("Ingredient", sceneName);
 
 	// FPS
 	auto font = resources.LoadFont("Lingua.otf", 36);

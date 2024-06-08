@@ -610,3 +610,25 @@ void dae::ThrowPepperCommand::Execute(float)
 		pepperComp->ThrowPepper();
 	}
 }
+
+dae::MultiplayerCommand::MultiplayerCommand()
+	: Command{}
+{
+}
+
+void dae::MultiplayerCommand::Execute(float)
+{
+	auto& sceneManager = SceneManager::GetInstance();
+	sceneManager.SetActiveMultiplayerScene();
+}
+
+dae::VersusCommand::VersusCommand()
+	: Command{}
+{
+}
+
+void dae::VersusCommand::Execute(float)
+{
+	auto& sceneManager = SceneManager::GetInstance();
+	sceneManager.SetActiveVersusScene();
+}

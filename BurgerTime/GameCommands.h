@@ -273,6 +273,34 @@ namespace dae
 
 		void Execute(float elapsedSec) override;
 	};
+
+	class MultiplayerCommand final : public Command
+	{
+	public:
+		MultiplayerCommand();
+
+		virtual ~MultiplayerCommand() override = default;
+		MultiplayerCommand(const MultiplayerCommand& other) = delete;
+		MultiplayerCommand(MultiplayerCommand&& other) = delete;
+		MultiplayerCommand& operator=(const MultiplayerCommand& other) = delete;
+		MultiplayerCommand& operator=(MultiplayerCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
+
+	class VersusCommand final : public Command
+	{
+	public:
+		VersusCommand();
+
+		virtual ~VersusCommand() override = default;
+		VersusCommand(const VersusCommand& other) = delete;
+		VersusCommand(VersusCommand&& other) = delete;
+		VersusCommand& operator=(const VersusCommand& other) = delete;
+		VersusCommand& operator=(VersusCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
 }
 
 #endif // ! GAMECOMMANDS_H

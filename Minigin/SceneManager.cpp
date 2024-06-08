@@ -20,9 +20,24 @@ void dae::SceneManager::Render(const float deltaTime) const
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 {
+	if (name == "Multiplayer")
+	{
+		const auto& scene = std::shared_ptr<Scene>(new Scene(name));
+		m_MultiplayerScene = scene;
+		return *scene;
+	}
+	else if (name == "Versus")
+	{
+		const auto& scene = std::shared_ptr<Scene>(new Scene(name));
+		m_VersusScene = scene;
+		return *scene;
+	}
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
+	if (m_Scenes.empty())
+	{
+		m_ActiveScene = scene;
+	}
 	m_Scenes.push_back(scene);
-	m_ActiveScene = scene;
 	return *scene;
 }
 
@@ -38,6 +53,16 @@ void dae::SceneManager::SetActiveScene(std::string name)
 	}
 
 	throw std::exception("Scene not found");
+}
+
+void dae::SceneManager::SetActiveMultiplayerScene()
+{
+	m_ActiveScene = m_MultiplayerScene;
+}
+
+void dae::SceneManager::SetActiveVersusScene()
+{
+	m_ActiveScene = m_VersusScene;
 }
 
 dae::Scene& dae::SceneManager::GetNextScene(std::string scene) const
@@ -71,6 +96,16 @@ dae::Scene& dae::SceneManager::GetScene(std::string scene) const
 			return *s;
 		}
 	}
+
+	if (scene == "Multiplayer" && m_MultiplayerScene.get())
+	{
+		return *m_MultiplayerScene;
+	}
+	else if (scene == "Versus" && m_VersusScene.get())
+	{
+		return *m_VersusScene;
+	}
+
 	throw std::runtime_error("Scene not found: " + scene);
 }
 
@@ -83,5 +118,15 @@ bool dae::SceneManager::HasScene(std::string scene) const
 			return true;
 		}
 	}
+	
+	if (scene == "Multiplayer" && m_MultiplayerScene.get())
+	{
+		return true;
+	}
+	else if (scene == "Versus" && m_VersusScene.get())
+	{
+		return true;
+	}
+
 	return false;
 }

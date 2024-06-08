@@ -14,6 +14,8 @@ namespace dae
 	public:
 		Scene& CreateScene(const std::string& name);
 		void SetActiveScene(std::string name);
+		void SetActiveMultiplayerScene();
+		void SetActiveVersusScene();
 		dae::Scene& GetActiveScene() const { return *m_ActiveScene; }
 		dae::Scene& GetNextScene(std::string scene) const;
 		dae::Scene& GetScene(std::string scene) const;
@@ -26,6 +28,8 @@ namespace dae
 		SceneManager() = default;
 		std::vector<std::shared_ptr<Scene>> m_Scenes;
 		std::shared_ptr<Scene> m_ActiveScene;
+		std::shared_ptr<Scene> m_MultiplayerScene;
+		std::shared_ptr<Scene> m_VersusScene;
 	};
 }
 

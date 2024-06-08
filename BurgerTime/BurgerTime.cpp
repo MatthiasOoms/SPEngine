@@ -377,7 +377,10 @@ void load()
 	}
 
 	input.AddGlobalCommand(SDL_SCANCODE_F1, dae::keyState::isDown, std::make_unique<dae::SceneNextCommand>());
+	input.AddGlobalCommand(SDL_SCANCODE_F2, dae::keyState::isDown, std::make_unique<dae::MultiplayerCommand>());
+	input.AddGlobalCommand(SDL_SCANCODE_F3, dae::keyState::isDown, std::make_unique<dae::VersusCommand>());
 	input.AddGlobalCommand(SDL_SCANCODE_M, dae::keyState::isDown, std::make_unique<dae::ToggleSoundCommand>());
+
 	sceneManager.SetActiveScene("Menu");
 }
 
