@@ -73,16 +73,6 @@ void dae::PlatformComponent::RegisterObjects(std::string scene)
 		auto& currentScene = dae::SceneManager::GetInstance().GetScene(scene);
 		m_pPlayers = currentScene.GetObjectsByTag("Player");
 		m_pEnemies = currentScene.GetObjectsByTag("Enemy");
-		// Go over enemies, if controlled, remove from list
-		for (size_t i = 0; i < m_pEnemies.size(); i++)
-		{
-			auto enemyComp = m_pEnemies[i]->GetComponent<EnemyComponent>();
-			if (enemyComp->GetIsControlled())
-			{
-				m_pEnemies.erase(m_pEnemies.begin() + i);
-				i--;
-			}
-		}
 		m_pIngredients = currentScene.GetObjectsByTag("Ingredient");
 	}
 	else
