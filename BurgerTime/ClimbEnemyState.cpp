@@ -44,6 +44,7 @@ void dae::ClimbEnemyState::Update(float elapsedSec)
 	}
 	else
 	{
+		// Make StartWalkCommand
 		ClimbEndCommand climbEndCommand{ GetEnemy() };
 		climbEndCommand.Execute(elapsedSec);
 	}
