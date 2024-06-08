@@ -43,6 +43,10 @@ namespace dae
         EnemyState* m_pCurrentState;
         EnemyType m_Type;
 
+		std::shared_ptr<Texture2D> m_pHotdogStunned;
+		std::shared_ptr<Texture2D> m_pEggStunned;
+		std::shared_ptr<Texture2D> m_pPickleStunned;
+
 		bool m_IsStunned;
 		float m_StunDuration;
 		float m_AccumulatedTime;

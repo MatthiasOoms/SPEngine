@@ -1,6 +1,8 @@
 #ifndef PEPPERCOMPONENT_H
 #define PEPPERCOMPONENT_H
 #include "Component.h"
+#include <vector>
+#include <string>
 
 namespace dae
 {
@@ -19,11 +21,14 @@ namespace dae
 
 		virtual void Update(float elapsedSec) override;
 
-		void ThrowPepper();
+		void RegisterObjects();
+		void RegisterObjects(std::string sceneName);
 
 	private:
 		float m_PepperCooldown;
 		float m_AccumulatedTime;
+
+		std::vector<GameObject*> m_pEnemies;
 	};
 }
 

@@ -12,6 +12,7 @@ dae::PepperComponent::PepperComponent(GameObject* pOwner)
 	, m_PepperCooldown{ 1.0f }
 	, m_AccumulatedTime{ 0.0f }
 {
+	RegisterObjects();
 }
 
 void dae::PepperComponent::Update(float elapsedSec)
@@ -23,7 +24,7 @@ void dae::PepperComponent::Update(float elapsedSec)
 		auto selfPos = GetOwner()->GetTransform().GetWorldPosition();
 		auto selfDims = GetOwner()->GetTransform().GetDimensions();
 
-		for (auto enemy : SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Enemy"))
+		for (auto enemy : m_pEnemies)
 		{
 			auto enemyPos = enemy->GetTransform().GetWorldPosition();
 			auto enemyDims = enemy->GetTransform().GetDimensions();
@@ -50,7 +51,13 @@ void dae::PepperComponent::Update(float elapsedSec)
 	}
 }
 
-void dae::PepperComponent::ThrowPepper()
+void dae::PepperComponent::RegisterObjects()
 {
-	
+	m_pEnemies = SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Enemy");
 }
+
+void dae::PepperComponent::RegisterObjects(std::string sceneName)
+{
+	m_pEnemies = SceneManager::GetInstance().GetScene(sceneName).GetObjectsByTag("Enemy");
+}
+

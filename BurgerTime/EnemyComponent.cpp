@@ -15,6 +15,9 @@ dae::EnemyComponent::EnemyComponent(GameObject* pOwner)
 	, m_AccumulatedTime{ 0.0f }
 	, m_pPreStunTexture{ nullptr }
 {
+	m_pHotdogStunned = dae::ResourceManager::GetInstance().LoadTexture("HotdogStunned.png");
+	m_pEggStunned = dae::ResourceManager::GetInstance().LoadTexture("EggStunned.png");
+	m_pPickleStunned = dae::ResourceManager::GetInstance().LoadTexture("PickleStunned.png");
 }
 
 dae::EnemyComponent::~EnemyComponent()
@@ -85,13 +88,13 @@ void dae::EnemyComponent::Stun()
 	switch (m_Type)
 	{
 	case EnemyType::Hotdog:
-		pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("HotdogStunned.png"));
+		pTextureComp->SetTexture(m_pHotdogStunned);
 		break;
 	case EnemyType::Egg:
-		pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("EggStunned.png"));
+		pTextureComp->SetTexture(m_pEggStunned);
 		break;
 	case EnemyType::Pickle:
-		pTextureComp->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("PickleStunned.png"));
+		pTextureComp->SetTexture(m_pPickleStunned);
 		break;
 	default:
 		break;

@@ -7,6 +7,7 @@
 dae::PlateComponent::PlateComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
 {
+	RegisterObjects();
 }
 
 void dae::PlateComponent::Update(float)
@@ -15,7 +16,7 @@ void dae::PlateComponent::Update(float)
 	auto selfDims = GetOwner()->GetTransform().GetDimensions();
 
 	// Get all ingredients
-	for (auto ingredient : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient"))
+	for (auto ingredient : m_pIngredients)
 	{
 		auto ingredientPos = ingredient->GetTransform().GetLocalPosition();
 		auto ingredientDims = ingredient->GetTransform().GetDimensions();
@@ -35,4 +36,14 @@ void dae::PlateComponent::Update(float)
 			}
 		}
 	}
+}
+
+void dae::PlateComponent::RegisterObjects()
+{
+	m_pIngredients = SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient");
+}
+
+void dae::PlateComponent::RegisterObjects(std::string sceneName)
+{
+	m_pIngredients = SceneManager::GetInstance().GetScene(sceneName).GetObjectsByTag("Ingredient");
 }

@@ -15,6 +15,7 @@ dae::IngredientComponent::IngredientComponent(GameObject* pOwner, float speed)
 	, m_FloorsToFall{ false }
 	, m_FallSpeed{ speed }
 {
+	RegisterObjects();
 }
 
 dae::IngredientComponent::IngredientComponent(GameObject* pOwner)
@@ -25,6 +26,7 @@ dae::IngredientComponent::IngredientComponent(GameObject* pOwner)
 	, m_FloorsToFall{ false }
 	, m_FallSpeed{ 75.f }
 {
+	RegisterObjects();
 }
 
 void dae::IngredientComponent::Update(float elapsedSec)
@@ -49,7 +51,7 @@ void dae::IngredientComponent::Update(float elapsedSec)
 	}
 
 	// Go over all ingredients
-	for (auto ingredient : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient"))
+	for (auto ingredient : m_pIngredients)
 	{
 		// If type is the same
 		auto ingredientComp = ingredient->GetComponent<IngredientComponent>();
@@ -71,27 +73,15 @@ void dae::IngredientComponent::Update(float elapsedSec)
 void dae::IngredientComponent::HandleFall()
 {
 	bool fall = true;
-	std::vector<GameObject*> fullIngredient;
 
-	// Get all ingredients
-	for (auto ingredient : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient"))
+	for (auto ingredient : m_pFullIngredient)
 	{
-		// If type is the same
 		auto ingredientComp = ingredient->GetComponent<IngredientComponent>();
-		if (ingredientComp->GetType() == GetType())
-		{
-			// If ID is the same
-			if (ingredientComp->GetId() == GetId())
-			{
-				// Add to list
-				fullIngredient.push_back(ingredient);
 
-				// If not all segments are pressed, do not fall
-				if (!ingredientComp->GetPressed())
-				{
-					fall = false;
-				}
-			}
+		// If not all segments are pressed, do not fall
+		if (!ingredientComp->GetPressed())
+		{
+			fall = false;
 		}
 	}
 
@@ -99,18 +89,18 @@ void dae::IngredientComponent::HandleFall()
 	if (fall)
 	{
 		// Set full ingredient to falling
-		for (auto ingredient : fullIngredient)
+		for (auto ingredient : m_pFullIngredient)
 		{
 			ingredient->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
 		}
 		
 		// If an enemy is touching any segment, make all segments fall an extra floor
-		for (auto enemy : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Enemy"))
+		for (auto enemy : m_pEnemies)
 		{
 			auto enemyPos = enemy->GetTransform().GetWorldPosition();
 			auto enemyDims = enemy->GetTransform().GetDimensions();
 
-			for (auto ingredient : fullIngredient)
+			for (auto ingredient : m_pFullIngredient)
 			{
 				auto ingredientPos = ingredient->GetTransform().GetWorldPosition();
 				auto ingredientDims = ingredient->GetTransform().GetDimensions();
@@ -126,7 +116,7 @@ void dae::IngredientComponent::HandleFall()
 						enemyPos.y + enemyDims.y >= ingredientPos.y && enemyPos.y + enemyDims.y <= ingredientPos.y + ingredientDims.y)
 					{
 						// Increment floors to fall
-						for (auto ingredientSegment : fullIngredient)
+						for (auto ingredientSegment : m_pFullIngredient)
 						{
 							ingredientSegment->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
 						}
@@ -148,7 +138,7 @@ void dae::IngredientComponent::HandlePress()
 	auto selfDims = GetOwner()->GetTransform().GetDimensions();
 
 	// Get all players
-	for (auto player : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player"))
+	for (auto player : m_pPlayers)
 	{
 		auto playerPos = player->GetTransform().GetWorldPosition();
 		auto playerDims = player->GetTransform().GetDimensions();
@@ -178,7 +168,7 @@ void dae::IngredientComponent::HandlePress()
 void dae::IngredientComponent::ExecuteFall(float elapsedSec)
 {
 	// If an enemy is touching any segment, make all segments fall an extra floor
-	for (auto enemy : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Enemy"))
+	for (auto enemy : m_pEnemies)
 	{
 		auto enemyPos = enemy->GetTransform().GetWorldPosition();
 		auto enemyDims = enemy->GetTransform().GetDimensions();
@@ -247,12 +237,64 @@ void dae::IngredientComponent::HandleIngredient(GameObject* pOther)
 
 					// Stack self on top of other
 					GetOwner()->GetTransform().SetLocalPosition(selfPos.x, ingredientPos.y - selfDims.y, selfPos.z);
+
+					if (m_Type == "BunTop")
+					{
+						// Inform observer that burger is complete
+
+					}
 				}
 				else
 				{
 					// Move the other ingredient down
 					pOther->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
 				}
+			}
+		}
+	}
+}
+
+void dae::IngredientComponent::RegisterObjects()
+{
+	m_pIngredients = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient");
+	m_pEnemies = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Enemy");
+	m_pPlayers = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player");
+
+	// Get all ingredients
+	for (auto ingredient : m_pIngredients)
+	{
+		// If type is the same
+		auto ingredientComp = ingredient->GetComponent<IngredientComponent>();
+		if (ingredientComp->GetType() == GetType())
+		{
+			// If ID is the same
+			if (ingredientComp->GetId() == GetId())
+			{
+				// Add to list
+				m_pFullIngredient.push_back(ingredient);
+			}
+		}
+	}
+}
+
+void dae::IngredientComponent::RegisterObjects(std::string sceneName)
+{
+	m_pIngredients = dae::SceneManager::GetInstance().GetScene(sceneName).GetObjectsByTag("Ingredient");
+	m_pEnemies = dae::SceneManager::GetInstance().GetScene(sceneName).GetObjectsByTag("Enemy");
+	m_pPlayers = dae::SceneManager::GetInstance().GetScene(sceneName).GetObjectsByTag("Player");
+
+	// Get all ingredients
+	for (auto ingredient : m_pIngredients)
+	{
+		// If type is the same
+		auto ingredientComp = ingredient->GetComponent<IngredientComponent>();
+		if (ingredientComp->GetType() == GetType())
+		{
+			// If ID is the same
+			if (ingredientComp->GetId() == GetId())
+			{
+				// Add to list
+				m_pFullIngredient.push_back(ingredient);
 			}
 		}
 	}

@@ -31,7 +31,8 @@ namespace dae
 		void SetFloorsToFall(int floors) { m_FloorsToFall = floors; }
 		int GetFalling() const { return m_FloorsToFall; }
 
-
+		void RegisterObjects();
+		void RegisterObjects(std::string sceneName);
 	private:
 		std::string m_Type;
 		int m_Id;
@@ -39,6 +40,11 @@ namespace dae
 		bool m_IsPressed;
 		int m_FloorsToFall;
 		float m_FallSpeed;
+
+		std::vector<GameObject*> m_pFullIngredient;
+		std::vector<GameObject*> m_pIngredients;
+		std::vector<GameObject*> m_pEnemies;
+		std::vector<GameObject*> m_pPlayers;
 
 		void HandleFall();
 		void HandlePress();
