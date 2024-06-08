@@ -17,30 +17,15 @@ void dae::IngredientComponent::Update(float elapsedSec)
 {
 	if (m_FloorsToFall == -1)
 	{
-		// Go over all ingredients
-		for (auto ingredient : dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Ingredient"))
-		{
-			// If ingredient is not me
-			if (ingredient != GetOwner())
-			{
-				// Handle ingredient
-				HandleIngredient(ingredient);
-			}
-		}
 		return;
 	}
-
-	// If not pressed and not falling
 	if (!m_IsPressed && m_FloorsToFall == 0)
 	{
-		// Should I be pressed
 		HandlePress();
-		// Should I be falling
 		HandleFall();
 	}
 	else if (m_FloorsToFall > 0)
 	{
-		// Fall
 		ExecuteFall(elapsedSec);
 	}
 }
@@ -132,16 +117,6 @@ void dae::IngredientComponent::ExecuteFall(float elapsedSec)
 
 void dae::IngredientComponent::HandleIngredient(GameObject* pOther)
 {
-	// If type and ID are not the same
-	if (pOther->GetComponent<IngredientComponent>()->GetType() != GetType())
-	{
-		if (pOther->GetComponent<IngredientComponent>()->GetId() != GetId())
-		{
-			return;
-		}
-	}
-	
-
 	// This is a fully different Ingredient
 	auto selfPos = GetOwner()->GetTransform().GetWorldPosition();
 	auto selfDims = GetOwner()->GetTransform().GetDimensions();
@@ -161,7 +136,7 @@ void dae::IngredientComponent::HandleIngredient(GameObject* pOther)
 		{
 			// Two ingredients are colliding
 			// If this ingredient is falling, and the other one is not falling
-			if (m_FloorsToFall >= 0 && pOther->GetComponent<IngredientComponent>()->GetFalling() <= 0)
+			if (m_FloorsToFall > 0 && pOther->GetComponent<IngredientComponent>()->GetFalling() <= 0)
 			{
 				// If other has -1 floors to fall, it is on a plate, so set own floors to fall to -1 and stack on top
 				if (pOther->GetComponent<IngredientComponent>()->GetFalling() == -1)
