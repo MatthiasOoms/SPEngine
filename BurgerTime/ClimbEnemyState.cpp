@@ -15,6 +15,11 @@ dae::ClimbEnemyState::ClimbEnemyState(GameObject* pPlayer, GameObject* pLadder, 
 
 void dae::ClimbEnemyState::Update(float elapsedSec)
 {
+	if (GetEnemy()->GetComponent<EnemyComponent>()->GetIsControlled())
+	{
+		return;
+	}
+
 	// Check if the enemy is touching the ladder
 	bool touchingLadder{ false };
 

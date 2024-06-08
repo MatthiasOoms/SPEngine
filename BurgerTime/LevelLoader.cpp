@@ -310,7 +310,6 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		// Throw Pepper
 		input.AddCommand(sceneName, SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::ThrowPepperCommand>(player.get()));
 	}
-	input.AddController();
 
 	// Singleplayer
 	if (sceneName != "Multiplayer" && sceneName != "Versus")
@@ -346,7 +345,7 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	else
 	{
 		// Make second player object
-		player2 = std::make_unique<dae::GameObject>("Player");
+		player2 = std::make_unique<dae::GameObject>("Enemy");
 		if (sceneName == "Multiplayer")
 		{
 			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Peter.png"));
@@ -356,7 +355,6 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		{
 			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
 			auto enemyComp = player2->AddComponent<dae::EnemyComponent>();
-			enemyComp->SetState(nullptr);
 			enemyComp->SetControlled(true);
 		}
 		player2->SetLocalPosition({ j["Player2"]["Position"]["x"], j["Player2"]["Position"]["y"], 0 });

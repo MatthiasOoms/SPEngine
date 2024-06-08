@@ -5,6 +5,7 @@
 #include <Scene.h>
 #include "ClimbEnemyState.h"
 #include <stdexcept>
+#include "EnemyComponent.h"
 
 dae::WalkingEnemyState::WalkingEnemyState(GameObject* pPlayer)
 	: EnemyState(pPlayer)
@@ -24,6 +25,12 @@ dae::WalkingEnemyState::WalkingEnemyState(GameObject* pPlayer, float speed)
 
 void dae::WalkingEnemyState::Update(float elapsedSec)
 {
+	// If enemy is controlled, do not update
+	if (GetEnemy()->GetComponent<EnemyComponent>()->GetIsControlled())
+	{
+		return;
+	}
+
 	// Update AccumulatedTime
 	m_AccumulatedTime += elapsedSec;
 
