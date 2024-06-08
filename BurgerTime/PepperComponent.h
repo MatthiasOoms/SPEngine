@@ -26,7 +26,7 @@ namespace dae
 
 	private:
 		float m_PepperCooldown;
-		float m_AccumulatedTime;
+		float m_AccumulatedPepperTime;
 
 		std::vector<GameObject*> m_pEnemies;
 	};

@@ -93,7 +93,7 @@ void load()
 	}
 
 	// Demo scene
-	/* {
+	/*{
 		auto& scene = sceneManager.CreateScene("Demo");
 
 		// Load and Play Sound

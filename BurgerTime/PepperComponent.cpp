@@ -10,16 +10,16 @@
 dae::PepperComponent::PepperComponent(GameObject* pOwner)
 	: UpdateComponent(pOwner)
 	, m_PepperCooldown{ 1.0f }
-	, m_AccumulatedTime{ 0.0f }
+	, m_AccumulatedPepperTime{ 0.0f }
 {
 	RegisterObjects();
 }
 
 void dae::PepperComponent::Update(float elapsedSec)
 {
-	if (m_AccumulatedTime < m_PepperCooldown)
+	if (m_AccumulatedPepperTime < m_PepperCooldown)
 	{
-		m_AccumulatedTime += elapsedSec;
+		m_AccumulatedPepperTime += elapsedSec;
 
 		auto selfPos = GetOwner()->GetTransform().GetWorldPosition();
 		auto selfDims = GetOwner()->GetTransform().GetDimensions();

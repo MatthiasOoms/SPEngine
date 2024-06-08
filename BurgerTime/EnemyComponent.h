@@ -52,7 +52,7 @@ namespace dae
 
 		bool m_IsStunned;
 		float m_StunDuration;
-		float m_AccumulatedTime;
+		float m_AccumulatedPepperTime;
 
         bool m_IsControlled;
 

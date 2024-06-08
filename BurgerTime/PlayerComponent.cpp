@@ -6,14 +6,19 @@
 #include <TextureComponent.h>
 #include <ResourceManager.h>
 #include "PepperComponent.h"
+#include "SceneManager.h"
+#include "LivesComponent.h"
 
 dae::PlayerComponent::PlayerComponent(GameObject* pOwner)
 	: Component(pOwner)
 	, m_pCurrentState{ new IdlePlayerState{ pOwner } }
 	, m_PepperCount{ 5 }
 	, m_PepperCooldown{ 1.0f }
-	, m_AccumulatedTime{ 0.0f }
+	, m_AccumulatedPepperTime{ 0.0f }
+	, m_HurtCooldown{ 3.0f }
+	, m_AccumulatedHurtTime{ 0.0f }
 {
+	RegisterObjects();
 }
 
 dae::PlayerComponent::~PlayerComponent()
@@ -24,13 +29,38 @@ dae::PlayerComponent::~PlayerComponent()
 
 void dae::PlayerComponent::Update(float elapsedSec)
 {
-	if (m_AccumulatedTime < m_PepperCooldown)
-	{
-		m_AccumulatedTime += elapsedSec;
-	}
-
 	// Update the current state
 	m_pCurrentState->Update(elapsedSec);
+
+	// Check if player is hurt
+	if (m_AccumulatedHurtTime < m_HurtCooldown)
+	{
+		m_AccumulatedHurtTime += elapsedSec;
+	}
+	else
+	{
+		auto selfPos = GetOwner()->GetTransform().GetWorldPosition();
+		auto selfDims = GetOwner()->GetComponent<TextureComponent>()->GetDimensions();
+
+		// For every enemy
+		for (auto pEnemy : m_pEnemies)
+		{
+			auto enemyPos = pEnemy->GetTransform().GetWorldPosition();
+			auto enemyDims = pEnemy->GetComponent<TextureComponent>()->GetDimensions();
+
+			// Check if player is colliding with enemy
+			if (selfPos.x < enemyPos.x + enemyDims.x &&
+				selfPos.x + selfDims.x > enemyPos.x &&
+				selfPos.y < enemyPos.y + enemyDims.y &&
+				selfPos.y + selfDims.y > enemyPos.y)
+			{
+				// Player is hurt
+				m_AccumulatedHurtTime = 0.0f;
+				GetOwner()->GetComponent<LivesComponent>()->LowerLives();
+				break;
+			}
+		}
+	}
 }
 
 void dae::PlayerComponent::Render(float elapsedSec) const
@@ -54,10 +84,10 @@ void dae::PlayerComponent::SetState(PlayerState* pState)
 
 void dae::PlayerComponent::ThrowPepper()
 {
-	if (m_PepperCount > 0 && m_AccumulatedTime >= m_PepperCooldown)
+	if (m_PepperCount > 0 && m_AccumulatedPepperTime >= m_PepperCooldown)
 	{
 		--m_PepperCount;
-		m_AccumulatedTime = 0.0f;
+		m_AccumulatedPepperTime = 0.0f;
 
 		// Get playercomponent
 		auto playerTexture = GetOwner()->GetComponent<TextureComponent>();
@@ -85,4 +115,14 @@ void dae::PlayerComponent::ThrowPepper()
 
 		dae::SceneManager::GetInstance().GetActiveScene().Add(std::move(pPepper));
 	}
+}
+
+void dae::PlayerComponent::RegisterObjects()
+{
+	m_pEnemies = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Enemy");
+}
+
+void dae::PlayerComponent::RegisterObjects(std::string sceneName)
+{
+	m_pEnemies = dae::SceneManager::GetInstance().GetScene(sceneName).GetObjectsByTag("Enemy");
 }

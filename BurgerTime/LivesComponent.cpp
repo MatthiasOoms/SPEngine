@@ -34,6 +34,11 @@ void dae::LivesComponent::LowerLives()
 		--m_CurrentLives;
 		m_pSubject->OnNotify(GetOwner(), Event::PlayerDeath);
 	}
+	else
+	{
+		m_pSubject->OnNotify(GetOwner(), Event::GameOver);
+
+	}
 }
 
 void dae::LivesComponent::LowerLives(int amount)

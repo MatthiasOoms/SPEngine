@@ -12,7 +12,7 @@ dae::EnemyComponent::EnemyComponent(GameObject* pOwner)
 	, m_Type{ EnemyType::Hotdog }
 	, m_IsStunned{ false }
 	, m_StunDuration{ 1.5f }
-	, m_AccumulatedTime{ 0.0f }
+	, m_AccumulatedPepperTime{ 0.0f }
 	, m_pPreStunTexture{ nullptr }
 {
 	m_pHotdogStunned = dae::ResourceManager::GetInstance().LoadTexture("HotdogStunned.png");
@@ -41,11 +41,11 @@ void dae::EnemyComponent::Update(float elapsedSec)
 		}
 		else
 		{
-			m_AccumulatedTime += elapsedSec;
-			if (m_AccumulatedTime >= m_StunDuration)
+			m_AccumulatedPepperTime += elapsedSec;
+			if (m_AccumulatedPepperTime >= m_StunDuration)
 			{
 				m_IsStunned = false;
-				m_AccumulatedTime = 0.0f;
+				m_AccumulatedPepperTime = 0.0f;
 
 				// Set Texture back to normal
 				GetOwner()->GetComponent<TextureComponent>()->SetTexture(m_pPreStunTexture);

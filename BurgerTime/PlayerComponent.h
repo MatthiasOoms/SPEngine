@@ -1,10 +1,13 @@
 #ifndef PLAYERCOMPONENT_H
 #define PLAYERCOMPONENT_H
 #include <Component.h>
+#include <vector>
+#include <string>
 
 namespace dae
 {
     class PlayerState;
+	class GameObject;
 
 	class PlayerComponent : public Component
 	{
@@ -25,12 +28,20 @@ namespace dae
 
 		void ThrowPepper();
 
+        void RegisterObjects();
+		void RegisterObjects(std::string sceneName);
+
     private:
         PlayerState* m_pCurrentState;
 
+		std::vector<GameObject*> m_pEnemies;
+
 		int m_PepperCount;
 		float m_PepperCooldown;
-		float m_AccumulatedTime;
+		float m_AccumulatedPepperTime;
+
+		float m_HurtCooldown;
+		float m_AccumulatedHurtTime;
     };
 }
 

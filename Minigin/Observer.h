@@ -9,7 +9,8 @@ namespace dae
 	{
 		PlayerDeath,
 		EnemyDeath,
-		ObserverAdded
+		ObserverAdded,
+		GameOver
 	};
 
 	class Observer
