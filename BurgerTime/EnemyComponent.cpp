@@ -5,11 +5,6 @@
 #include <TextureComponent.h>
 #include <ResourceManager.h>
 #include "FallingEnemyState.h"
-#include "Subject.h"
-#include "Observer.h"
-#include "ScoreComponent.h"
-#include <SceneManager.h>
-#include <Scene.h>
 
 dae::EnemyComponent::EnemyComponent(GameObject* pOwner)
 	: Component(pOwner)
@@ -19,8 +14,6 @@ dae::EnemyComponent::EnemyComponent(GameObject* pOwner)
 	, m_StunDuration{ 1.5f }
 	, m_AccumulatedPepperTime{ 0.0f }
 	, m_pPreStunTexture{ nullptr }
-	, m_pSubject{ new Subject{} }
-	, m_IsControlled{ false }
 {
 	m_pHotdogStunned = dae::ResourceManager::GetInstance().LoadTexture("HotdogStunned.png");
 	m_pEggStunned = dae::ResourceManager::GetInstance().LoadTexture("EggStunned.png");
@@ -34,9 +27,6 @@ dae::EnemyComponent::~EnemyComponent()
 		delete m_pCurrentState;
 		m_pCurrentState = nullptr;
 	}
-
-	delete m_pSubject;
-	m_pSubject = nullptr;
 }
 
 void dae::EnemyComponent::Update(float elapsedSec)
@@ -59,6 +49,7 @@ void dae::EnemyComponent::Update(float elapsedSec)
 
 				// Set Texture back to normal
 				GetOwner()->GetComponent<TextureComponent>()->SetTexture(m_pPreStunTexture);
+
 			}
 		}
 	}
@@ -131,42 +122,15 @@ void dae::EnemyComponent::Stun()
 void dae::EnemyComponent::Respawn()
 {
 	// Move to left or right of screen depending on distance from center
-	auto pos = GetOwner()->GetTransform().GetLocalPosition();
+	auto pos = GetOwner()->GetTransform().GetWorldPosition();
 	auto dims = GetOwner()->GetTransform().GetDimensions();
 
-	if (pos.x > 240)
+	if (pos.x < 240)
 	{
-		GetOwner()->GetTransform().SetLocalPosition(480.f - 32.f - dims.x, pos.y, pos.z);
+		GetOwner()->GetTransform().SetWorldPosition(480, 32, pos.z );
 	}
 	else
 	{
-		GetOwner()->GetTransform().SetLocalPosition(32, pos.y, pos.z);
+		GetOwner()->GetTransform().SetWorldPosition( -static_cast<float>(dims.x), 32, pos.z );
 	}
-
-	// Stun Enemy
-	Stun();
-
-	// Get Player 1 score component
-	auto pScoreComp = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front()->GetComponent<ScoreComponent>();
-
-	switch (m_Type)
-	{
-	case dae::EnemyType::Hotdog:
-		pScoreComp->HotdogDeath();
-		break;
-	case dae::EnemyType::Egg:
-		pScoreComp->EggDeath();
-		break;
-	case dae::EnemyType::Pickle:
-		pScoreComp->PickleDeath();
-		break;
-	default:
-		break;
-	}
-}
-
-void dae::EnemyComponent::AddObserver(Observer* pObserver)
-{
-	m_pSubject->AddObserver(pObserver);
-	pObserver->OnNotify(GetOwner(), Event::ObserverAdded);
 }

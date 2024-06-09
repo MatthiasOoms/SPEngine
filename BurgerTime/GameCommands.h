@@ -170,27 +170,6 @@ namespace dae
 		void Execute(float elapsedSec) override;
 	};
 
-	class FloatCommand final : public Command
-	{
-	public:
-		FloatCommand(GameObject* pOwner, float speed);
-
-		virtual ~FloatCommand() override = default;
-		FloatCommand(const FloatCommand& other) = delete;
-		FloatCommand(FloatCommand&& other) = delete;
-		FloatCommand& operator=(const FloatCommand& other) = delete;
-		FloatCommand& operator=(FloatCommand&& other) = delete;
-
-		void Execute(float elapsedSec) override;
-
-	private:
-		GameObject* m_pGameObject;
-		float m_FloatSpeed;
-
-	protected:
-		GameObject* GetGameObject() const { return m_pGameObject; }
-	};
-
 	class KillCommand final : public Command
 	{
 	private:
@@ -205,6 +184,24 @@ namespace dae
 		KillCommand(KillCommand&& other) = delete;
 		KillCommand& operator=(const KillCommand& other) = delete;
 		KillCommand& operator=(KillCommand&& other) = delete;
+
+		void Execute(float elapsedSec) override;
+	};
+
+	class HotdogKilledCommand final : public Command
+	{
+	private:
+		GameObject* m_pGameObject;
+	protected:
+		GameObject* GetGameObject() const{ return m_pGameObject; }
+	public:
+		HotdogKilledCommand(GameObject* pGameObject);
+
+		virtual ~HotdogKilledCommand() override = default;
+		HotdogKilledCommand(const HotdogKilledCommand& other) = delete;
+		HotdogKilledCommand(HotdogKilledCommand&& other) = delete;
+		HotdogKilledCommand& operator=(const HotdogKilledCommand& other) = delete;
+		HotdogKilledCommand& operator=(HotdogKilledCommand&& other) = delete;
 
 		void Execute(float elapsedSec) override;
 	};

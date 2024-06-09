@@ -1,5 +1,3 @@
-#include "ScoreObserverComponent.h"
-#include "ScoreComponent.h"
 #include "LivesObserverComponent.h"
 #include "LivesComponent.h"
 #include "PepperComponent.h"
@@ -68,7 +66,6 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	player->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Peter.png"));
 	player->AddComponent<dae::PlayerComponent>();
 	auto playerLives = player->AddComponent<dae::LivesComponent>();
-	auto playerScore = player->AddComponent<dae::ScoreComponent>();
 	player->SetLocalPosition({ j["Player"]["Position"]["x"], j["Player"]["Position"]["y"], 0 });
 	auto playerTexture = player->GetComponent<dae::TextureComponent>();
 	player->GetTransform().SetDimensions(playerTexture->GetDimensions());
@@ -76,18 +73,10 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	// Add player1 lives observer object
 	auto livesObserver = std::make_unique<dae::GameObject>("Background");
 	livesObserver->AddComponent<dae::TextureComponent>();
-	livesObserver->GetTransform().SetLocalPosition(32, 32, 0);
+	livesObserver->GetTransform().SetLocalPosition(20, 20, 0);
 	livesObserver->AddComponent<dae::TextComponent>()->SetFont(font);
 	livesObserver->AddComponent<dae::LivesObserverComponent>();
 	playerLives->AddObserver(livesObserver->GetComponent<dae::LivesObserverComponent>());
-
-	// Add player1 lives observer object
-	auto scoreObserver = std::make_unique<dae::GameObject>("Background");
-	scoreObserver->AddComponent<dae::TextureComponent>();
-	scoreObserver->GetTransform().SetLocalPosition(480 - 128, 32, 0);
-	scoreObserver->AddComponent<dae::TextComponent>()->SetFont(font);
-	scoreObserver->AddComponent<dae::ScoreObserverComponent>();
-	playerScore->AddObserver(scoreObserver->GetComponent<dae::ScoreObserverComponent>());
 
 	// Process level layout
 	for (const auto& layout : j["Layout"])
@@ -273,23 +262,24 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		{
 			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Hotdog);
 			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
+			gameObjects.push_back(std::move(enemyObj));
 		}
 		else if (enemy["Type"] == "Egg")
 		{
 			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Egg);
 			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("EggWalk.png"));
+			gameObjects.push_back(std::move(enemyObj));
 		}
 		else if (enemy["Type"] == "Pickle")
 		{
 			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Pickle);
 			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("PickleWalk.png"));
+			gameObjects.push_back(std::move(enemyObj));
 		}
 		else
 		{
 			throw std::runtime_error("Unknown enemy type");
 		}
-
-		gameObjects.push_back(std::move(enemyObj));
 	}
 
 	// If the scene does not exist, create it
@@ -492,7 +482,6 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	scene.Add(std::move(player));
 
 	scene.Add(std::move(livesObserver));
-	scene.Add(std::move(scoreObserver));
 
 	RegisterObjects<PlayerComponent>("Player", sceneName);
 	RegisterObjects<PlateComponent>("Plate", sceneName);

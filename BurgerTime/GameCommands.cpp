@@ -95,19 +95,6 @@ void dae::WalkCommand::Execute(float elapsedSec)
 	}
 }
 
-dae::FloatCommand::FloatCommand(GameObject* pGameObject, float speed)
-	: Command{}
-	, m_pGameObject{ pGameObject }
-	, m_FloatSpeed{ speed }
-{
-}
-
-void dae::FloatCommand::Execute(float elapsedSec)
-{
-	auto temp = GetGameObject()->GetTransform().GetLocalPosition();
-	GetGameObject()->SetLocalPosition(temp + glm::vec3{ m_FloatSpeed * elapsedSec, 0, 0 });
-}
-
 dae::KillCommand::KillCommand(GameObject* pGameObject)
 	: Command{ }
 	, m_pGameObject{ pGameObject }
@@ -119,6 +106,20 @@ void dae::KillCommand::Execute(float)
 	if (GetGameObject()->HasComponent<LivesComponent>())
 	{
 		GetGameObject()->GetComponent<LivesComponent>()->LowerLives();
+	}
+}
+
+dae::HotdogKilledCommand::HotdogKilledCommand(GameObject* pGameObject)
+	: Command{ }
+	, m_pGameObject{ pGameObject }
+{
+}
+
+void dae::HotdogKilledCommand::Execute(float)
+{
+	if (GetGameObject()->HasComponent<ScoreComponent>())
+	{
+		GetGameObject()->GetComponent<ScoreComponent>()->IncreaseScore(100);
 	}
 }
 
