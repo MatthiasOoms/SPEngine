@@ -43,7 +43,7 @@ void dae::ScoreComponent::BurgerDrop()
 void dae::ScoreComponent::BurgerDrop(int enemyCount)
 {
 	int baseScore = 500;
-	for (size_t i = 1; i < enemyCount; i++)
+	for (int i = 1; i < enemyCount; i++)
 	{
 		// 1 = 500, 2 = 1000, 3 = 2000, 4 = 4000, 5 = 8000, 6 = 16000
 		baseScore *= 2;
