@@ -28,6 +28,9 @@
 // Platform
 #include "PlatformComponent.h"
 
+#include <fstream>
+#include <algorithm>
+
 dae::WalkCommand::WalkCommand(GameObject* pGameObject, float speed)
 	: Command{}
 	, m_pGameObject{ pGameObject }
@@ -161,7 +164,62 @@ void dae::SceneSwapCommand::Execute(float)
 		}
 	}
 
-	dae::SceneManager::GetInstance().SetActiveScene(GetScene());
+	// if next scene is multiplayer or versus, set the active scene to that scene
+	if (GetScene() == "Multiplayer")
+	{
+		sceneManager.SetActiveMultiplayerScene();
+	}
+	else if (GetScene() == "Versus")
+	{
+		sceneManager.SetActiveVersusScene();
+	}
+	else if (GetScene() == "HighScore")
+	{
+		// Write player's score to scores.txt
+		if (!players.empty())
+		{
+			auto currentPlayer = players.front();
+			if (currentPlayer)
+			{
+				auto playerScore = currentPlayer->GetComponent<ScoreComponent>()->GetScore();
+				
+				// Read Scores.txt and write sorted list of scores to Scores.txt
+				std::ifstream file{ "../Data/Scores.txt" };
+				std::vector<int> scores{};
+				if (file.is_open())
+				{
+					int temp{};
+					while (file >> temp)
+					{
+						scores.push_back(temp);
+					}
+					file.close();
+				}
+
+				// Add current score and write to file from high to low
+				scores.push_back(playerScore);
+
+				std::sort(scores.begin(), scores.end(), std::greater<int>());
+
+				std::ofstream outFile{ "../Data/Scores.txt" };
+				if (outFile.is_open())
+				{
+					for (auto score : scores)
+					{
+						outFile << score << '\n';
+					}
+					outFile.close();
+				}
+			}
+		}
+
+		sceneManager.SetActiveScene(GetScene());
+	}
+	else
+	{
+		sceneManager.SetActiveScene(GetScene());
+	}
+
 	auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
 
 	soundSystem.StopMusic();
