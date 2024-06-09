@@ -134,11 +134,6 @@ void dae::EnemyComponent::Respawn()
 	auto pos = GetOwner()->GetTransform().GetLocalPosition();
 	auto dims = GetOwner()->GetTransform().GetDimensions();
 
-	if (pos.y > 240)
-	{
-		GetOwner()->GetTransform().SetLocalPosition(pos.x, 480.f - 32.f - dims.y, pos.z);
-	}
-
 	if (pos.x > 240)
 	{
 		GetOwner()->GetTransform().SetLocalPosition(480.f - 32.f - dims.x, pos.y, pos.z);

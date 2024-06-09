@@ -60,24 +60,32 @@ void load()
 		// Add controllers
 		input.AddControllersMax();
 
-		// Text
-		auto font = resourceManager.LoadFont("Lingua.otf", 36);
-		auto go = std::make_unique<dae::GameObject>("Player");
-		go->GetTransform().SetWorldPosition(80, 20, 0);
-		go->AddComponent<dae::PlayerComponent>();
-		go->AddComponent<dae::TextureComponent>();
-		auto playerScore = go->AddComponent<dae::ScoreComponent>();
-		go->AddComponent<dae::LivesComponent>();
+		// Background
+		auto go = std::make_unique<dae::GameObject>("Background");
+		go->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("background.tga"));
 		scene.Add(std::move(go));
 
-		// Add player1 score observer object
-		auto scoreObserver = std::make_unique<dae::GameObject>("Background");
-		scoreObserver->AddComponent<dae::TextureComponent>();
-		scoreObserver->GetTransform().SetLocalPosition(240 - 64, 32, 0);
-		scoreObserver->AddComponent<dae::TextComponent>()->SetFont(font);
-		scoreObserver->AddComponent<dae::ScoreObserverComponent>();
-		playerScore->AddObserver(scoreObserver->GetComponent<dae::ScoreObserverComponent>());
-		scene.Add(std::move(scoreObserver));
+		// Logo
+		go = std::make_unique<dae::GameObject>("Background");
+		go->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("logo.tga"));
+		go->GetTransform().SetWorldPosition(216, 180, 0);
+		scene.Add(std::move(go));
+
+		// Text
+		auto font = resourceManager.LoadFont("Lingua.otf", 36);
+		go = std::make_unique<dae::GameObject>("Background");
+		go->AddComponent<dae::TextureComponent>();
+		go->AddComponent<dae::TextComponent>()->SetFont(font);
+		go->GetComponent<dae::TextComponent>()->SetText("Press \"SPACE\" To Start!");
+		go->GetTransform().SetWorldPosition(80, 20, 0);
+		scene.Add(std::move(go));
+
+		// FPS
+		go = std::make_unique<dae::GameObject>("Background");
+		go->AddComponent<dae::TextureComponent>();
+		go->AddComponent<dae::TextComponent>()->SetFont(font);
+		go->AddComponent<dae::FPSComponent>();
+		scene.Add(std::move(go));
 
 		input.AddCommand("Menu", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Level1", "../Data/Soundtrack.mp3"));
 	}
