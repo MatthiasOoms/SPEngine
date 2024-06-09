@@ -46,7 +46,7 @@ void dae::PlayerComponent::Update(float elapsedSec)
 	else
 	{
 		auto selfPos = GetOwner()->GetTransform().GetWorldPosition();
-		auto selfDims = GetOwner()->GetComponent<TextureComponent>()->GetDimensions();
+		auto selfDims = GetOwner()->GetTransform().GetDimensions();
 
 		// For every enemy
 		for (auto pEnemy : m_pEnemies)
@@ -54,7 +54,7 @@ void dae::PlayerComponent::Update(float elapsedSec)
 			if (!pEnemy->GetComponent<EnemyComponent>()->IsStunned())
 			{
 				auto enemyPos = pEnemy->GetTransform().GetWorldPosition();
-				auto enemyDims = pEnemy->GetComponent<TextureComponent>()->GetDimensions();
+				auto enemyDims = pEnemy->GetTransform().GetDimensions();
 
 				// Check if player is colliding with enemy
 				if (selfPos.x < enemyPos.x + enemyDims.x &&

@@ -220,13 +220,6 @@ void dae::IngredientComponent::ExecuteFall(float elapsedSec)
 		auto ingredientPos = GetOwner()->GetTransform().GetWorldPosition();
 		auto ingredientDims = GetOwner()->GetTransform().GetDimensions();
 
-		// If enemy is below screen, respawn
-		if (enemyPos.y > 480)
-		{
-			enemy->GetComponent<EnemyComponent>()->Respawn();
-			continue;
-		}
-
 		// If left side of enemy is between left and right side of ingredient
 		// or right side of enemy is between left and right side of ingredient
 		if (enemyPos.x >= ingredientPos.x && enemyPos.x <= ingredientPos.x + ingredientDims.x ||

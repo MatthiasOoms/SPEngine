@@ -23,6 +23,15 @@ void dae::FallingEnemyState::Update(float elapsedSec)
 	// Make FallCommand
 	FallCommand fallCommand{ GetEnemy(), m_FallSpeed };
 	fallCommand.Execute(elapsedSec);
+
+	auto enemy = GetEnemy();
+	auto enemyPos = enemy->GetTransform().GetWorldPosition();
+
+	// If enemy is below screen, respawn
+	if (enemyPos.y > 480)
+	{
+		enemy->GetComponent<EnemyComponent>()->Respawn();
+	}
 }
 
 void dae::FallingEnemyState::Render(float) const
