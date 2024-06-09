@@ -396,14 +396,14 @@
       "Type": "Hotdog",
       "Position": {
         "x": 100,
-        "y": 68
+        "y": 36
       }
     },
     {
       "Type": "Hotdog",
       "Position": {
         "x": 200,
-        "y": 68
+        "y": 36
       }
     },
     {
@@ -424,14 +424,14 @@
       "Type": "Egg",
       "Position": {
         "x": 100,
-        "y": 132
+        "y": 100
       }
     },
     {
       "Type": "Pickle",
       "Position": {
         "x": 400,
-        "y": 260
+        "y": 228
       }
     }
   ]
