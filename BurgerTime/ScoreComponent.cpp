@@ -52,12 +52,6 @@ void dae::ScoreComponent::BurgerDrop(int enemyCount)
 	m_pSubject->OnNotify(GetOwner(), Event::BurgerDrop);
 }
 
-void dae::ScoreComponent::SetScore(int score)
-{
-	m_Score = score;
-	m_pSubject->OnNotify(GetOwner(), Event::EnemyDeath);
-}
-
 void dae::ScoreComponent::AddObserver(Observer* pObserver)
 {
 	m_pSubject->AddObserver(pObserver);
@@ -67,4 +61,10 @@ void dae::ScoreComponent::AddObserver(Observer* pObserver)
 int dae::ScoreComponent::GetScore() const
 {
 	return m_Score;
+}
+
+void dae::ScoreComponent::SetScore(int score)
+{
+	m_Score = score;
+	m_pSubject->OnNotify(GetOwner(), Event::EnemyDeath);
 }

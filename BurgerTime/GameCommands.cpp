@@ -132,11 +132,15 @@ void dae::SceneSwapCommand::Execute(float)
 {
 	dae::SceneManager::GetInstance().SetActiveScene(GetScene());
 	auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
-	dae::Sound temp{ GetMusicPath(), "Soundtrack", -1};
+
 	soundSystem.StopMusic();
 	soundSystem.StopSoundEffects();
 
-	soundSystem.PlayMusic(temp);
+	if (!GetMusicPath().empty())
+	{
+		dae::Sound temp = {GetMusicPath(), "Soundtrack", -1 };
+		soundSystem.PlayMusic(temp);
+	}
 }
 
 dae::WalkEndCommand::WalkEndCommand(GameObject* pGameObject)
@@ -567,11 +571,39 @@ dae::SceneNextCommand::SceneNextCommand()
 
 void dae::SceneNextCommand::Execute(float)
 {
-	// Get the next scene and set it as the active scene
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& activeScene = sceneManager.GetActiveScene().GetSceneName();
 	auto& nextScene = sceneManager.GetNextScene(activeScene).GetSceneName();
-	sceneManager.SetActiveScene(nextScene);
+
+	auto players = sceneManager.GetActiveScene().GetObjectsByTag("Player");
+	if (!players.empty())
+	{
+		auto currentPlayer = players.front();
+
+		int currentLives{};
+		int currentScore{};
+		int currentPepper{};
+
+		if (currentPlayer)
+		{
+			currentLives = currentPlayer->GetComponent<LivesComponent>()->GetLives();
+			currentScore = currentPlayer->GetComponent<ScoreComponent>()->GetScore();
+			currentPepper = currentPlayer->GetComponent<PlayerComponent>()->GetPepperCount();
+		}
+
+		//Get player from next scene
+		auto nextPlayers = sceneManager.GetScene(nextScene).GetObjectsByTag("Player");
+		if (!nextPlayers.empty())
+		{
+			auto nextPlayer = nextPlayers.front();
+			if (nextPlayer)
+			{
+				nextPlayer->GetComponent<LivesComponent>()->SetLives(currentLives);
+				nextPlayer->GetComponent<ScoreComponent>()->SetScore(currentScore);
+				nextPlayer->GetComponent<PlayerComponent>()->SetPepperCount(currentPepper);
+			}
+		}
+	}
 }
 
 dae::ToggleSoundCommand::ToggleSoundCommand()

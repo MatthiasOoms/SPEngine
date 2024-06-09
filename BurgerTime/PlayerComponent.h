@@ -27,6 +27,8 @@ namespace dae
         PlayerState* GetCurrentState() const { return m_pCurrentState; }
 
 		void ThrowPepper();
+		int GetPepperCount() const { return m_PepperCount; }
+		void SetPepperCount(int pepperCount) { m_PepperCount = pepperCount; }
 
         void RegisterObjects();
 		void RegisterObjects(std::string sceneName);
