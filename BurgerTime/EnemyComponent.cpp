@@ -136,11 +136,11 @@ void dae::EnemyComponent::Respawn()
 
 	if (pos.x < 240)
 	{
-		GetOwner()->GetTransform().SetWorldPosition(480.f - 32.f - dims.x, pos.y, pos.z);
+		GetOwner()->GetTransform().SetWorldPosition(480.f - 32.f - dims.x, 324, pos.z);
 	}
 	else
 	{
-		GetOwner()->GetTransform().SetWorldPosition(32, pos.y, pos.z);
+		GetOwner()->GetTransform().SetWorldPosition(32, 324, pos.z);
 	}
 
 	// Get Player 1 score component
