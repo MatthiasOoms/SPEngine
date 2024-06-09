@@ -162,8 +162,8 @@ void dae::SceneSwapCommand::Execute(float)
 	}
 
 	dae::SceneManager::GetInstance().SetActiveScene(GetScene());
-	auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem();
-
+	auto& soundSystem = dae::SoundServiceLocator::GetSoundSystem(); 
+	
 	soundSystem.StopMusic();
 	soundSystem.StopSoundEffects();
 
