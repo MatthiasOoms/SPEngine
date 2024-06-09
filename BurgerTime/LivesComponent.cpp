@@ -56,7 +56,7 @@ void dae::LivesComponent::SetLives(int lives)
 	{
 		m_CurrentLives = lives;
 	}
-	else
+	if (m_CurrentLives <= 0) 
 	{
 		m_CurrentLives = 1;
 	}
