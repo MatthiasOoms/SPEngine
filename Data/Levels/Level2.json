@@ -1,0 +1,438 @@
+{
+  "Player": {
+    "Type": "Player",
+    "Position": {
+      "x": 224,
+      "y": 324
+    }
+  },
+  "Player2": {
+    "Type": "Player",
+    "Position": {
+      "x": 224,
+      "y": 260
+    }
+  },
+  "Layout": [
+    {
+      "Type": "Plate",
+      "Position": {
+        "x": 58,
+        "y": 448
+      }
+    },
+    {
+      "Type": "Plate",
+      "Position": {
+        "x": 154,
+        "y": 448
+      }
+    },
+    {
+      "Type": "Plate",
+      "Position": {
+        "x": 250,
+        "y": 448
+      }
+    },
+    {
+      "Type": "Plate",
+      "Position": {
+        "x": 346,
+        "y": 448
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 32,
+        "y": 292
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 128,
+        "y": 292
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 224,
+        "y": 292
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "3",
+      "Position": {
+        "x": 320,
+        "y": 260
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "3",
+      "Position": {
+        "x": 368,
+        "y": 260
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "3",
+      "Position": {
+        "x": 416,
+        "y": 260
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 128,
+        "y": 228
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 224,
+        "y": 228
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "1",
+      "Position": {
+        "x": 320,
+        "y": 228
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "3",
+      "Position": {
+        "x": 32,
+        "y": 196
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "3",
+      "Position": {
+        "x": 80,
+        "y": 196
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "1",
+      "Position": {
+        "x": 128,
+        "y": 196
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "1",
+      "Position": {
+        "x": 320,
+        "y": 196
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 320,
+        "y": 196
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 368,
+        "y": 196
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "1",
+      "Position": {
+        "x": 128,
+        "y": 164
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 224,
+        "y": 164
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 80,
+        "y": 132
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "1",
+      "Position": {
+        "x": 128,
+        "y": 132
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "1",
+      "Position": {
+        "x": 224,
+        "y": 132
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "3",
+      "Position": {
+        "x": 272,
+        "y": 132
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 320,
+        "y": 132
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 416,
+        "y": 132
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 32,
+        "y": 68
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 128,
+        "y": 68
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "3",
+      "Position": {
+        "x": 176,
+        "y": 68
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 224,
+        "y": 68
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 320,
+        "y": 68
+      }
+    },
+    {
+      "Type": "Ladder",
+      "Length": "2",
+      "Position": {
+        "x": 416,
+        "y": 68
+      }
+    },
+    {
+      "Type": "Platform",
+      "Length": "4",
+      "Position": {
+        "x": 32,
+        "y": 356
+      }
+    },
+    {
+      "Type": "Platform",
+      "Length": "3",
+      "Position": {
+        "x": 32,
+        "y": 292
+      }
+    },
+    {
+      "Type": "Platform",
+      "Length": "1",
+      "Position": {
+        "x": 320,
+        "y": 260
+      }
+    },
+    {
+      "Type": "Platform",
+      "Length": "2",
+      "Position": {
+        "x": 128,
+        "y": 228
+      }
+    },
+    {
+      "Type": "Platform",
+      "Length": "1",
+      "Position": {
+        "x": 32,
+        "y": 196
+      }
+    },
+    {
+      "Type": "Platform",
+      "Length": "1",
+      "Position": {
+        "x": 320,
+        "y": 196
+      }
+    },
+    {
+      "Type": "Platform",
+      "Length": "1",
+      "Position": {
+        "x": 128,
+        "y": 164
+      }
+    },
+    {
+      "Type": "Platform",
+      "Length": "1",
+      "Position": {
+        "x": 32,
+        "y": 132
+      }
+    },
+    {
+      "Type": "Platform",
+      "Length": "2",
+      "Position": {
+        "x": 224,
+        "y": 132
+      }
+    },
+    {
+      "Type": "Platform",
+      "Length": "4",
+      "Position": {
+        "x": 32,
+        "y": 68 
+      }
+    },
+    {
+      "Type": "Ingredient",
+      "Option": "1",
+      "Id": 1,
+      "Position": {
+        "x": 64,
+        "y": 56
+      }
+    },
+    {
+      "Type": "Ingredient",
+      "Option": "5",
+      "Id": 1,
+      "Position": {
+        "x": 64,
+        "y": 120
+      }
+    },
+    {
+      "Type": "Ingredient",
+      "Option": "3",
+      "Id": 1,
+      "Position": {
+        "x": 64,
+        "y": 184
+      }
+    },
+    {
+      "Type": "Ingredient",
+      "Option": "6",
+      "Id": 1,
+      "Position": {
+        "x": 64,
+        "y": 280
+      }
+    }
+  ],
+  "Enemies": [
+    {
+      "Type": "Hotdog",
+      "Position": {
+        "x": 100,
+        "y": 36
+      }
+    },
+    {
+      "Type": "Hotdog",
+      "Position": {
+        "x": 200,
+        "y": 36
+      }
+    },
+    {
+      "Type": "Hotdog",
+      "Position": {
+        "x": 30,
+        "y": 260
+      }
+    },
+    {
+      "Type": "Egg",
+      "Position": {
+        "x": 150,
+        "y": 132
+      }
+    },
+    {
+      "Type": "Egg",
+      "Position": {
+        "x": 100,
+        "y": 100
+      }
+    },
+    {
+      "Type": "Pickle",
+      "Position": {
+        "x": 400,
+        "y": 228
+      }
+    }
+  ]
+}

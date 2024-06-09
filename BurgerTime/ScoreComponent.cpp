@@ -62,3 +62,9 @@ int dae::ScoreComponent::GetScore() const
 {
 	return m_Score;
 }
+
+void dae::ScoreComponent::SetScore(int score)
+{
+	m_Score = score; 
+	m_pSubject->OnNotify(GetOwner(), Event::SceneSwap);
+}

@@ -53,14 +53,48 @@ void load()
 	auto& resourceManager = dae::ResourceManager::GetInstance();
 	auto& input = dae::InputManager::GetInstance();
 
+	// HighScore scene
+	{
+		auto& scene = sceneManager.CreateScene("HighScore");
+
+		// Add controllers
+		input.AddControllersMax();
+
+		// Background
+		auto go = std::make_unique<dae::GameObject>("Background");
+		go->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("background.tga"));
+		scene.Add(std::move(go));
+
+		// Logo
+		go = std::make_unique<dae::GameObject>("Background");
+		go->AddComponent<dae::TextureComponent>()->SetTexture(resourceManager.LoadTexture("logo.tga"));
+		go->GetTransform().SetWorldPosition(216, 180, 0);
+		scene.Add(std::move(go));
+
+		// Text
+		auto font = resourceManager.LoadFont("Lingua.otf", 36);
+		go = std::make_unique<dae::GameObject>("Background");
+		go->AddComponent<dae::TextureComponent>();
+		go->AddComponent<dae::TextComponent>()->SetFont(font);
+		go->GetComponent<dae::TextComponent>()->SetText("Press \"SPACE\" To Start!");
+		go->GetTransform().SetWorldPosition(80, 20, 0);
+		scene.Add(std::move(go));
+
+		// FPS
+		go = std::make_unique<dae::GameObject>("Background");
+		go->AddComponent<dae::TextureComponent>();
+		go->AddComponent<dae::TextComponent>()->SetFont(font);
+		go->AddComponent<dae::FPSComponent>();
+		scene.Add(std::move(go));
+
+		input.AddCommand("Menu", SDL_SCANCODE_SPACE, dae::keyState::isDown, std::make_unique<dae::SceneSwapCommand>("Level1", "../Data/Soundtrack.mp3"));
+	}
+
 	// Menu scene
 	{
 		auto& scene = sceneManager.CreateScene("Menu");
 
 		soundSystem.StopMusic();
-
-		// Add controllers
-		input.AddControllersMax();
 
 		// Background
 		auto go = std::make_unique<dae::GameObject>("Background");
@@ -375,11 +409,9 @@ void load()
 		// Load the level
 		dae::LevelLoader::GetInstance().LoadLevel("Level1.json", "Level1");
 		dae::LevelLoader::GetInstance().LoadLevel("Level1.json", "Versus");
+		dae::LevelLoader::GetInstance().LoadLevel("Level2.json", "Level2");
 		dae::LevelLoader::GetInstance().LoadLevel("Level1.json", "Multiplayer");
-		//dae::LevelLoader::GetInstance().LoadLevel("Level2.json", "Level2");
-		//dae::LevelLoader::GetInstance().LoadLevel("Level3.json", "Level3");
-		//dae::LevelLoader::GetInstance().LoadLevel("Level2.json", "Multiplayer");
-		//dae::LevelLoader::GetInstance().LoadLevel("Level2.json", "Multiplayer");
+		dae::LevelLoader::GetInstance().LoadLevel("Level3.json", "Level3");
 	}
 
 	input.AddGlobalCommand(SDL_SCANCODE_F1, dae::keyState::isDown, std::make_unique<dae::SceneNextCommand>());

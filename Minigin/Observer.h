@@ -10,6 +10,7 @@ namespace dae
 		PlayerDeath,
 		EnemyDeath,
 		ObserverAdded,
+		SceneSwap,
 		BurgerDrop,
 		GameOver
 	};

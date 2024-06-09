@@ -5,6 +5,7 @@
 #include <SoundSystem.h>
 #include "GameObject.h"
 #include "Subject.h"
+#include "GameCommands.h"
 
 dae::LivesObserverComponent::LivesObserverComponent(GameObject* pObj)
 	: Component(pObj)
@@ -35,6 +36,18 @@ void dae::LivesObserverComponent::OnNotify(GameObject* obj, Event event)
 	case dae::Event::ObserverAdded:
 		UpdateText(obj);
 		break;
+	case dae::Event::SceneSwap:
+		UpdateText(obj);
+		break;
+	case dae::Event::BurgerDrop:
+		break;
+	case dae::Event::GameOver:
+	{
+		// Load HighScoreScene
+		SceneSwapCommand swapCommand{ "HighScore", "" };
+		swapCommand.Execute(0);
+		break;
+	}
 	default:
 		break;
 	}

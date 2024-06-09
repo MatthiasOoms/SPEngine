@@ -5,9 +5,9 @@
 
 dae::LivesComponent::LivesComponent(GameObject* pOwner)
 	: Component(pOwner)
+	, m_pSubject{ new Subject{} }
 {
 	SetLives(3);
-	m_pSubject = new Subject{};
 }
 
 dae::LivesComponent::~LivesComponent()
@@ -60,4 +60,5 @@ void dae::LivesComponent::SetLives(int lives)
 	{
 		m_CurrentLives = 1;
 	}
+	m_pSubject->OnNotify(GetOwner(), Event::SceneSwap);
 }

@@ -64,7 +64,6 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 
 	// Process player
 	auto player = std::make_unique<dae::GameObject>("Player");
-	std::unique_ptr<GameObject> player2 = nullptr;
 	player->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Peter.png"));
 	player->AddComponent<dae::PlayerComponent>();
 	auto playerLives = player->AddComponent<dae::LivesComponent>();
@@ -88,6 +87,9 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	scoreObserver->AddComponent<dae::TextComponent>()->SetFont(font);
 	scoreObserver->AddComponent<dae::ScoreObserverComponent>();
 	playerScore->AddObserver(scoreObserver->GetComponent<dae::ScoreObserverComponent>());
+
+	// Make player 2 object
+	std::unique_ptr<GameObject> player2 = nullptr;
 
 	// Process level layout
 	for (const auto& layout : j["Layout"])

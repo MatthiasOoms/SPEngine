@@ -31,6 +31,9 @@ namespace dae
         void RegisterObjects();
 		void RegisterObjects(std::string sceneName);
 
+		int GetPepperCount() const { return m_PepperCount; }
+		void SetPepperCount(int pepperCount) { m_PepperCount = pepperCount; }
+
     private:
         PlayerState* m_pCurrentState;
 

@@ -28,6 +28,7 @@ namespace dae
 		void BurgerDrop(int enemyCount);
 		void AddObserver(Observer* pObserver);
 		int GetScore() const;
+		void SetScore(int score);
 
 	private:
 		int m_Score;
