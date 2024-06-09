@@ -7,6 +7,9 @@
 namespace dae
 {
     class EnemyState;
+    class GameObject;
+    class Observer;
+    class Subject;
 
     enum struct EnemyType
     {
@@ -42,6 +45,8 @@ namespace dae
         void SetControlled(bool isControlled) { m_IsControlled = isControlled; }
         bool GetIsControlled() { return m_IsControlled; }
 
+        void AddObserver(Observer* pObserver);
+
     private:
         EnemyState* m_pCurrentState;
         EnemyType m_Type;
@@ -55,6 +60,8 @@ namespace dae
 		float m_AccumulatedPepperTime;
 
         bool m_IsControlled;
+
+        Subject* m_pSubject;
 
 		std::shared_ptr<Texture2D> m_pPreStunTexture;
     };

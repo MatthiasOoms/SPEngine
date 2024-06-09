@@ -109,18 +109,17 @@ void dae::KillCommand::Execute(float)
 	}
 }
 
-dae::HotdogKilledCommand::HotdogKilledCommand(GameObject* pGameObject)
-	: Command{ }
+dae::FloatCommand::FloatCommand(GameObject* pGameObject, float speed)
+	: Command{}
 	, m_pGameObject{ pGameObject }
+	, m_FloatSpeed{ speed }
 {
 }
 
-void dae::HotdogKilledCommand::Execute(float)
+void dae::FloatCommand::Execute(float elapsedSec)
 {
-	if (GetGameObject()->HasComponent<ScoreComponent>())
-	{
-		GetGameObject()->GetComponent<ScoreComponent>()->IncreaseScore(100);
-	}
+	auto temp = GetGameObject()->GetTransform().GetLocalPosition();
+	GetGameObject()->SetLocalPosition(temp + glm::vec3{ m_FloatSpeed * elapsedSec, 0, 0 });
 }
 
 dae::SceneSwapCommand::SceneSwapCommand(std::string scene, std::string musicPath)

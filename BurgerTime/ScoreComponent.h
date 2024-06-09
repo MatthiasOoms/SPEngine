@@ -21,7 +21,11 @@ namespace dae
 		virtual void Update(float) override {};
 		virtual void Render(float) const override {};
 
-		void IncreaseScore(int amount);
+		void HotdogDeath();
+		void EggDeath();
+		void PickleDeath();
+		void BurgerDrop();
+		void BurgerDrop(int enemyCount);
 		void SetScore(int score);
 		void AddObserver(Observer* pObserver);
 		int GetScore() const;

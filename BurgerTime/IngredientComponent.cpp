@@ -1,3 +1,4 @@
+#include "ScoreComponent.h"
 #include "PlatformComponent.h"
 #include "EnemyComponent.h"
 #include "IngredientComponent.h"
@@ -27,6 +28,11 @@ dae::IngredientComponent::IngredientComponent(GameObject* pOwner)
 	, m_FallSpeed{ 75.f }
 {
 	RegisterObjects();
+}
+
+void dae::IngredientComponent::IncrementFloorsToFall()
+{
+	++m_FloorsToFall;
 }
 
 void dae::IngredientComponent::Update(float elapsedSec)
@@ -101,6 +107,8 @@ void dae::IngredientComponent::HandleFall()
 	// If all segments are pressed, fall
 	if (fall)
 	{
+		std::vector<GameObject*> enemiesToFall{};
+
 		// Set full ingredient to falling
 		for (auto ingredient : m_pFullIngredient)
 		{
@@ -128,19 +136,45 @@ void dae::IngredientComponent::HandleFall()
 					if (enemyPos.y >= ingredientPos.y && enemyPos.y <= ingredientPos.y + ingredientDims.y ||
 						enemyPos.y + enemyDims.y >= ingredientPos.y && enemyPos.y + enemyDims.y <= ingredientPos.y + ingredientDims.y)
 					{
-						// Increment floors to fall
-						for (auto ingredientSegment : m_pFullIngredient)
-						{
-							ingredientSegment->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
-						}
-
-						auto enemyComp = enemy->GetComponent<EnemyComponent>();
-						enemyComp->SetState(new FallingEnemyState{ enemy, m_FallSpeed });
-						dynamic_cast<FallingEnemyState*>(enemyComp->GetCurrentState())->SetFloorsToFall(m_FloorsToFall);
+						enemiesToFall.push_back(enemy);
 						continue;
 					}
 				}
 			}
+		}
+		// For every enemy touching, make all segments fall an extra floor
+		for (int i{}; i < static_cast<int>(enemiesToFall.size()); ++i)
+		{
+			auto enemyComp = enemiesToFall[i]->GetComponent<EnemyComponent>();
+			enemyComp->SetState(new FallingEnemyState{ enemiesToFall[i], m_FallSpeed });
+			dynamic_cast<FallingEnemyState*>(enemyComp->GetCurrentState())->SetFloorsToFall(m_FloorsToFall);
+
+			// Set full ingredient to falling
+			for (auto ingredient : m_pFullIngredient)
+			{
+				ingredient->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
+			}
+		}
+
+		// If enemies are touching, drop burger event with amount of enemies touching
+		if (static_cast<int>(enemiesToFall.size() > 0))
+		{
+			// Get player1 scorecomponent
+			auto player1 = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player");
+			auto scoreComp = player1.front()->GetComponent<ScoreComponent>();
+			scoreComp->BurgerDrop(static_cast<int>(enemiesToFall.size()));
+		}
+		else
+		{
+			// Set full ingredient to falling
+			for (auto ingredient : m_pFullIngredient)
+			{
+				ingredient->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
+			}
+			// Get player1 scorecomponent
+			auto player1 = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player");
+			auto scoreComp = player1.front()->GetComponent<ScoreComponent>();
+			scoreComp->BurgerDrop();
 		}
 	}
 }
@@ -259,12 +293,6 @@ void dae::IngredientComponent::HandleIngredient(GameObject* pOther)
 
 					// Stack self on top of other
 					GetOwner()->GetTransform().SetLocalPosition(selfPos.x, ingredientPos.y - selfDims.y, selfPos.z);
-
-					if (m_Type == "BunTop")
-					{
-						// Inform observer that burger is complete
-
-					}
 				}
 				else
 				{

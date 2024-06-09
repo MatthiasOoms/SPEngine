@@ -29,6 +29,11 @@ void dae::ScoreObserverComponent::OnNotify(GameObject* obj, Event event)
 	case dae::Event::ObserverAdded:
 		UpdateText(obj);
 		break;
+	case dae::Event::BurgerDrop:
+		UpdateText(obj);
+		break;
+	case dae::Event::GameOver:
+		break;
 	default:
 		break;
 	}

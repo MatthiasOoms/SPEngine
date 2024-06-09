@@ -5,6 +5,11 @@
 #include <TextureComponent.h>
 #include <ResourceManager.h>
 #include "FallingEnemyState.h"
+#include "Subject.h"
+#include "Observer.h"
+#include "ScoreComponent.h"
+#include <SceneManager.h>
+#include <Scene.h>
 
 dae::EnemyComponent::EnemyComponent(GameObject* pOwner)
 	: Component(pOwner)
@@ -14,6 +19,8 @@ dae::EnemyComponent::EnemyComponent(GameObject* pOwner)
 	, m_StunDuration{ 1.5f }
 	, m_AccumulatedPepperTime{ 0.0f }
 	, m_pPreStunTexture{ nullptr }
+	, m_pSubject{ new Subject{} }
+	, m_IsControlled{ false }
 {
 	m_pHotdogStunned = dae::ResourceManager::GetInstance().LoadTexture("HotdogStunned.png");
 	m_pEggStunned = dae::ResourceManager::GetInstance().LoadTexture("EggStunned.png");
@@ -27,6 +34,8 @@ dae::EnemyComponent::~EnemyComponent()
 		delete m_pCurrentState;
 		m_pCurrentState = nullptr;
 	}
+	delete m_pSubject;
+	m_pSubject = nullptr;
 }
 
 void dae::EnemyComponent::Update(float elapsedSec)
@@ -127,10 +136,34 @@ void dae::EnemyComponent::Respawn()
 
 	if (pos.x < 240)
 	{
-		GetOwner()->GetTransform().SetWorldPosition(480, 32, pos.z );
+		GetOwner()->GetTransform().SetWorldPosition(480.f - 32.f - dims.x, pos.y, pos.z);
 	}
 	else
 	{
-		GetOwner()->GetTransform().SetWorldPosition( -static_cast<float>(dims.x), 32, pos.z );
+		GetOwner()->GetTransform().SetWorldPosition(32, pos.y, pos.z);
 	}
+
+	// Get Player 1 score component
+	auto pScoreComp = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front()->GetComponent<ScoreComponent>();
+
+	switch (m_Type)
+	{
+	case dae::EnemyType::Hotdog:
+		pScoreComp->HotdogDeath();
+		break;
+	case dae::EnemyType::Egg:
+		pScoreComp->EggDeath();
+		break;
+	case dae::EnemyType::Pickle:
+		pScoreComp->PickleDeath();
+		break;
+	default:
+		break;
+	}
+}
+
+void dae::EnemyComponent::AddObserver(Observer* pObserver)
+{
+	m_pSubject->AddObserver(pObserver);
+	pObserver->OnNotify(GetOwner(), Event::ObserverAdded);
 }

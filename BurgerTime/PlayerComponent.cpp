@@ -8,6 +8,7 @@
 #include "PepperComponent.h"
 #include "SceneManager.h"
 #include "LivesComponent.h"
+#include "EnemyComponent.h"
 
 dae::PlayerComponent::PlayerComponent(GameObject* pOwner)
 	: Component(pOwner)
@@ -29,6 +30,11 @@ dae::PlayerComponent::~PlayerComponent()
 
 void dae::PlayerComponent::Update(float elapsedSec)
 {
+	if (m_AccumulatedPepperTime < m_PepperCooldown)
+	{
+		m_AccumulatedPepperTime += elapsedSec;
+	}
+
 	// Update the current state
 	m_pCurrentState->Update(elapsedSec);
 
@@ -45,19 +51,22 @@ void dae::PlayerComponent::Update(float elapsedSec)
 		// For every enemy
 		for (auto pEnemy : m_pEnemies)
 		{
-			auto enemyPos = pEnemy->GetTransform().GetWorldPosition();
-			auto enemyDims = pEnemy->GetComponent<TextureComponent>()->GetDimensions();
-
-			// Check if player is colliding with enemy
-			if (selfPos.x < enemyPos.x + enemyDims.x &&
-				selfPos.x + selfDims.x > enemyPos.x &&
-				selfPos.y < enemyPos.y + enemyDims.y &&
-				selfPos.y + selfDims.y > enemyPos.y)
+			if (!pEnemy->GetComponent<EnemyComponent>()->IsStunned())
 			{
-				// Player is hurt
-				m_AccumulatedHurtTime = 0.0f;
-				GetOwner()->GetComponent<LivesComponent>()->LowerLives();
-				break;
+				auto enemyPos = pEnemy->GetTransform().GetWorldPosition();
+				auto enemyDims = pEnemy->GetComponent<TextureComponent>()->GetDimensions();
+
+				// Check if player is colliding with enemy
+				if (selfPos.x < enemyPos.x + enemyDims.x &&
+					selfPos.x + selfDims.x > enemyPos.x &&
+					selfPos.y < enemyPos.y + enemyDims.y &&
+					selfPos.y + selfDims.y > enemyPos.y)
+				{
+					// Player is hurt
+					m_AccumulatedHurtTime = 0.0f;
+					GetOwner()->GetComponent<LivesComponent>()->LowerLives();
+					break;
+				}
 			}
 		}
 	}

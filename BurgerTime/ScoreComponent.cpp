@@ -16,10 +16,40 @@ dae::ScoreComponent::~ScoreComponent()
 	m_pSubject = nullptr;
 }
 
-void dae::ScoreComponent::IncreaseScore(int amount)
+void dae::ScoreComponent::HotdogDeath()
 {
-	m_Score += amount;
+	m_Score += 100;
 	m_pSubject->OnNotify(GetOwner(), Event::EnemyDeath);
+}
+
+void dae::ScoreComponent::EggDeath()
+{
+	m_Score += 200;
+	m_pSubject->OnNotify(GetOwner(), Event::EnemyDeath);
+}
+
+void dae::ScoreComponent::PickleDeath()
+{
+	m_Score += 300;
+	m_pSubject->OnNotify(GetOwner(), Event::EnemyDeath);
+}
+
+void dae::ScoreComponent::BurgerDrop()
+{
+	m_Score += 50;
+	m_pSubject->OnNotify(GetOwner(), Event::BurgerDrop);
+}
+
+void dae::ScoreComponent::BurgerDrop(int enemyCount)
+{
+	int baseScore = 500;
+	for (int i = 1; i < enemyCount; i++)
+	{
+		// 1 = 500, 2 = 1000, 3 = 2000, 4 = 4000, 5 = 8000, 6 = 16000
+		baseScore *= 2;
+	}
+	m_Score += baseScore;
+	m_pSubject->OnNotify(GetOwner(), Event::BurgerDrop);
 }
 
 void dae::ScoreComponent::SetScore(int score)
