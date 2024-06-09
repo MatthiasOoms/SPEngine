@@ -108,12 +108,6 @@ void dae::IngredientComponent::HandleFall()
 	if (fall)
 	{
 		std::vector<GameObject*> enemiesToFall{};
-
-		// Set full ingredient to falling
-		for (auto ingredient : m_pFullIngredient)
-		{
-			ingredient->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
-		}
 		
 		// If an enemy is touching any segment, make all segments fall an extra floor
 		for (auto enemy : m_pEnemies)
