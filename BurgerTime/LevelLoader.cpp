@@ -65,7 +65,7 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 	// Process player
 	auto player = std::make_unique<dae::GameObject>("Player");
 	std::unique_ptr<GameObject> player2 = nullptr;
-	player->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Peter.png"));
+	player->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Sprites/Peter.png"));
 	player->AddComponent<dae::PlayerComponent>();
 	auto playerScore = player->AddComponent<dae::ScoreComponent>();
 	auto playerLives = player->AddComponent<dae::LivesComponent>();
@@ -104,19 +104,19 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 			// Set the texture of the TextureComponent
 			if (layout["Length"] == "1")
 			{
-				texture->SetTexture(resources.LoadTexture("Ladder1.png"));
+				texture->SetTexture(resources.LoadTexture("Ladders/Ladder1.png"));
 			}
 			else if (layout["Length"] == "2")
 			{
-				texture->SetTexture(resources.LoadTexture("Ladder2.png"));
+				texture->SetTexture(resources.LoadTexture("Ladders/Ladder2.png"));
 			}
 			else if (layout["Length"] == "3")
 			{
-				texture->SetTexture(resources.LoadTexture("Ladder3.png"));
+				texture->SetTexture(resources.LoadTexture("Ladders/Ladder3.png"));
 			}
 			else if (layout["Length"] == "4")
 			{
-				texture->SetTexture(resources.LoadTexture("Ladder4.png"));
+				texture->SetTexture(resources.LoadTexture("Ladders/Ladder4.png"));
 			}
 			else
 			{
@@ -146,19 +146,19 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 			// Set the texture of the TextureComponent
 			if (layout["Length"] == "1")
 			{
-				texture->SetTexture(resources.LoadTexture("Platform1.png"));
+				texture->SetTexture(resources.LoadTexture("Platforms/Platform1.png"));
 			}
 			else if (layout["Length"] == "2")
 			{
-				texture->SetTexture(resources.LoadTexture("Platform2.png"));
+				texture->SetTexture(resources.LoadTexture("Platforms/Platform2.png"));
 			}
 			else if (layout["Length"] == "3")
 			{
-				texture->SetTexture(resources.LoadTexture("Platform3.png"));
+				texture->SetTexture(resources.LoadTexture("Platforms/Platform3.png"));
 			}
 			else if (layout["Length"] == "4")
 			{
-				texture->SetTexture(resources.LoadTexture("Platform4.png"));
+				texture->SetTexture(resources.LoadTexture("Platforms/Platform4.png"));
 			}
 			else
 			{
@@ -246,7 +246,7 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 			plate->AddComponent<dae::PlateComponent>();
 
 			// Set the texture of the TextureComponent
-			texture->SetTexture(resources.LoadTexture("Plate.png"));
+			texture->SetTexture(resources.LoadTexture("Misc/Plate.png"));
 
 			// Set the position of the GameObject
 			plate->SetLocalPosition({ layout["Position"]["x"], layout["Position"]["y"], 0 });
@@ -272,19 +272,19 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		if (enemy["Type"] == "Hotdog")
 		{
 			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Hotdog);
-			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
+			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Sprites/HotdogWalk.png"));
 			gameObjects.push_back(std::move(enemyObj));
 		}
 		else if (enemy["Type"] == "Egg")
 		{
 			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Egg);
-			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("EggWalk.png"));
+			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Sprites/EggWalk.png"));
 			gameObjects.push_back(std::move(enemyObj));
 		}
 		else if (enemy["Type"] == "Pickle")
 		{
 			enemyObj->AddComponent<dae::EnemyComponent>()->SetType(EnemyType::Pickle);
-			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("PickleWalk.png"));
+			enemyObj->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Sprites/PickleWalk.png"));
 			gameObjects.push_back(std::move(enemyObj));
 		}
 		else
@@ -343,14 +343,14 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		if (sceneName == "Multiplayer")
 		{
 			player2 = std::make_unique<dae::GameObject>("Player");
-			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Peter.png"));
+			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Sprites/Peter.png"));
 			player2->AddComponent<dae::PlayerComponent>();
 			player2->AddComponent<dae::LivesComponent>();
 		}
 		else if (sceneName == "Versus")
 		{
 			player2 = std::make_unique<dae::GameObject>("Enemy");
-			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("HotdogWalk.png"));
+			player2->AddComponent<dae::TextureComponent>()->SetTexture(resources.LoadTexture("Sprites/HotdogWalk.png"));
 			auto enemyComp = player2->AddComponent<dae::EnemyComponent>();
 			enemyComp->SetControlled(true);
 		}
@@ -517,8 +517,8 @@ std::vector<std::unique_ptr<dae::GameObject>> dae::LevelLoader::CreateIngredient
 
 	// Create bun left side
 	auto& resources = dae::ResourceManager::GetInstance();
-	auto sideTexture = resources.LoadTexture(type + "Side.png");
-	auto middleTexture = resources.LoadTexture(type + "Middle.png");
+	auto sideTexture = resources.LoadTexture("Ingredients/" + type + "Side.png");
+	auto middleTexture = resources.LoadTexture("Ingredients/" + type + "Middle.png");
 
 	// Create 4 parts of the ingredient
 	for (int i{}; i < 4; ++i)

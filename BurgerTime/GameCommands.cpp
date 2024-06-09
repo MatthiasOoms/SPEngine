@@ -36,7 +36,7 @@ dae::WalkCommand::WalkCommand(GameObject* pGameObject, float speed)
 	, m_pGameObject{ pGameObject }
 	, m_MoveSpeed{ speed }
 {
-	m_PeterWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("PeterWalk.png");
+	m_PeterWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PeterWalk.png");
 }
 
 void dae::WalkCommand::Execute(float elapsedSec)
@@ -236,7 +236,7 @@ dae::WalkEndCommand::WalkEndCommand(GameObject* pGameObject)
 	: Command{}
 	, m_pGameObject{ pGameObject }
 {
-	m_PeterIdleTexture = dae::ResourceManager::GetInstance().LoadTexture("Peter.png");
+	m_PeterIdleTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/Peter.png");
 }
 
 void dae::WalkEndCommand::Execute(float)
@@ -375,10 +375,10 @@ dae::WalkStartCommand::WalkStartCommand(GameObject* pGameObject, float moveSpeed
 	, m_pGameObject{ pGameObject }
 	, m_MoveSpeed{ moveSpeed }
 {
-	m_PeterWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("PeterWalk.png");
-	m_HotdogWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("HotdogWalk.png");
-	m_EggWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("EggWalk.png");
-	m_PickleWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("PickleWalk.png");
+	m_PeterWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PeterWalk.png");
+	m_HotdogWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/HotdogWalk.png");
+	m_EggWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/EggWalk.png");
+	m_PickleWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PickleWalk.png");
 }
 
 void dae::WalkStartCommand::Execute(float)
@@ -454,10 +454,10 @@ dae::ClimbStartCommand::ClimbStartCommand(GameObject* pGameObject, float moveSpe
 	, m_pLadder{ nullptr }
 	, m_MoveSpeed{ moveSpeed }
 {
-	m_PeterClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("PeterClimb.png");
-	m_HotdogClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("HotdogClimb.png");
-	m_EggClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("EggClimb.png");
-	m_PickleClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("PickleClimb.png");
+	m_PeterClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PeterClimb.png");
+	m_HotdogClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/HotdogClimb.png");
+	m_EggClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/EggClimb.png");
+	m_PickleClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PickleClimb.png");
 }
 
 dae::ClimbStartCommand::ClimbStartCommand(GameObject* pGameObject, GameObject* pLadder, float moveSpeed)
@@ -466,10 +466,10 @@ dae::ClimbStartCommand::ClimbStartCommand(GameObject* pGameObject, GameObject* p
 	, m_pLadder{ pLadder }
 	, m_MoveSpeed{ moveSpeed }
 {
-	m_PeterClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("PeterClimb.png");
-	m_HotdogClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("HotdogClimb.png");
-	m_EggClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("EggClimb.png");
-	m_PickleClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("PickleClimb.png");
+	m_PeterClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PeterClimb.png");
+	m_HotdogClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/HotdogClimb.png");
+	m_EggClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/EggClimb.png");
+	m_PickleClimbTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PickleClimb.png");
 }
 
 void dae::ClimbStartCommand::Execute(float)
@@ -584,10 +584,10 @@ dae::ClimbEndCommand::ClimbEndCommand(GameObject* pGameObject)
 	: Command{}
 	, m_pGameObject{ pGameObject }
 {
-	m_PeterIdleTexture = dae::ResourceManager::GetInstance().LoadTexture("Peter.png");
-	m_HotdogWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("HotdogWalk.png");
-	m_EggWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("EggWalk.png");
-	m_PickleWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("PickleWalk.png");
+	m_PeterIdleTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/Peter.png");
+	m_HotdogWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/HotdogWalk.png");
+	m_EggWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/EggWalk.png");
+	m_PickleWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PickleWalk.png");
 }
 
 void dae::ClimbEndCommand::Execute(float)
@@ -602,10 +602,10 @@ dae::ClimbCommand::ClimbCommand(GameObject* pGameObject, float speed)
 	, m_pGameObject{ pGameObject }
 	, m_ClimbSpeed{ speed }
 {
-	m_PeterIdleTexture = dae::ResourceManager::GetInstance().LoadTexture("Peter.png");
-	m_HotdogWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("HotdogWalk.png");
-	m_EggWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("EggWalk.png");
-	m_PickleWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("PickleWalk.png");
+	m_PeterIdleTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/Peter.png");
+	m_HotdogWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/HotdogWalk.png");
+	m_EggWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/EggWalk.png");
+	m_PickleWalkTexture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PickleWalk.png");
 }
 
 void dae::ClimbCommand::Execute(float elapsedSec)

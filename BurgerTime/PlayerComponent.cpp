@@ -106,7 +106,7 @@ void dae::PlayerComponent::ThrowPepper()
 		auto pPepper = std::make_unique<GameObject>("Pepper");
 		pPepper->AddComponent<PepperComponent>();
 		auto pTexture = pPepper->AddComponent<TextureComponent>();
-		pTexture->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("Pepper.png"));
+		pTexture->SetTexture(dae::ResourceManager::GetInstance().LoadTexture("Misc/Pepper.png"));
 		pTexture->SetScale(2);
 
 		if (playerTexture->GetScale() > 0)

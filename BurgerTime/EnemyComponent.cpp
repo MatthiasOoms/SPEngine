@@ -22,9 +22,9 @@ dae::EnemyComponent::EnemyComponent(GameObject* pOwner)
 	, m_pSubject{ new Subject{} }
 	, m_IsControlled{ false }
 {
-	m_pHotdogStunned = dae::ResourceManager::GetInstance().LoadTexture("HotdogStunned.png");
-	m_pEggStunned = dae::ResourceManager::GetInstance().LoadTexture("EggStunned.png");
-	m_pPickleStunned = dae::ResourceManager::GetInstance().LoadTexture("PickleStunned.png");
+	m_pHotdogStunned = dae::ResourceManager::GetInstance().LoadTexture("Sprites/HotdogStunned.png");
+	m_pEggStunned = dae::ResourceManager::GetInstance().LoadTexture("Sprites/EggStunned.png");
+	m_pPickleStunned = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PickleStunned.png");
 }
 
 dae::EnemyComponent::~EnemyComponent()
