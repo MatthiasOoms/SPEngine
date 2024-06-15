@@ -479,6 +479,9 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		player->GetComponent<dae::TextureComponent>()->SetScale(2);
 	}
 
+	// Add Player last for correct rendering
+	scene.Add(std::move(player));
+
 	if (player2)
 	{
 		// Scale if player has a TextureComponent
@@ -488,9 +491,6 @@ void dae::LevelLoader::LoadLevel(const std::string& fileName, const std::string&
 		}
 		scene.Add(std::move(player2));
 	}
-
-	// Add Player last for correct rendering
-	scene.Add(std::move(player));
 
 	scene.Add(std::move(livesObserver));
 	scene.Add(std::move(scoreObserver));

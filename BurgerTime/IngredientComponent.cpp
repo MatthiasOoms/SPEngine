@@ -154,8 +154,8 @@ void dae::IngredientComponent::HandleFall()
 		if (static_cast<int>(enemiesToFall.size() > 0))
 		{
 			// Get player1 scorecomponent
-			auto player1 = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player");
-			auto scoreComp = player1.front()->GetComponent<ScoreComponent>();
+			auto player1 = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front();
+			auto scoreComp = player1->GetComponent<ScoreComponent>();
 			scoreComp->BurgerDrop(static_cast<int>(enemiesToFall.size()));
 		}
 		else
@@ -166,8 +166,8 @@ void dae::IngredientComponent::HandleFall()
 				ingredient->GetComponent<IngredientComponent>()->IncrementFloorsToFall();
 			}
 			// Get player1 scorecomponent
-			auto player1 = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player");
-			auto scoreComp = player1.front()->GetComponent<ScoreComponent>();
+			auto player1 = dae::SceneManager::GetInstance().GetActiveScene().GetObjectsByTag("Player").front();
+			auto scoreComp = player1->GetComponent<ScoreComponent>();
 			scoreComp->BurgerDrop();
 		}
 	}
